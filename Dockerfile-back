@@ -1,0 +1,13 @@
+FROM node:10.8.0
+
+MAINTAINER heigrace <heigrace@gmail.com>
+
+ADD . /app/
+#进入到app目录下面，类似cd
+WORKDIR /app
+RUN npm -v
+RUN npm install
+RUN cd /app && pwd && ls -al
+RUN cd /app/Dockerfile && pwd && ls -al
+EXPOSE 8001
+CMD ["npm","start"]
