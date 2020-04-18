@@ -1,4 +1,5 @@
-export default {
+import System from '@/api/sys'
+const user = {
   namespaced: true,
   state: {
     id: 0,
@@ -9,8 +10,13 @@ export default {
       state.id = id
     },
     updateName (state, name) {
-      console.log(name)
+      // console.log(name)
       state.name = name
     }
-  }
+  },
+  action: {
+    
+  },
 }
+
+export default user

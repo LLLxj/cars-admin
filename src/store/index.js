@@ -25,6 +25,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import common from './modules/common'
 import user from './modules/user'
+import getters from './getters'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -34,18 +35,18 @@ const store = new Vuex.Store({
   },
   mutations: {
     // 重置vuex本地储存状态
-    resetStore (state) {
-      Object.keys(state).forEach((key) => {
-        state[key] = cloneDeep(window.SITE_CONFIG['storeState'][key])
-      })
-    },
+    // resetStore (state) {
+    //   Object.keys(state).forEach((key) => {
+    //     state[key] = cloneDeep(window.SITE_CONFIG['storeState'][key])
+    //   })
+    // },
   },
   actions: {},
-  strict: process.env.NODE_ENV !== 'production',
   modules: {
     common,
     user,
-  }
+  },
+  getters
 })
 
 export default store

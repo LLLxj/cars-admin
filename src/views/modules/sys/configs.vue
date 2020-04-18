@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-  import { configList, configDelete } from '@/api/config'
+  // import { configList, configDelete } from '@/api/config'
   import AddOrUpdate from './configs-add-or-update'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -106,7 +106,7 @@
       ElMain,
     },
     activated () {
-      this.getDataList()
+      // this.getDataList()
     },
     methods: {
       // 获取数据列表

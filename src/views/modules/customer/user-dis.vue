@@ -4,29 +4,32 @@
     <el-container>
       <!--右侧-->
       <el-main>
-        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent>
-          <el-form-item>
-            <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
+        <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
+        <el-form :inline="true" :model="dataForm">
+          <el-form-item label="请输入用户名">
+            <el-input v-model="dataForm.userName" placeholder="请输入用户名" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="请输入手机号">
+            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="类型">
+            <TypeSelect v-model="dataForm.type"></TypeSelect>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
-            <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-            <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
-            <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
-            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button> -->
-            
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
+            <el-button @click="resetFrom()" type="primary">重置</el-button>
+
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
-          <!-- <el-table-column type="selection" header-align="center" align="center" width="50">
-          </el-table-column> -->
-          <!-- <el-table-column prop="userId" header-align="center" align="center" width="80" label="ID">
-          </el-table-column> -->
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="userName" header-align="center" align="center" label="用户名">
           </el-table-column>
-          <el-table-column prop="deptName" header-align="center" align="center" label="部门">
+          <el-table-column prop="storeName" header-align="center" align="center" label="所属公司">
+            <template slot-scope="scope">
+              <span>{{scope.row.storeName || '--'}}</span>
+            </template>
           </el-table-column>
           <!-- <el-table-column prop="email" header-align="center" align="center" label="邮箱">
           </el-table-column> -->
@@ -34,20 +37,20 @@
           </el-table-column>
           <!-- <el-table-column prop="schoolName" header-align="center" align="center" label="校区">
           </el-table-column> -->
-          <el-table-column prop="status" header-align="center" align="center" label="状态">
+          <el-table-column prop="type" header-align="center" align="center" label="客户类型">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-              <el-tag v-else size="small">正常</el-tag>
+              <span v-if="scope.row.type === 0">个人用户</span>
+              <span v-else>企业用户</span>
             </template>
           </el-table-column>
-          <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
-          </el-table-column>
+          <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
+          </el-table-column> -->
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
-              <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">编辑</el-button>
-              <!-- <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">编辑</el-button>
+              <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -63,16 +66,16 @@
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!-- 弹窗, 上传文件 -->
-        <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop>
+        <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
     </el-container>
   </div>
 </template>
 <script>
 
-  import Users from '@/api/users'
-  import schoolAllSidebar from '../../common-sidebar/school-all-sidebar'
-  import AddOrUpdate from './user-add-or-update'
+  import Customer from '@/api/customer'
+  import TypeSelect from '@/views/common-select/customer-type-select'
+  import AddOrUpdate from './user-add'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -84,8 +87,9 @@
     data () {
       return {
         dataForm: {
-          userName: undefined,
-          deptId: undefined
+          userName: '',
+          phone: '',
+          type: ''
         },
         dataList: [],
         isShow: true,
@@ -103,10 +107,10 @@
     },
     components: {
       AddOrUpdate,
+      TypeSelect,
       ElContainer,
       ElAside,
       ElMain,
-      schoolAllSidebar,
       uploadPop
     },
     activated () {
@@ -116,28 +120,20 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        this.params = this.searchData || null
-        Users.norList(params).then(res => {
+        params = this.dataForm || null
+        Customer.disList(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
-            if(this.dataList !== null){
-              this.isShow = false
-            }
-          } else {
-            this.dataList = []
-            this.totalPage = 0
           }
           this.dataListLoading = false
+        }).catch(err => {
+          console.log(err)
         })
-      },
-      schoolTreeChangeEvent (deptId) {
-        this.dataForm.deptId = deptId
-        this.getDataList()
       },
       // 禁用
       disHandle (data) {
-        Users.disable(data.userId).then(res => {
+        Customer.disable(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -163,7 +159,7 @@
       },
       // 启用
       norHandle (data) {
-         Users.awake(data.userId).then(res => {
+        Customer.awake(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -178,15 +174,23 @@
           }
         })
       },
+       resetFrom () {
+        this.dataForm = {
+          userName: '',
+          phone: '',
+          type: ''
+        }
+        this.getDataList()
+      },
       // 每页数
       sizeChangeHandle (val) {
-        this.searchData.page = val
-        this.searchData.limit = 1
+        this.dataForm.page = val
+        this.dataForm.limit = 1
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
-        this.searchData.page = val
+        this.dataForm.page = val
         this.getDataList()
       },
       // 多选
@@ -241,20 +245,16 @@
       },
       // 删除
       deleteHandle (id) {
-        var userIds = id ? [id] : this.dataListSelections.map(item => {
-          return item.userId
-        })
-        this.$confirm(`确定对[id=${userIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        // var userIds = id ? [id] : this.dataListSelections.map(item => {
+        //   return item.userId
+        // })
+        this.$confirm(`确定删除?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http({
-            url: this.$http.adornUrl('/sys/user/delete'),
-            method: 'post',
-            data: this.$http.adornData(userIds, false)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
+          Customer.delete(id).then(({data}) => {
+            if (data.code === 0) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
@@ -266,6 +266,8 @@
             } else {
               this.$message.error(data.msg)
             }
+          }).catch(err => {
+            console.log(err)
           })
         }).catch(() => {})
       },

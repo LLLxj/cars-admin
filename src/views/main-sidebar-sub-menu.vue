@@ -22,6 +22,8 @@
 
 <script>
   import SubMenu from './main-sidebar-sub-menu'
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'sub-menu',
     props: {
@@ -38,9 +40,12 @@
       SubMenu
     },
     computed: {
-      sidebarLayoutSkin: {
-        get () { return this.$store.state.common.sidebarLayoutSkin }
-      }
+      ...mapGetters([
+        'sidebarLayoutSkin'
+      ]),
+      // sidebarLayoutSkin: {
+      //   get () { return this.$store.state.common.sidebarLayoutSkin }
+      // }
     },
     methods: {
       // 通过menuId与动态(菜单)路由进行匹配跳转至指定路由

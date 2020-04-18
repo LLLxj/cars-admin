@@ -45,16 +45,13 @@
         get () { return this.$store.state.user.id },
         set (val) { this.$store.commit('user/updateId', val) }
       },
-      userName: {
-        get () { return this.$store.state.user.name },
-        set (val) { this.$store.commit('user/updateName', val) }
-      }
     },
     created () {
-      this.getUserInfo()
+      // this.getUserInfo()
     },
     mounted () {
       this.resetDocumentClientHeight()
+      this.getUserInfo()
     },
     methods: {
       // 重置窗口可视高度
@@ -80,24 +77,14 @@
       // }
       getUserInfo () {
         var userId = getUserId()
-        // this.$http({
-        //   url: this.$http.adornUrl('/sys/user/info'),
-        //   method: 'get',
-        //   params: this.$http.adornParams()
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.loading = false
-        //     this.userId = data.user.userId
-        //     this.userName = data.user.username
-        //   }
-        // })
         System.getInfo(userId).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data.code === 0) {
             this.loading = false
-            this.userId = data.data.userId
-            this.userName = data.data.username
+            this.$store.commit('user/updateName', data.data.userName)
           }
         })
+        
+      //  this.$store.dispatch('user/GetInfo',1111)
       }
     }
   }

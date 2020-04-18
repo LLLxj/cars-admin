@@ -126,7 +126,7 @@
         <el-menu-item class="site-navbar__avatar" index="3">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
-            {{ userName }}
+            {{ name }}
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item>
@@ -143,6 +143,7 @@
 
 <script>
   import { Notification } from 'element-ui';
+  import { mapGetters } from 'vuex'
   import UpdatePassword from './main-navbar-update-password'
   // import screenfull from '@/components/screenFull'
   import screenfull from 'screenfull'
@@ -150,6 +151,8 @@
   import { clearLoginInfo } from '@/utils'
   import Socket from '@/libs/webSocket'
   import MessageApi from '@/api/message'
+  import System from '@/api/sys'
+  import { getUserId } from '@/utils/userInfoUtil'
   import Vue from 'vue'
   export default {
     data () {
@@ -180,6 +183,10 @@
       UpdatePassword, screenfull, breadCrumb
     },
     mounted() {
+      // this.getUserInfo()
+      // this.$nextTick(function () {
+      //   this.getUserInfo()
+      // })
       // 保证完全挂载
       // this.$nextTick(function () {
       //   this.socket()
@@ -187,6 +194,9 @@
       // this.$store.commit('common/setMessageCount', 11)
     },
     computed: {
+      ...mapGetters([
+        'name'
+      ]),
       navbarLayoutType: {
         get () { return this.$store.state.common.navbarLayoutType }
       },
@@ -206,9 +216,13 @@
         get () { return this.$store.state.common.mainTabsActiveName },
         set (val) { this.$store.commit('common/updateMainTabsActiveName', val) }
       },
-      userName: {
-        get () { return this.$store.state.user.name }
-      },
+      // userName: {
+      //   get () { return this.$store.state.user.name }
+      // },
+      // userName: {
+      //   get () { return this.$store.state.user.name },
+      //   set (val) { this.$store.commit('user/updateName', val) }
+      // },
       mesCount: {
         get () { return this.$store.state.common.messageCount },
         set (val) { this.$store.commit('common/setMessageCount', val) }
@@ -250,6 +264,8 @@
       }
       // this.socket()
     },
+    created () {
+    },
     methods: {
       changeFullScreen() {
         if (!screenfull.enabled) {
@@ -284,16 +300,18 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http({
-            url: this.$http.adornUrl('/sys/logout'),
-            method: 'post',
-            data: this.$http.adornData()
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              clearLoginInfo()
-              this.$router.push({ name: 'login' })
-            }
-          })
+          clearLoginInfo()
+          this.$router.push({ name: 'login' })
+          // this.$http({
+          //   url: this.$http.adornUrl('/sys/logout'),
+          //   method: 'post',
+          //   data: this.$http.adornData()
+          // }).then(({data}) => {
+          //   if (data && data.code === 0) {
+          //     clearLoginInfo()
+          //     this.$router.push({ name: 'login' })
+          //   }
+          // })
         }).catch(() => {})
       },
       // websocket

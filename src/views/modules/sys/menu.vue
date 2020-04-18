@@ -139,7 +139,7 @@
                 }
               })
             }else{
-              this.$message.error(msg)
+              this.$message.error(data.msg)
             }
           })
         }).catch(() => {})

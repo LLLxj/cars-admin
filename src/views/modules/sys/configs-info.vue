@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { configGetValue, configSave, configDelete, configInfoUpdate, configInfoSave, configInfoDelete } from '@/api/config'
+// import { configGetValue, configSave, configDelete, configInfoUpdate, configInfoSave, configInfoDelete } from '@/api/config'
 export default {
   data () {
     return {
@@ -66,15 +66,15 @@ export default {
     },
     // 获取配置属性
     getDataList (data) {
-      configGetValue(data).then(res => {
-        if(res.data && res.data.code === 0){
-          console.log(res)
-          this.infoIdList = res.data.data
-        } else {
-           this.$message.error(res.data.msg)
-        }
-      })
-      this.infoIdList = this.result
+      // configGetValue(data).then(res => {
+      //   if(res.data && res.data.code === 0){
+      //     console.log(res)
+      //     this.infoIdList = res.data.data
+      //   } else {
+      //      this.$message.error(res.data.msg)
+      //   }
+      // })
+      // this.infoIdList = this.result
     },
     addInfoFlag () {
       let cFlag = false

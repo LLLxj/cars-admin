@@ -1,4 +1,4 @@
-export default {
+const common =  {
   namespaced: true,
   state: {
     // 页面文档可视高度(随窗口改变大小)
@@ -83,3 +83,5 @@ export default {
     },
   }
 }
+
+export default common

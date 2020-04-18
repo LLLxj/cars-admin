@@ -50,7 +50,7 @@
 
   import schoolSelect from '@/views/common-select/school-select'
   import configInfo from './configs-info'
-  import { configInfos, configGetValue, configSave, configUpdate } from '@/api/config'
+  // import { configInfos, configGetValue, configSave, configUpdate } from '@/api/config'
   export default {
     data () {
       var checkInfoId = (rule, value, callback) => {
@@ -116,8 +116,8 @@
           this.dataForm.infoId = data.infoId
           this.dataForm.code = data.code
           this.dataForm.configId = data.configId
-          this.getDataList()
-          this.getConfigList()
+          // this.getDataList()
+          // this.getConfigList()
         }
       },
       resetDateForm () {

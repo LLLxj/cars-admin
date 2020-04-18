@@ -3,11 +3,11 @@ import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
 
-class Users{
+class Custome{
 
   static norList(params) {
     return request({
-      url: `${baseUrl}/sys/user/normalList`,
+      url: `${baseUrl}/deal/user/normalList`,
       method: 'get',
       params: params
     })
@@ -15,7 +15,7 @@ class Users{
 
   static disList(params) {
     return request({
-      url: `${baseUrl}/sys/user/disableList`,
+      url: `${baseUrl}/deal/user/disableList`,
       method: 'get',
       params: params
     })
@@ -23,14 +23,14 @@ class Users{
 
   static disable(data) {
     return request({
-      url: `${baseUrl}/sys/user/disable/` + data,
+      url: `${baseUrl}/deal/user/disable/` + data,
       method: 'get',
     })
   }
 
   static awake(data) {
     return request({
-      url: `${baseUrl}/sys/user/normal/` + data,
+      url: `${baseUrl}/deal/user/normal/` + data,
       method: 'get',
     })
   }
@@ -38,14 +38,14 @@ class Users{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/sys/user/info/` + data,
+      url: `${baseUrl}/deal/user/info/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/sys/user/save`,
+      url: `${baseUrl}/deal/user/save`,
       method: 'post',
       data
     })
@@ -53,21 +53,19 @@ class Users{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/sys/user/update`,
+      url: `${baseUrl}/deal/user/update`,
       method: 'post',
       data
     })
   }
 
-  static checkPhone(params) {
+  static delete(data) {
     return request({
-      url: `${baseUrl}/sys/user/check`,
+      url: `${baseUrl}/deal/user/delete/` + data,
       method: 'get',
-      params: params
     })
   }
 
-
 }
 
-export default Users
+export default Custome

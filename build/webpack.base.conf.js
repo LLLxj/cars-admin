@@ -8,6 +8,8 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
+
+
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
@@ -83,13 +85,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HappyPack({
-        id: 'happybabel',
-        loaders: ['babel-loader?cacheDirectory'],
-        threads: 4, // 线程开启数
-    })
-  ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).

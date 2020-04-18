@@ -11,10 +11,10 @@
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+            <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
             <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
-            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button>
+            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button> -->
             
           </el-form-item>
         </el-form>
@@ -47,7 +47,7 @@
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
               <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">编辑</el-button>
-              <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button>
+              <!-- <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
