@@ -26,6 +26,13 @@ if (process.env.NODE_ENV !== 'production') {
 Vue.prototype.$http = httpRequest // ajax请求方法
 Vue.prototype.isAuth = isAuth     // 权限方法
 
+Vue.prototype.GLOBAL = {
+  // 'BASE_URL_HEAD': '/apiPro',
+  /** 单文件上传地址 */
+  'UPLOAD_URL': '/apiPro/conf/banner/upload/image',
+  'UPLOAD_BRAND_URL': '/apiPro/deal/wares/brand/upload/image'
+}
+
 // 保存整站vuex本地储存初始状态
 // window.SITE_CONFIG['storeState'] = cloneDeep(store.state)
 /* eslint-disable no-new */

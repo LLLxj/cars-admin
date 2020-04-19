@@ -6,17 +6,15 @@
       <el-main>
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
-          <el-form-item label="区域名称">
-            <el-input v-model="searchData.areaName" placeholder="区域名称" clearable></el-input>
+          <el-form-item label="系列名称">
+            <el-input v-model="searchData.seriesName" placeholder="系列名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="选择市区">
-            <citySelect v-model="searchData.cityId" @get-city-val="getCityData"></citySelect>
-          </el-form-item>
-          <el-form-item label="选择县/区">
-            <countrySelect v-model="searchData.countryId" ref="countrySelect" :disabled="chooseCity" @get-country-val="getCountryData"></countrySelect>
+          <el-form-item label="选择品牌">
+            <brandSelect v-model="searchData.cityId" @get-brand-val="getBrandData"></brandSelect>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button> 
+            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetForm()" type="primary">重置</el-button> 
           </el-form-item>
         </el-form>
@@ -31,6 +29,13 @@
               <span v-if="scope.row.type === 2" size="small">县/区</span>
             </template>
           </el-table-column>
+          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.brandId)">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           @size-change="sizeChangeHandle"
@@ -42,32 +47,30 @@
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
-        <!-- 弹窗, 上传文件 -->
+        <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
       </el-main>
     </el-container>
   </div>
 </template>
 <script>
 
-  import Areas from '@/api/area'
-  import ElContainer from 'element-ui/packages/container/index'
-  import citySelect from '@/views/common-select/all-city-select'
-  import countrySelect from '@/views/common-select/all-country-select'
+  import Series from '@/api/brand/series'
+  import brandSelect from '@/views/common-select/brand-select'
+  import AddOrUpdate from './series-update'
   import Bus from '@/utils/bus'
   import Vue from 'vue'
   export default {
     data () {
       return {
+        addOrUpdateVisible: false,
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
         searchData: {
-          areaName: '',
-          countryId: '',
-          cityId: '',
-          areaId: '',
+          seriesName: '',
+          brandId: '',
           page: 1,
           limit: 10
         },
@@ -81,45 +84,20 @@
       }
     },
     components: {
-      citySelect, countrySelect
+      brandSelect, AddOrUpdate
     },
     activated () {
       this.getDataList()
     },
     watch: {
-      'searchData.cityId':function(newV,oldV){
-        if (newV !== oldV) {
-          this.searchData.countryId = ''
-        }
-     },
-     deep:true, //深度监听设置为 true
+      
     },
     methods: {
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        var params = this.searchData || null
-        this.paramsSearch()
-      },
-      paramsSearch() {
-        var data = this.searchData
-        let obj = {}
-        if (data.cityId !== '' && data.countryId == '') {
-          // data.areaId = data.cityId
-          obj.areaName = data.areaName
-          obj.areaId = data.cityId
-        } else if (data.cityId !== '' && data.countryId !== '') {
-          // data.cityId = data.countryId
-          obj.areaName = data.areaName
-          obj.areaId = data.countryId
-          // this.params = {
-          //   areaName: data.areaName,
-          //   data.cityId: data.countryId,
-          //   page: data.page,
-          //   limit: data.limit
-          // }
-        } 
-        Areas.list(obj).then(res => {
+        params = this.searchData || null
+        Series.norList(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -133,11 +111,8 @@
           this.dataListLoading = false
         })
       },
-      getCityData(val) {
-        this.searchData.cityId = val
-        this.chooseCity = false
-        // 更新子组件状态
-        this.$refs.countrySelect.update(val)
+      getBrandData(val) {
+        this.searchData.brandId = val
       },
       getCountryData(val) {
         this.searchData.countryId = val
@@ -148,6 +123,13 @@
           countryId: '',
           cityId: ''
         }
+      },
+       // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(id)
+        })
       },
       // 每页数
       sizeChangeHandle (val) {
