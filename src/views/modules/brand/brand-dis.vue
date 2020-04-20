@@ -28,8 +28,8 @@
           </el-table-column>
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <span v-if="scope.row.type === 0">禁用</span>
-              <span v-else>正常</span>
+              <el-tag v-if="scope.row.type === 0">禁用</el-tag>
+              <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">

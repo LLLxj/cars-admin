@@ -4,34 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="品牌名称" prop="brandName">
-        <el-input v-model="dataForm.brandName" placeholder="请输入品牌名称"></el-input>
+      <el-form-item label="系列名称" prop="seriesName">
+        <el-input v-model="dataForm.seriesName" placeholder="请输入品牌名称"></el-input>
       </el-form-item>
-      <el-form-item label="品牌首字母" prop="firstLetter">
-        <el-input v-model="dataForm.firstLetter" placeholder="请输入品牌首字母"></el-input>
-      </el-form-item>
-      <el-row :gutter="20">
-        <el-col :span="20">
-          <el-form-item label="logo" prop="image">
-            <el-upload
-              class="avatar-uploader"
-              :action="GLOBAL.UPLOAD_URL"
-              :show-file-list="false"
-              :on-success="imageUploadSuccess"
-              :before-upload="beforeAvatarUpload"
-              :headers="myHeaders">
-              <el-image v-if="dataForm.image" :src="dataForm.image" alt="" lazy>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-form-item label="排序" prop="sort">
-        <el-input-number v-model="dataForm.sort" controls-position="right" :min="0" label="排序号"></el-input-number>
+      <el-form-item label="选择品牌" prop="brandId">
+        <brandSelect v-model="dataForm.brandId"></brandSelect>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -43,20 +20,14 @@
 
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
-  import Series from '@/api/brand/brand'
+  import Series from '@/api/brand/series'
+  import brandSelect from '@/views/common-select/brand-select'
   import { getToken } from '@/utils/userInfoUtil'
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
-        this.dataForm.userName = removeBlank(value)
+        this.dataForm.seriesName = removeBlank(value)
         callback()
-      }
-      var validateMobile = (rule, value, callback) => {
-        if (!isMobile(value)) {
-          callback(new Error('手机号格式错误'))
-        } else {
-          callback()
-        }
       }
       return {
         visible: false,
@@ -65,26 +36,24 @@
           token: getToken()
         },
         dataForm: {
-          brandId: '',
-          brandName: '',
-          image: '',
-          firstLetter: '',
-          sort: ''
+          seriesId: '',
+          seriesName: '',
+          brandId: ''
         },
         id: '',
         dataRule: {
-          brandName: [
+          seriesName: [
             { required: true, message: '用户名不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
-          phone: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' },
-            { validator: validateMobile, trigger: 'blur' }
-          ],
+          brandId: [
+            { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
+          ]
         }
       }
     },
     components: {
+      brandSelect
     },
     watch: {
     },

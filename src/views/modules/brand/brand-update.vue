@@ -20,7 +20,7 @@
               :on-success="imageUploadSuccess"
               :before-upload="beforeAvatarUpload"
               :headers="myHeaders">
-              <el-image v-if="dataForm.image" :src="dataForm.image" alt="" lazy>
+              <el-image v-if="dataForm.image" :src="dataForm.image" alt="" lazy style="width:80px">
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -186,3 +186,8 @@
     }
   }
 </script>
+<style>
+  .el-image img {
+    width:100%;
+  }
+</style>

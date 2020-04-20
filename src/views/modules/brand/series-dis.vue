@@ -14,7 +14,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button> 
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetForm()" type="primary">重置</el-button> 
           </el-form-item>
         </el-form>
@@ -27,7 +27,7 @@
           
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.seriesId)">编辑</el-button>
+              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.seriesId)">编辑</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
             </template>
@@ -43,7 +43,7 @@
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
-        <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+        <!-- <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update> -->
       </el-main>
     </el-container>
   </div>
@@ -52,7 +52,7 @@
 
   import Series from '@/api/brand/series'
   import brandSelect from '@/views/common-select/brand-select'
-  import AddOrUpdate from './series-update'
+  // import AddOrUpdate from './series-update'
   import Bus from '@/utils/bus'
   import Vue from 'vue'
   export default {
@@ -80,7 +80,8 @@
       }
     },
     components: {
-      brandSelect, AddOrUpdate
+      brandSelect, 
+      // AddOrUpdate
     },
     activated () {
       this.getDataList()
@@ -93,7 +94,7 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.searchData || null
-        Series.norList(params).then(res => {
+        Series.disList(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
