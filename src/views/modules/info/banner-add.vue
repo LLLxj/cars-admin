@@ -8,8 +8,8 @@
         <el-input v-model="dataForm.name" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="上传">
-        <el-row :gutter="20">
-          <el-col :span="20">
+        <el-row :gutter="24">
+          <el-col :span="24">
             <el-upload
               :action="GLOBAL.UPLOAD_BRAND_URL"
               :show-file-list="false"
@@ -20,15 +20,14 @@
             </el-upload>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="20">
+        <el-row :gutter="24">
+          <el-col :span="24">
             <el-table :data="body.images" ref="body-images" stripe>
               <el-table-column header-align="center" align="center" type="index" label="NO" width="80"/>
 
               <el-table-column label="图片" prop="img" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <el-image :src="scope.row.img" :alt="scope.row.img" lazy style="max-width: 100px;max-height: 80px;">
-                  </el-image>
+                  <img :src="scope.row.img" :alt="scope.row.img" style="width: 100px;" />
                 </template>
               </el-table-column>
 
@@ -143,7 +142,7 @@
           if (this.body.images === null) {
             this.body.images = []
           }
-          this.body.images.push({ 'img': res.data, 'url': '#' })
+          this.body.images.push({ 'img': res.data.url, 'url': '#' })
         } else {
           this.$message(res.data.msg)
         }
