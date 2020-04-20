@@ -20,7 +20,7 @@
 
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
-  import Customer from '@/api/customer'
+  import Customer from '@/api/customer/customer'
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {

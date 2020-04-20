@@ -77,7 +77,7 @@
 </template>
 <script>
 
-  import Customer from '@/api/customer'
+  import Customer from '@/api/customer/customer'
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './user-add'
   import uploadPop from '@/views/common-pop/upload-user-pop'
