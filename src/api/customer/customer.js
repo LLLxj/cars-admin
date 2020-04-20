@@ -3,7 +3,7 @@ import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
 
-class Custome{
+class Customer{
 
   static norList(params) {
     return request({
@@ -68,4 +68,4 @@ class Custome{
 
 }
 
-export default Custome
+export default Customer
