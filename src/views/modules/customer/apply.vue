@@ -79,7 +79,7 @@
 
   import Applys from '@/api/apply'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
+  import AddOrUpdate from './apply-update'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
