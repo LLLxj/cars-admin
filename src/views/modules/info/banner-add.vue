@@ -8,7 +8,8 @@
         <el-input v-model="dataForm.name" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="上传">
-        <el-row :gutter="24">
+        <el-button size="small" type="primary" @click="chooseProduct">点击上传</el-button>
+        <!-- <el-row :gutter="24">
           <el-col :span="24">
             <el-upload
               :action="GLOBAL.UPLOAD_BRAND_URL"
@@ -16,24 +17,18 @@
               :on-success="imageUploadSuccess2"
               :before-upload="beforeAvatarUpload"
               :headers="myHeaders">
-              <el-button size="small" type="primary">点击上传</el-button>
+              
             </el-upload>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row :gutter="24">
           <el-col :span="24">
-            <el-table :data="body.images" ref="body-images" stripe>
+            <el-table :data="dataForm.images" ref="body-images" stripe>
               <el-table-column header-align="center" align="center" type="index" label="NO" width="80"/>
-
+              <el-table-column label="产品名称" prop="brandName" header-align="center" align="center" width="80"/>
               <el-table-column label="图片" prop="img" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <img :src="scope.row.img" :alt="scope.row.img" style="width: 100px;" />
-                </template>
-              </el-table-column>
-
-              <el-table-column label="跳转地址" prop="url" header-align="center" align="center" min-width="200">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.url" maxlength="255" placeholder="请输入url"/>
+                  <img :src="scope.row.image" :alt="scope.row.img" style="width: 100px;" />
                 </template>
               </el-table-column>
 
@@ -41,7 +36,7 @@
                 <template slot-scope="scope">
                   <el-button-group>
                     <el-button size="mini" v-if="scope.$index > 0" type="primary" title="上移" icon="el-icon-caret-top" @click.stop="imagesUp(scope.$index)"></el-button>
-                    <el-button size="mini"  type="primary" v-if="scope.$index != body.images.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
+                    <el-button size="mini"  type="primary" v-if="scope.$index != dataForm.images.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
                   </el-button-group>
                   <el-button-group>
                     <el-button size="mini" type="danger" title="删除" icon="el-icon-delete" @click.stop="imagesDel(scope.$index)" ></el-button>
@@ -61,6 +56,7 @@
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
+    <ProductPop v-if="proPopVisible" ref="ProductPop" @product-pop-event="getProInfo"></ProductPop>
   </el-dialog>
 </template>
 
@@ -68,6 +64,7 @@
   import { isMobile, removeBlank } from '@/utils/validate'
   import Banner from '@/api/banner'
   import { getToken } from '@/utils/userInfoUtil'
+  import ProductPop from '@/views/common-pop/product-pop'
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
@@ -76,6 +73,7 @@
       }
       return {
         visible: false,
+        proPopVisible: false,
         roleList: [],
         menuList: [],
         menuListTreeProps: {
@@ -112,17 +110,23 @@
       }
     },
     components: {
+      ProductPop
     },
     watch: {
     },
     methods: {
       init (id) {
         this.bannerId = id
-        console.log(this.id)
         this.visible = true
         if(id) {
           this.setData(id)
         } 
+      },
+      chooseProduct () {
+        this.proPopVisible = true
+        this.$nextTick(() => {
+          this.$refs.ProductPop.init()
+        })
       },
       setData(data) {
         Banner.info(data).then(({data}) => {
@@ -161,7 +165,7 @@
       },
        // 多图片 删除图片方法
       imagesDel(index) {
-        this.body.images.splice(index, 1)
+        this.dataForm.images.splice(index, 1)
         // this.body.images = this.body.images.splice(index, 1)
       },
       // 多图片 上移
@@ -169,16 +173,16 @@
         this.bodyImagesLoading = true
         if (index !== 0) {
           // 将当前数组index索引与前面一个元素互换位置，向数组前面移动一位
-          this.body.images[index] = this.body.images.splice(index - 1, 1, this.body.images[index])[0]
+          this.dataForm.images[index] = this.dataForm.images.splice(index - 1, 1, this.dataForm.images[index])[0]
         }
         this.bodyImagesLoading = false
       },
       // 多图片 下移
       imagesDown(index) {
         this.bodyImagesLoading = true
-        if (index + 1 !== this.body.images.length) {
+        if (index + 1 !== this.dataForm.images.length) {
           // 将当前数组index索引与后面一个元素互换位置，向数组后面移动一位
-          this.body.images[index] = this.body.images.splice(index + 1, 1, this.body.images[index])[0]
+          this.dataForm.images[index] = this.dataForm.images.splice(index + 1, 1, this.dataForm.images[index])[0]
         }
         this.bodyImagesLoading = false
       },
@@ -189,10 +193,15 @@
         this.visible = false
         this.resetForm()
       },
+      getProInfo (val) {
+        console.log(val)
+        this.dataForm.images.push(val)
+      },
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            console.log(this.dataForm)
             if (!this.id) {
               Banner.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
@@ -236,6 +245,7 @@
             }
           }
         })
+       
       }
     }
   }
