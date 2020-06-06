@@ -17,7 +17,7 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="brandName" header-align="center" align="center" label="品牌名称">
+          <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称">
           </el-table-column>
           <el-table-column prop="image" header-align="center" align="center" label="品牌logo">
             <template slot-scope="scope">
@@ -34,7 +34,7 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.brandId)">编辑</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couBrandId)">编辑</el-button>
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
             </template>
@@ -106,9 +106,7 @@
       },
       resetForm () {
         this.searchData = {
-          areaName: '',
-          countryId: '',
-          cityId: ''
+          brandName: '',
         }
       },
       // 新增 / 修改

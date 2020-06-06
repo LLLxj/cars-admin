@@ -7,10 +7,10 @@
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
           <el-form-item label="系列名称">
-            <el-input v-model="searchData.seriesName" placeholder="系列名称" clearable></el-input>
+            <el-input v-model="searchData.couSeriesName" placeholder="系列名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="选择品牌">
-            <brandSelect v-model="searchData.brandId" @get-brand-val="getBrandData"></brandSelect>
+            <brandSelect v-model="searchData.couBrandId" @get-brand-val="getBrandData"></brandSelect>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button> 
@@ -20,14 +20,14 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="seriesName" header-align="center" align="center" label="系列名称">
+          <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称">
           </el-table-column>
-          <el-table-column prop="brandName" header-align="center" align="center" label="所属品牌">
+          <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌">
           </el-table-column>
           
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.seriesId)">编辑</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couSeriesId)">编辑</el-button>
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
             </template>
@@ -65,8 +65,8 @@
         totalPage: 0,
         dataListLoading: false,
         searchData: {
-          seriesName: '',
-          brandId: '',
+          couSeriesName: '',
+          couBrandId: '',
           page: 1,
           limit: 10
         },
@@ -115,8 +115,8 @@
       },
       resetForm () {
         this.searchData = {
-          seriesName: '',
-          brandId: '',
+          couSeriesName: '',
+          couBrandId: '',
           page: 1,
           limit: 10
         }

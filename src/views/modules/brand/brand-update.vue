@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="品牌名称" prop="brandName">
-        <el-input v-model="dataForm.brandName" placeholder="请输入品牌名称"></el-input>
+      <el-form-item label="品牌名称" prop="couBrandName">
+        <el-input v-model="dataForm.couBrandName" placeholder="请输入品牌名称"></el-input>
       </el-form-item>
       <el-form-item label="品牌首字母" prop="firstLetter">
         <el-input v-model="dataForm.firstLetter" placeholder="请输入品牌首字母"></el-input>
@@ -48,7 +48,7 @@
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
-        this.dataForm.userName = removeBlank(value)
+        this.dataForm.couBrandName = removeBlank(value)
         callback()
       }
       var validateMobile = (rule, value, callback) => {
@@ -65,15 +65,15 @@
           token: getToken()
         },
         dataForm: {
-          brandId: '',
-          brandName: '',
+          couBrandId: '',
+          couBrandName: '',
           image: '',
           firstLetter: '',
           sort: ''
         },
         id: '',
         dataRule: {
-          brandName: [
+          couBrandName: [
             { required: true, message: '用户名不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
@@ -91,6 +91,7 @@
     methods: {
       init (id) {
         this.id = id
+        this.dataForm.couBrandId = id
         this.visible = true
         if(id) {
           this.setData(id)
@@ -100,6 +101,7 @@
         Brand.info(data).then(({data}) => {
           if (data.code === 0) {
             this.dataForm = data.data
+            console.log(this.dataForm)
           }else {
             this.$message.error(data.msg)
           }

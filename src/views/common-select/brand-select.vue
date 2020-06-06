@@ -2,9 +2,9 @@
   <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择品牌" @change="getCity">
     <el-option
       v-for="item in dataList"
-      :key="item.brandId"
-      :label="item.brandName"
-      :value="item.brandId">
+      :key="item.couBrandId"
+      :label="item.couBrandName"
+      :value="item.couBrandId">
     </el-option>
   </el-select>
 </template>

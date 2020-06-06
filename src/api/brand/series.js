@@ -7,7 +7,7 @@ class Series{
 
   static norList(params) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/normalList`,
+      url: `${baseUrl}/cou/wares/series/normalList`,
       method: 'get',
       params: params
     })
@@ -15,7 +15,7 @@ class Series{
 
   static disList(params) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/disableList`,
+      url: `${baseUrl}/cou/wares/series/disableList`,
       method: 'get',
       params: params
     })
@@ -23,14 +23,14 @@ class Series{
 
   static disable(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/disable/` + data,
+      url: `${baseUrl}/cou/wares/series/disable/` + data,
       method: 'get',
     })
   }
 
   static awake(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/normal/` + data,
+      url: `${baseUrl}/cou/wares/series/normal/` + data,
       method: 'get',
     })
   }
@@ -38,14 +38,14 @@ class Series{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/info/` + data,
+      url: `${baseUrl}/cou/wares/series/info/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/save`,
+      url: `${baseUrl}/cou/wares/series/save`,
       method: 'post',
       data
     })
@@ -53,7 +53,7 @@ class Series{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/series/update`,
+      url: `${baseUrl}/cou/wares/series/update`,
       method: 'post',
       data
     })

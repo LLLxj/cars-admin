@@ -7,7 +7,7 @@ class Brand{
 
   static norList(params) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/normalList`,
+      url: `${baseUrl}/cou/wares/brand/normalList`,
       method: 'get',
       params: params
     })
@@ -15,7 +15,7 @@ class Brand{
 
   static disList(params) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/disableList`,
+      url: `${baseUrl}/cou/wares/brand/disableList`,
       method: 'get',
       params: params
     })
@@ -23,14 +23,14 @@ class Brand{
 
   static disable(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/disable/` + data,
+      url: `${baseUrl}/cou/wares/brand/disable/` + data,
       method: 'get',
     })
   }
 
   static awake(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/normal/` + data,
+      url: `${baseUrl}/cou/wares/brand/normal/` + data,
       method: 'get',
     })
   }
@@ -38,14 +38,14 @@ class Brand{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/info/` + data,
+      url: `${baseUrl}/cou/wares/brand/info/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/save`,
+      url: `${baseUrl}/cou/wares/brand/save`,
       method: 'post',
       data
     })
@@ -53,7 +53,7 @@ class Brand{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/deal/wares/brand/update`,
+      url: `${baseUrl}/cou/wares/brand/update`,
       method: 'post',
       data
     })
