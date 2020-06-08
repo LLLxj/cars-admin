@@ -238,7 +238,7 @@
         })
       },
       getRoleList() {
-        Role.norList().then(({data}) => {
+        Role.list().then(({data}) => {
           console.log(data)
           if (data && data.code === 0) {
             this.roleList = data.data.list

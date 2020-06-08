@@ -7,7 +7,7 @@ class Customer{
 
   static norList(params) {
     return request({
-      url: `${baseUrl}/deal/user/normalList`,
+      url: `${baseUrl}/deal/user/list`,
       method: 'get',
       params: params
     })

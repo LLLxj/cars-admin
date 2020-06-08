@@ -73,7 +73,7 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Role.norList().then(({data}) => {
+        Role.list().then(({data}) => {
           if (data && data.code === 0) {
             this.dataListLoading = false
             this.dataList = data.data.list

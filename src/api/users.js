@@ -5,9 +5,9 @@ const baseUrl = '/apiPro'
 
 class Users{
 
-  static norList(params) {
+  static list(params) {
     return request({
-      url: `${baseUrl}/sys/user/normalList`,
+      url: `${baseUrl}/sys/user/list`,
       method: 'get',
       params: params
     })

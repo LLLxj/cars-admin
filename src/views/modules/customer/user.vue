@@ -7,7 +7,7 @@
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
           <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.userName" placeholder="请输入用户名" clearable></el-input>
+            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
           </el-form-item>
           <el-form-item label="请输入手机号">
             <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
@@ -28,9 +28,15 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="userName" header-align="center" align="center" label="用户名">
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
           </el-table-column>
-          <el-table-column prop="storeName" header-align="center" align="center" label="所属公司">
+          <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
+          </el-table-column>
+          <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
+          </el-table-column>
+          <el-table-column prop="integral" header-align="center" align="center" label="积分">
+          </el-table-column>
+          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属公司">
             <template slot-scope="scope">
               <span>{{scope.row.storeName || '--'}}</span>
             </template>
@@ -53,7 +59,7 @@
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">编辑</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -250,6 +256,7 @@
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
+        console.log(id)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)

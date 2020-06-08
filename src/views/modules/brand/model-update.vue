@@ -2,14 +2,31 @@
   <el-dialog
     :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
-    :visible.sync="visible" @close="cancle" width="800px">
+    :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="系列名称" prop="couSeriesName">
-        <el-input v-model="dataForm.couSeriesName" placeholder="请输入品牌名称"></el-input>
+      <el-form-item label="型号名称" prop="couModelName">
+        <el-input v-model="dataForm.couModelName" placeholder="请输入型号名称"></el-input>
       </el-form-item>
-      <el-form-item label="选择品牌" prop="couBrandId">
-        <brandSelect v-model="dataForm.couBrandId"></brandSelect>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="20">
+          <el-form-item label="logo" prop="image">
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadUrl"
+              :show-file-list="false"
+              :on-success="imageUploadSuccess"
+              :before-upload="beforeAvatarUpload"
+              :headers="myHeaders">
+              <el-image v-if="dataForm.image" :src="dataForm.image" alt="" lazy style="width:80px">
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
@@ -20,54 +37,59 @@
 
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
-  import Series from '@/api/brand/series'
-  import brandSelect from '@/views/common-select/brand-select'
+  import Models from '@/api/brand/model'
   import { getToken } from '@/utils/userInfoUtil'
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
-        this.dataForm.seriesName = removeBlank(value)
+        this.dataForm.couModelName = removeBlank(value)
         callback()
+      }
+      var validateMobile = (rule, value, callback) => {
+        if (!isMobile(value)) {
+          callback(new Error('手机号格式错误'))
+        } else {
+          callback()
+        }
       }
       return {
         visible: false,
+        uploadUrl: '/apiPro/cou/wares/model/upload/image',
         myHeaders: {
           token: getToken()
         },
         dataForm: {
-          couSeriesId: '',
-          couSeriesName: '',
-          couBrandId: ''
+          couModelId: '',
+          couModelName: '',
+          image: '',
         },
         id: '',
         dataRule: {
-          couSeriesName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' },
+          couModelName: [
+            { required: true, message: '型号名称不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
-          ],
-          couBrandId: [
-            { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
           ]
         }
       }
     },
     components: {
-      brandSelect
     },
     watch: {
     },
     methods: {
       init (id) {
         this.id = id
+        this.dataForm.couModelId = id
         this.visible = true
         if(id) {
           this.setData(id)
         } 
       },
       setData(data) {
-        Series.info(data).then(({data}) => {
+        Models.info(data).then(({data}) => {
           if (data.code === 0) {
             this.dataForm = data.data
+            console.log(this.dataForm)
           }else {
             this.$message.error(data.msg)
           }
@@ -108,7 +130,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.id) {
-              Series.save(this.dataForm).then(({data}) => {
+              Models.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',
@@ -128,7 +150,7 @@
                 this.$message.error(err)
               })
             } else {
-              Series.update(this.dataForm).then(({data}) => {
+              Models.update(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',
@@ -154,3 +176,8 @@
     }
   }
 </script>
+<style>
+  .el-image img {
+    width:100%;
+  }
+</style>

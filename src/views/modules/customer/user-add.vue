@@ -67,6 +67,7 @@
     },
     methods: {
       init (id) {
+        console.log(id)
         this.id = id
         console.log(this.id)
         this.visible = true

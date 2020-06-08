@@ -20,7 +20,7 @@
 
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
-  import Series from '@/api/brand/series'
+  import Product from '@/api/brand/product'
   import brandSelect from '@/views/common-select/brand-select'
   import { getToken } from '@/utils/userInfoUtil'
   export default {
@@ -65,7 +65,7 @@
         } 
       },
       setData(data) {
-        Series.info(data).then(({data}) => {
+        Product.info(data).then(({data}) => {
           if (data.code === 0) {
             this.dataForm = data.data
           }else {
@@ -108,7 +108,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.id) {
-              Series.save(this.dataForm).then(({data}) => {
+              Product.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',
@@ -128,7 +128,7 @@
                 this.$message.error(err)
               })
             } else {
-              Series.update(this.dataForm).then(({data}) => {
+              Product.update(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',

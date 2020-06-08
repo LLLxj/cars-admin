@@ -148,6 +148,7 @@
           countryId: '',
           cityId: ''
         }
+        this.getDataList()
       },
       // 每页数
       sizeChangeHandle (val) {

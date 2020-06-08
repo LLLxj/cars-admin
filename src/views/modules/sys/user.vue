@@ -117,7 +117,7 @@
       getDataList (params) {
         this.dataListLoading = true
         this.params = this.searchData || null
-        Users.norList(params).then(res => {
+        Users.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount

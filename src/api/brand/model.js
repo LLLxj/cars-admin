@@ -2,12 +2,11 @@
 import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
-
-class Role{
+class Models{
 
   static list(params) {
     return request({
-      url: `${baseUrl}/sys/role/list`,
+      url: `${baseUrl}/cou/wares/model/list`,
       method: 'get',
       params: params
     })
@@ -15,7 +14,7 @@ class Role{
 
   static disList(params) {
     return request({
-      url: `${baseUrl}/sys/role/disableList`,
+      url: `${baseUrl}/cou/wares/model/disableList`,
       method: 'get',
       params: params
     })
@@ -23,14 +22,14 @@ class Role{
 
   static disable(data) {
     return request({
-      url: `${baseUrl}/sys/role/disable/` + data,
+      url: `${baseUrl}/cou/wares/model/disable/` + data,
       method: 'get',
     })
   }
 
   static awake(data) {
     return request({
-      url: `${baseUrl}/sys/role/nomarl/` + data,
+      url: `${baseUrl}/cou/wares/model/normal/` + data,
       method: 'get',
     })
   }
@@ -38,14 +37,14 @@ class Role{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/sys/role/info/` + data,
+      url: `${baseUrl}/cou/wares/model/info/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/sys/role/save`,
+      url: `${baseUrl}/cou/wares/model/save`,
       method: 'post',
       data
     })
@@ -53,19 +52,12 @@ class Role{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/sys/role/update`,
+      url: `${baseUrl}/cou/wares/model/update`,
       method: 'post',
       data
     })
   }
 
-  static delete(data) {
-    return request({
-      url: `${baseUrl}/sys/role/delete/` + data,
-      method: 'get',
-    })
-  }
-
 }
 
-export default Role
+export default Models
