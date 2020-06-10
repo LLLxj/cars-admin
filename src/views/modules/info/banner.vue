@@ -5,9 +5,12 @@
       <!--右侧-->
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
-        <el-form :inline="true" :model="dataForm">
+        <el-form :inline="true" :model="searchData">
           <el-form-item label="标题">
-            <el-input v-model="dataForm.name" placeholder="标题" clearable></el-input>
+            <el-input v-model="searchData.name" placeholder="标题" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -17,20 +20,23 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="name" header-align="center" align="center" label="标题">
+          <el-table-column prop="bannerName" header-align="center" align="center" label="标题">
           </el-table-column>
-          <el-table-column prop="image" header-align="center" align="center" label="缩略图">
+          <el-table-column header-align="center" align="center" label="缩略图">
             <template slot-scope="scope">
-              <img :src="scope.row.image" alt="" style="max-height: 100px;max-width: 100px">
+              <div v-if="scope.row.bannerWaresList.length !== 0">
+                 <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId">
+                  <img :src="item.coverImage" alt="" style="max-height: 100px;max-width: 100px">
+                </div>
+              </div>
+              <span v-else>-</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="url" header-align="center" align="center" label="url">
           </el-table-column>
           <el-table-column prop="sort" header-align="center" align="center" label="排序">
           </el-table-column>
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0">禁用</el-tag>
+              <el-tag type="info" v-if="scope.row.status === 0">禁用</el-tag>
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
@@ -60,7 +66,7 @@
   </div>
 </template>
 <script>
-
+  import SelectStatus from '@/views/common-select/select-status'
   import Banner from '@/api/banner'
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './banner-add'
@@ -74,8 +80,11 @@
   export default {
     data () {
       return {
-        dataForm: {
+        searchData: {
           name: '',
+          status: '',
+          page: 1,
+          limit: 10
         },
         dataList: [],
         isShow: true,
@@ -97,7 +106,8 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop
+      uploadPop,
+      SelectStatus
     },
     activated () {
       this.getDataList()
@@ -106,8 +116,8 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
-        Banner.norList(params).then(res => {
+        params = this.searchData || null
+        Banner.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -115,6 +125,7 @@
               this.isShow = false
             }
           } else {
+            this.$message.error(res.data.msg)
             this.dataList = []
             this.totalPage = 0
           }
@@ -165,8 +176,11 @@
         })
       },
       resetFrom () {
-        this.dataForm = {
-          name: ''
+        this.searchData = {
+          name: '',
+          status: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },

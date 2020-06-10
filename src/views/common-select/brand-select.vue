@@ -58,9 +58,9 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Brand.norList({page:1,limit:100}).then(res => {
+        Brand.listAll().then(res => {
           if(res.data && res.data.code === 0){
-            this.dataList = res.data.data.list
+            this.dataList = res.data.data
           }else{
             this.dataList = []
           }

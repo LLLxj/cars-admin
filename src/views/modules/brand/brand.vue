@@ -9,6 +9,9 @@
           <el-form-item label="品牌名称">
             <el-input v-model="searchData.brandName" placeholder="品牌名称" clearable></el-input>
           </el-form-item>
+          <el-form-item label="状态">
+            <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
+          </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button> 
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -19,24 +22,25 @@
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称">
           </el-table-column>
-          <el-table-column prop="image" header-align="center" align="center" label="品牌logo">
+          <el-table-column header-align="center" align="center" label="品牌logo">
             <template slot-scope="scope">
-              <img :src="scope.row.image" alt="" style="max-height: 100px;max-width: 100px">
+              <img v-if="scope.row.image" :src="scope.row.image" alt="" style="max-height: 100px;max-width: 100px">
+              <span v-else>-</span>
             </template>
           </el-table-column>
           <el-table-column prop="firstLetter" header-align="center" align="center" label="品牌首字母">
           </el-table-column>
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.type === 0">禁用</el-tag>
+              <el-tag type="info" v-if="scope.row.status === 0">禁用</el-tag>
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couBrandId)">编辑</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couBrandId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.couBrandId)">启用</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,7 +61,7 @@
   </div>
 </template>
 <script>
-
+  import SelectStatus from '@/views/common-select/select-status'
   import Brand from '@/api/brand/brand'
   import AddOrUpdate from './brand-update'
   import Vue from 'vue'
@@ -72,13 +76,15 @@
         dataListLoading: false,
         searchData: {
           brandName: '',
+          status: '',
           page: 1,
           limit: 10
         },
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      SelectStatus
     },
     activated () {
       this.getDataList()
@@ -90,7 +96,7 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.searchData || null
-        Brand.norList(params).then(res => {
+        Brand.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -107,7 +113,11 @@
       resetForm () {
         this.searchData = {
           brandName: '',
+          status: '',
+          page: 1,
+          limit: 10
         }
+        this.getDataList()
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
@@ -129,7 +139,7 @@
       },
       // 禁用
       disHandle (data) {
-        Brand.disable(data.brandId).then(res => {
+        Brand.disable(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -155,7 +165,7 @@
       },
       // 启用
       norHandle (data) {
-        Brand.awake(data.brandId).then(res => {
+        Brand.awake(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',

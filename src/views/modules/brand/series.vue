@@ -12,6 +12,9 @@
           <el-form-item label="选择品牌">
             <brandSelect v-model="searchData.couBrandId" @get-brand-val="getBrandData"></brandSelect>
           </el-form-item>
+          <el-form-item label="状态">
+            <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
+          </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button> 
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -24,12 +27,17 @@
           </el-table-column>
           <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌">
           </el-table-column>
-          
+          <el-table-column prop="status" header-align="center" align="center" label="状态">
+            <template slot-scope="scope">
+              <el-tag type="info" v-if="scope.row.status === 0">禁用</el-tag>
+              <el-tag v-else>正常</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couSeriesId)">编辑</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couSeriesId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.couSeriesId)">启用</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -49,7 +57,7 @@
   </div>
 </template>
 <script>
-
+  import SelectStatus from '@/views/common-select/select-status'
   import Series from '@/api/brand/series'
   import brandSelect from '@/views/common-select/brand-select'
   import AddOrUpdate from './series-update'
@@ -68,19 +76,21 @@
           couSeriesName: '',
           couBrandId: '',
           page: 1,
-          limit: 10
+          limit: 10,
+          status: ''
         },
         params: {
           areaName: '',
           areaId: '',
           page: '',
-          limit: ''
+          limit: '',
+          status: ''
         },
         chooseCity: true,
       }
     },
     components: {
-      brandSelect, AddOrUpdate
+      brandSelect, AddOrUpdate, SelectStatus
     },
     activated () {
       this.getDataList()
@@ -93,7 +103,7 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.searchData || null
-        Series.norList(params).then(res => {
+        Series.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -101,6 +111,7 @@
               this.isShow = false
             }
           } else {
+            this.$message.error(res.data.msg)
             this.dataList = []
             this.totalPage = 0
           }
@@ -118,7 +129,8 @@
           couSeriesName: '',
           couBrandId: '',
           page: 1,
-          limit: 10
+          limit: 10,
+          status: ''
         }
         this.getDataList()
       },
@@ -149,7 +161,7 @@
       },
       // 禁用
       disHandle (data) {
-        Series.disable(data.seriesId).then(res => {
+        Series.disable(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -175,7 +187,7 @@
       },
       // 启用
       norHandle (data) {
-        Series.awake(data.seriesId).then(res => {
+        Series.awake(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',

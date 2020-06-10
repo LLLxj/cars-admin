@@ -4,9 +4,12 @@
     <el-container>
       <!--右侧-->
       <el-main>
-        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent>
-          <el-form-item>
-            <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
+        <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent>
+          <el-form-item label="用户名">
+            <el-input v-model="searchData.userName" placeholder="用户名" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="用户状态">
+            <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -69,7 +72,7 @@
   </div>
 </template>
 <script>
-
+  import SelectStatus from '@/views/common-select/select-status'
   import Users from '@/api/users'
   import schoolAllSidebar from '../../common-sidebar/school-all-sidebar'
   import AddOrUpdate from './user-add-or-update'
@@ -85,7 +88,8 @@
       return {
         dataForm: {
           userName: undefined,
-          deptId: undefined
+          deptId: undefined,
+          status: ''
         },
         dataList: [],
         isShow: true,
@@ -98,6 +102,10 @@
         addOrUpdateVisible: false,
         uploadPopVisible: false,
         searchData: {
+          userName: '',
+          status: '',
+          page: 1,
+          limit: 10
         },
       }
     },
@@ -107,7 +115,8 @@
       ElAside,
       ElMain,
       schoolAllSidebar,
-      uploadPop
+      uploadPop,
+      SelectStatus
     },
     activated () {
       this.getDataList()
@@ -116,7 +125,7 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        this.params = this.searchData || null
+        params = this.searchData || null
         Users.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
@@ -125,6 +134,7 @@
               this.isShow = false
             }
           } else {
+            this.$message.error(res.data.msg)
             this.dataList = []
             this.totalPage = 0
           }

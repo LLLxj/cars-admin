@@ -1,8 +1,11 @@
 <template>
   <div class="mod-role">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable></el-input>
+    <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()">
+      <el-form-item label="角色名称">
+        <el-input v-model="searchData.roleName" placeholder="角色名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="用户状态">
+        <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -47,12 +50,16 @@
 
 <script>
   import AddOrUpdate from './role-add-or-update'
+  import SelectStatus from '@/views/common-select/select-status'
   import Role from '@/api/role'
   export default {
     data () {
       return {
-        dataForm: {
-          roleName: ''
+        searchData: {
+          roleName: '',
+          status: '',
+          page: 1,
+          limit: 10
         },
         dataList: [],
         pageIndex: 1,
@@ -64,21 +71,25 @@
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      SelectStatus
     },
     activated () {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
+      getDataList (params) {
         this.dataListLoading = true
-        Role.list().then(({data}) => {
+        params = this.searchData || null
+        Role.list(params).then(({data}) => {
           if (data && data.code === 0) {
             this.dataListLoading = false
             this.dataList = data.data.list
             this.totalPage = data.data.totalCount
-          } 
+          } else {
+            this.$message.error(data.msg)
+          }
         }).catch(err => {
           this.dataListLoading = false
           console.log(err)
@@ -88,24 +99,6 @@
             duration: 1500
           })
         })
-        // this.$http({
-        //   url: this.$http.adornUrl('/sys/role/list'),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //     'page': this.pageIndex,
-        //     'limit': this.pageSize,
-        //     'roleName': this.dataForm.roleName
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.dataList = data.page.list
-        //     this.totalPage = data.page.totalCount
-        //   } else {
-        //     this.dataList = []
-        //     this.totalPage = 0
-        //   }
-        //   this.dataListLoading = false
-        // })
       },
       // 每页数
       sizeChangeHandle (val) {

@@ -74,8 +74,8 @@
         params: {
           areaName: '',
           areaId: '',
-          page: '',
-          limit: ''
+          page: 1,
+          limit: 10
         },
         chooseCity: true,
       }
@@ -97,29 +97,23 @@
     methods: {
       // 获取数据列表
       getDataList (params) {
+        this.searchData.page = 1
         this.dataListLoading = true
         var params = this.searchData || null
         this.paramsSearch()
       },
       paramsSearch() {
         var data = this.searchData
-        let obj = {}
         if (data.cityId !== '' && data.countryId == '') {
-          // data.areaId = data.cityId
-          obj.areaName = data.areaName
-          obj.areaId = data.cityId
+          this.params.areaName = data.areaName
+          this.params.areaId = data.cityId
         } else if (data.cityId !== '' && data.countryId !== '') {
-          // data.cityId = data.countryId
-          obj.areaName = data.areaName
-          obj.areaId = data.countryId
-          // this.params = {
-          //   areaName: data.areaName,
-          //   data.cityId: data.countryId,
-          //   page: data.page,
-          //   limit: data.limit
-          // }
-        } 
-        Areas.list(obj).then(res => {
+          this.params.areaName = data.areaName
+          this.params.areaId = data.countryId
+        }
+        this.params.page = this.searchData.page
+        this.params.limit = this.searchData.limit
+        Areas.list(this.params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -145,8 +139,9 @@
       resetForm () {
         this.searchData = {
           areaName: '',
-          countryId: '',
-          cityId: ''
+          areaId: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },
@@ -158,6 +153,7 @@
       },
       // 当前页
       currentChangeHandle (val) {
+        console.log(val)
         this.searchData.page = val
         this.getDataList(this.searchData)
       },
