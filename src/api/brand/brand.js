@@ -5,11 +5,18 @@ const baseUrl = '/apiPro'
 
 class Brand{
 
-  static norList(params) {
+  static list(params) {
     return request({
-      url: `${baseUrl}/cou/wares/brand/normalList`,
+      url: `${baseUrl}/cou/wares/brand/list`,
       method: 'get',
       params: params
+    })
+  }
+
+  static listAll() {
+    return request({
+      url: `${baseUrl}/cou/wares/brand/getCouBrandList`,
+      method: 'get'
     })
   }
 

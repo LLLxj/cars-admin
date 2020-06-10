@@ -5,9 +5,9 @@ const baseUrl = '/apiPro'
 
 class Banner{
 
-  static norList(params) {
+  static list(params) {
     return request({
-      url: `${baseUrl}/conf/banner/normalList`,
+      url: `${baseUrl}/conf/banner/list`,
       method: 'get',
       params: params
     })
