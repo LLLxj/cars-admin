@@ -23,14 +23,18 @@
           <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称">
           </el-table-column>
           <el-table-column prop="image" header-align="center" align="center" label="型号照片">
+            <template slot-scope="scope">
+              <img v-if="scope.row.image" :src="scope.row.image" style="max-width:80px;" alt="">
+              <span v-else>-</span>
+            </template>
           </el-table-column>
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0">禁用</el-tag>
+              <el-tag v-if="scope.row.status === 0" type="info">禁用</el-tag>
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
+          <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couModelId)">编辑</el-button>
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couModelId)">禁用</el-button> 

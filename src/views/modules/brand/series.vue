@@ -119,7 +119,7 @@
         })
       },
       getBrandData(val) {
-        this.searchData.brandId = val
+        this.searchData.couBrandId = val
       },
       getCountryData(val) {
         this.searchData.countryId = val

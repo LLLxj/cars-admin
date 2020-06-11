@@ -43,6 +43,13 @@ class Series{
     })
   }
 
+  static selectBrandList(data) {
+    return request({
+      url: `${baseUrl}/cou/wares/series/getCouSeriesList/` + data,
+      method: 'get',
+    })
+  }
+
   static save(data) {
     return request({
       url: `${baseUrl}/cou/wares/series/save`,

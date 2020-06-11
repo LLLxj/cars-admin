@@ -7,7 +7,7 @@
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
           <el-form-item label="品牌名称">
-            <el-input v-model="searchData.brandName" placeholder="品牌名称" clearable></el-input>
+            <el-input v-model="searchData.couBrandName" placeholder="品牌名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
@@ -75,7 +75,7 @@
         totalPage: 0,
         dataListLoading: false,
         searchData: {
-          brandName: '',
+          couBrandName: '',
           status: '',
           page: 1,
           limit: 10
@@ -112,7 +112,7 @@
       },
       resetForm () {
         this.searchData = {
-          brandName: '',
+          couBrandName: '',
           status: '',
           page: 1,
           limit: 10

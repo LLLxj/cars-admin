@@ -51,9 +51,11 @@ consume (string, optional): 状态 0.禁用 1.正常 -->
           </el-table-column>
           <el-table-column prop="disMent" header-align="center" align="center" label="排量">
           </el-table-column>
-          <el-table-column prop="varBox" header-align="center" align="center" label="品牌logo路径">
+          <el-table-column prop="varBox" header-align="center" align="center" label="变速箱">
           </el-table-column>
-          <el-table-column prop="drive" header-align="center" align="center" label="品牌首字母">
+          <el-table-column prop="drive" header-align="center" align="center" label="驱动方式">
+          </el-table-column>
+          <el-table-column prop="consume" header-align="center" align="center" label="油耗量">
           </el-table-column>
           <!-- <el-table-column prop="image" header-align="center" align="center" label="品牌logo">
             <template slot-scope="scope">
@@ -68,13 +70,13 @@ consume (string, optional): 状态 0.禁用 1.正常 -->
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column prop="consume" header-align="center" align="center" label="状态">
+          <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.consume === 0">禁用</el-tag>
+              <el-tag v-if="scope.row.consume === 0" type="info">禁用</el-tag>
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
+          <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couWaresId)">编辑</el-button>
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couWaresId)">禁用</el-button> 

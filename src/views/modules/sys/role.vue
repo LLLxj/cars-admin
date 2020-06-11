@@ -4,12 +4,13 @@
       <el-form-item label="角色名称">
         <el-input v-model="searchData.roleName" placeholder="角色名称" clearable></el-input>
       </el-form-item>
-      <el-form-item label="用户状态">
+      <el-form-item label="状态">
         <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('sys:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" @click="resetForm()">重置</el-button>
         <!-- <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button> -->
       </el-form-item>
     </el-form>
@@ -24,6 +25,12 @@
       <el-table-column prop="roleName" header-align="center" align="center" label="角色名称">
       </el-table-column>
       <el-table-column prop="remake" header-align="center" align="center" label="备注">
+      </el-table-column>
+      <el-table-column prop="status" header-align="center" align="center" label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small" type="info">禁用</el-tag>
+          <el-tag v-else size="small">正常</el-tag>
+        </template>
       </el-table-column>
       <el-table-column prop="createTime" header-align="center" align="center" width="180" label="创建时间">
       </el-table-column>
@@ -114,6 +121,15 @@
       // 多选
       selectionChangeHandle (val) {
         this.dataListSelections = val
+      },
+      resetForm() {
+        this.searchData = {
+          roleName: '',
+          status: '',
+          page: 1,
+          limit: 10
+        }
+        this.getDataList()
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {

@@ -16,7 +16,8 @@
               :show-file-list="false"
               :on-success="imageUploadSuccess"
               :before-upload="beforeAvatarUpload"
-              :headers="myHeaders">
+              :headers="myHeaders"
+              :accept="'.jpg, .png'">
               <el-image v-if="dataForm.image" :src="dataForm.image" alt="" lazy style="width:80px">
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>

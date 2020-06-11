@@ -4,13 +4,54 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="系列名称" prop="couSeriesName">
-        <el-input v-model="dataForm.couSeriesName" placeholder="请输入品牌名称"></el-input>
+      <el-form-item label="商品名称" prop="couWaresName">
+        <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input>
       </el-form-item>
-      <el-form-item label="选择品牌" prop="couBrandId">
-        <brandSelect v-model="dataForm.couBrandId"></brandSelect>
+      <el-form-item label="品牌名称" prop="couBrandId">
+        <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
+      </el-form-item>
+      <el-form-item label="选择系列" prop="couSeriesId">
+        <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
+      </el-form-item>
+      <el-form-item label="选择型号" prop="couModelId">
+        <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
+      </el-form-item>
+      <el-form-item label="厂商指导价" prop="couWaresPrice">
+        <el-input-number v-model="dataForm.couWaresPrice" :min="1" label=""></el-input-number>
+      </el-form-item>
+      <el-form-item label="年款" prop="marketYear">
+        <el-date-picker v-model="dataForm.marketYear" value-format="yyyy" type="year" placeholder="选择年">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="年款" prop="marketTime">
+        <el-date-picker v-model="dataForm.marketTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="排量" prop="disMent">
+        <DisMent v-model="dataForm.disMent"></DisMent>
+      </el-form-item>
+      <el-form-item label="变速箱" prop="varBox">
+        <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect>
+      </el-form-item>
+      <el-form-item label="驱动方式" prop="drive">
+        <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect>
+      </el-form-item>
+      <el-form-item label="油耗量" prop="consume">
+        <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect>
       </el-form-item>
     </el-form>
+    <!-- {
+  "couWaresName": "string",
+  "couSeriesId": 0,
+  "couModelId": 0,
+  "couWaresPrice": "string",
+  "marketYear": 0,
+  "marketTime": "2020-06-10",
+  "disMent": "string",
+  "varBox": "string",
+  "drive": "string",
+  "consume": "string"
+} -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -21,12 +62,18 @@
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
   import Product from '@/api/brand/product'
-  import brandSelect from '@/views/common-select/brand-select'
+  import BrandSelect from '@/views/common-select/brand-select'
+  import SeriesSelect from '@/views/common-select/brand-series-select'
+  import DisMent from '@/views/common-select/disment-select'
+  import ModelSelect from '@/views/common-select/model-select'
+  import VarBoxSelect from '@/views/common-select/var-box-select'
+  import DriveStyleSelect from '@/views/common-select/drive-style-select'
+  import ConsumeSelect from '@/views/common-select/consume-select'
   import { getToken } from '@/utils/userInfoUtil'
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
-        this.dataForm.seriesName = removeBlank(value)
+        this.dataForm.couWaresName = removeBlank(value)
         callback()
       }
       return {
@@ -35,24 +82,35 @@
           token: getToken()
         },
         dataForm: {
+          couBrandId: '',
+          couWaresName: '',
           couSeriesId: '',
-          couSeriesName: '',
-          couBrandId: ''
+          couModelId: '',
+          couWaresPrice: '',
+          marketYear: '',
+          marketTime: '',
+          disMent: '',
+          varBox: '',
+          drive: '',
+          consume: ''
         },
         id: '',
         dataRule: {
-          couSeriesName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' },
+          couWaresName: [
+            { required: true, message: '商品名不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
+          ],
+          couModelId: [
+            { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
           ]
         }
       }
     },
     components: {
-      brandSelect
+      BrandSelect, ModelSelect, DisMent, VarBoxSelect, DriveStyleSelect, ConsumeSelect, SeriesSelect
     },
     watch: {
     },
@@ -107,6 +165,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            console.log(this.dataForm)
             if (!this.id) {
               Product.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {

@@ -26,7 +26,7 @@
   export default {
     data () {
       var removeSpace = (rule, value, callback) => {
-        this.dataForm.seriesName = removeBlank(value)
+        this.dataForm.couSeriesName = removeBlank(value)
         callback()
       }
       return {

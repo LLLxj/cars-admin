@@ -8,12 +8,13 @@
           <el-form-item label="用户名">
             <el-input v-model="searchData.userName" placeholder="用户名" clearable></el-input>
           </el-form-item>
-          <el-form-item label="用户状态">
+          <el-form-item label="状态">
             <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button type="primary" @click="resetForm()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
             <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
@@ -39,7 +40,7 @@
           </el-table-column> -->
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
+              <el-tag v-if="scope.row.status === 0" size="small" type="info">禁用</el-tag>
               <el-tag v-else size="small">正常</el-tag>
             </template>
           </el-table-column>
@@ -87,8 +88,8 @@
     data () {
       return {
         dataForm: {
-          userName: undefined,
-          deptId: undefined,
+          userName: '',
+          deptId: '',
           status: ''
         },
         dataList: [],
@@ -197,6 +198,15 @@
       // 当前页
       currentChangeHandle (val) {
         this.searchData.page = val
+        this.getDataList()
+      },
+      resetForm() {
+        this.searchData = {
+          userName: '',
+          status: '',
+          page: 1,
+          limit: 10
+        }
         this.getDataList()
       },
       // 多选

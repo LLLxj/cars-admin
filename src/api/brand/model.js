@@ -12,6 +12,13 @@ class Models{
     })
   }
 
+  static listAll() {
+    return request({
+      url: `${baseUrl}/cou/wares/model/getCouModelList`,
+      method: 'get'
+    })
+  }
+
   static disList(params) {
     return request({
       url: `${baseUrl}/cou/wares/model/disableList`,
