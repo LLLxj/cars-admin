@@ -1,16 +1,16 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" :disabled="disabled" placeholder="请选择系列" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :disabled="disabled" :clearable="temp_clearable" placeholder="请选择省份">
     <el-option
       v-for="item in dataList"
-      :key="item.couSeriesId"
-      :label="item.couSeriesName"
-      :value="item.couSeriesId">
+      :key="item.areaId"
+      :label="item.areaName"
+      :value="item.areaId">
     </el-option>
   </el-select>
 </template>
 
 <script>
-  import Series from '@/api/brand/series'
+  import Areas from '@/api/area'
   import Bus from '@/utils/bus'
   export default {
     props: {
@@ -25,7 +25,7 @@
       disabled: {
         type: [Boolean]
       },
-      couSeriesId: {
+      countryId: {
         type: [Number, String]
       }
     },
@@ -38,17 +38,16 @@
           return this.value
         },
         set: function (val) {
-          this.$emit('input', val)
-          // this.$emit('get-brand-val', val) // 通过$emit触发父组件
+          this.$emit('input', val) // 通过$emit触发父组件
         }
       },
     },
     watch: {
-      couSeriesId(val) {
-        if (val) {
-          this.getDataList()
-        }
-      }
+      countryId(val) {
+				if (val) {
+					this.getDataList()
+				}
+			}
     },
     data () {
       return {
@@ -65,14 +64,14 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Series.selectBrandList(this.couSeriesId).then(res => {
-          this.dataListLoading = false
+        Areas.couList(this.countryId).then(res => {
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
-            this.dataListLoading = false
           }else{
             this.dataList = []
-          } 
+          }
+            
+          this.dataListLoading = false
         })
       },
       getCity(val) {

@@ -1,16 +1,16 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" :disabled="disabled" placeholder="请选择系列" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" :disabled="disabled" placeholder="请选择型号" @change="getCity">
     <el-option
       v-for="item in dataList"
-      :key="item.couSeriesId"
-      :label="item.couSeriesName"
-      :value="item.couSeriesId">
+      :key="item.couBrandId"
+      :label="item.couBrandName"
+      :value="item.couBrandId">
     </el-option>
   </el-select>
 </template>
 
 <script>
-  import Series from '@/api/brand/series'
+  import Models from '@/api/brand/model'
   import Bus from '@/utils/bus'
   export default {
     props: {
@@ -24,9 +24,6 @@
       },
       disabled: {
         type: [Boolean]
-      },
-      couSeriesId: {
-        type: [Number, String]
       }
     },
     mounted () {
@@ -44,11 +41,6 @@
       },
     },
     watch: {
-      couSeriesId(val) {
-        if (val) {
-          this.getDataList()
-        }
-      }
     },
     data () {
       return {
@@ -60,13 +52,15 @@
     },
     methods: {
       init () {
-        // this.getDataList()
+        this.getDataList()
+        
       },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Series.selectBrandList(this.couSeriesId).then(res => {
-          this.dataListLoading = false
+        Models.selectModelList(this.couModelId).then(res => {
+            console.log(res.data.data)
+            this.dataListLoading = false
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
             this.dataListLoading = false

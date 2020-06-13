@@ -20,7 +20,7 @@
         <el-input-number v-model="dataForm.couWaresPrice" :min="1" label=""></el-input-number>
       </el-form-item>
       <el-form-item label="年款" prop="marketYear">
-        <el-date-picker v-model="dataForm.marketYear" value-format="yyyy" type="year" placeholder="选择年">
+        <el-date-picker v-model="dataForm.marketYear" type="year" placeholder="选择年">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="年款" prop="marketTime">
@@ -64,8 +64,8 @@
   import Product from '@/api/brand/product'
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
-  import DisMent from '@/views/common-select/disment-select'
   import ModelSelect from '@/views/common-select/model-select'
+  import DisMent from '@/views/common-select/disment-select'
   import VarBoxSelect from '@/views/common-select/var-box-select'
   import DriveStyleSelect from '@/views/common-select/drive-style-select'
   import ConsumeSelect from '@/views/common-select/consume-select'
@@ -82,6 +82,7 @@
           token: getToken()
         },
         dataForm: {
+          couWaresId: '',
           couBrandId: '',
           couWaresName: '',
           couSeriesId: '',
@@ -103,6 +104,9 @@
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
           ],
+          couSeriesId: [
+            { required: true, message: '请选择所属系列', trigger: 'blur', type: 'number' },
+          ],
           couModelId: [
             { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
           ]
@@ -119,12 +123,14 @@
         this.id = id
         this.visible = true
         if(id) {
+          this.dataForm.couWaresId = id
           this.setData(id)
         } 
       },
       setData(data) {
         Product.info(data).then(({data}) => {
           if (data.code === 0) {
+            console.log(data)
             this.dataForm = data.data
           }else {
             this.$message.error(data.msg)
@@ -165,7 +171,6 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            console.log(this.dataForm)
             if (!this.id) {
               Product.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {

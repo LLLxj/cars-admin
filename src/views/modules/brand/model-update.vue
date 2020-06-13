@@ -90,7 +90,6 @@
         Models.info(data).then(({data}) => {
           if (data.code === 0) {
             this.dataForm = data.data
-            console.log(this.dataForm)
           }else {
             this.$message.error(data.msg)
           }

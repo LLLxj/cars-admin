@@ -49,6 +49,14 @@ class Models{
     })
   }
 
+  static selectModelList(data) { // 根据系列选择型号
+    return request({
+      url: `${baseUrl}/cou/wares/model/info/` + data,
+      method: 'get',
+    })
+  }
+  
+
   static save(data) {
     return request({
       url: `${baseUrl}/cou/wares/model/save`,

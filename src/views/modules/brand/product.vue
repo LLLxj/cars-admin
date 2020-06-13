@@ -9,6 +9,15 @@
           <el-form-item label="商品名称">
             <el-input v-model="searchData.couWaresName" placeholder="商品名称" clearable></el-input>
           </el-form-item>
+          <el-form-item label="品牌名称" prop="couBrandId">
+            <BrandSelect v-model="searchData.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
+          </el-form-item>
+          <el-form-item label="选择系列" prop="couSeriesId">
+            <SeriesSelect v-model="searchData.couSeriesId" :disabled="!searchData.couBrandId" :couSeriesId="searchData.couBrandId"></SeriesSelect>
+          </el-form-item>
+          <el-form-item label="选择型号" prop="couModelId">
+            <ModelSelect v-model="searchData.couModelId"></ModelSelect>
+          </el-form-item>
           <el-form-item label="状态">
             <StatusSelect v-model="searchData.status"></StatusSelect>
           </el-form-item>
@@ -19,21 +28,6 @@
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
-            <!-- couWaresId (integer, optional): 商品ID ,
-couWaresName (string, optional): 商品名称 ,
-couBrandId (integer, optional): 所属品牌ID ,
-couBrandName (string, optional): 所属品牌名称 ,
-couSeriesId (integer, optional): 所属品牌系列ID ,
-couSeriesName (string, optional): 所属品牌系列名称 ,
-couModelId (integer, optional): 所属型号ID ,
-couModelName (string, optional): 所属型号名称 ,
-couWaresPrice (string, optional): 厂商指导价 ,
-marketYear (integer, optional): 年款 ,
-marketTime (string, optional): 上市时间 ,
-disMent (string, optional): 排量 ,
-varBox (string, optional): 品牌logo路径 ,
-drive (string, optional): 品牌首字母 ,
-consume (string, optional): 状态 0.禁用 1.正常 -->
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称">
           </el-table-column>
@@ -105,6 +99,9 @@ consume (string, optional): 状态 0.禁用 1.正常 -->
   import Products from '@/api/brand/product'
   import AddOrUpdate from './product-update'
   import StatusSelect from '@/views/common-select/select-status'
+  import BrandSelect from '@/views/common-select/brand-select'
+  import SeriesSelect from '@/views/common-select/brand-series-select'
+  import ModelSelect from '@/views/common-select/model-select'
   import Vue from 'vue'
   export default {
     data () {
@@ -117,13 +114,16 @@ consume (string, optional): 状态 0.禁用 1.正常 -->
         dataListLoading: false,
         searchData: {
           couWaresName: '',
+          couBrandId: '',
+          couSeriesId: '',
+          couModelId: '',
           page: 1,
           limit: 10
-        },
+        }
       }
     },
     components: {
-      AddOrUpdate, StatusSelect
+      AddOrUpdate, StatusSelect, BrandSelect, SeriesSelect, ModelSelect
     },
     activated () {
       this.getDataList()
@@ -152,7 +152,13 @@ consume (string, optional): 状态 0.禁用 1.正常 -->
       resetForm () {
         this.searchData = {
           couWaresName: '',
+          couBrandId: '',
+          couSeriesId: '',
+          couModelId: '',
+          page: 1,
+          limit: 10
         }
+        this.getDataList()
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {

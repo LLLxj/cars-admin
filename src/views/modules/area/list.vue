@@ -6,9 +6,9 @@
       <el-main>
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
-          <el-form-item label="区域名称">
+          <!-- <el-form-item label="区域名称">
             <el-input v-model="searchData.areaName" placeholder="区域名称" clearable></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="选择市区">
             <citySelect v-model="searchData.cityId" @get-city-val="getCityData"></citySelect>
           </el-form-item>
@@ -64,7 +64,7 @@
         totalPage: 0,
         dataListLoading: false,
         searchData: {
-          areaName: '',
+          // areaName: '',
           countryId: '',
           cityId: '',
           areaId: '',
@@ -72,7 +72,7 @@
           limit: 10
         },
         params: {
-          areaName: '',
+          // areaName: '',
           areaId: '',
           page: 1,
           limit: 10
@@ -105,12 +105,11 @@
       paramsSearch() {
         var data = this.searchData
         if (data.cityId !== '' && data.countryId == '') {
-          this.params.areaName = data.areaName
           this.params.areaId = data.cityId
         } else if (data.cityId !== '' && data.countryId !== '') {
-          this.params.areaName = data.areaName
           this.params.areaId = data.countryId
         }
+        // this.params.areaName = data.areaName
         this.params.page = this.searchData.page
         this.params.limit = this.searchData.limit
         Areas.list(this.params).then(res => {
@@ -138,7 +137,7 @@
       },
       resetForm () {
         this.searchData = {
-          areaName: '',
+          // areaName: '',
           areaId: '',
           page: 1,
           limit: 10
@@ -153,7 +152,6 @@
       },
       // 当前页
       currentChangeHandle (val) {
-        console.log(val)
         this.searchData.page = val
         this.getDataList(this.searchData)
       },
