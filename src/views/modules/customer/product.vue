@@ -28,6 +28,46 @@
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
+            <!-- dealWaresId (string, optional): 出售商品ID ,
+dealWaresTitle (string, optional): 出售商品标题 ,
+dealWaresNo (string, optional): 出售商品编号 ,
+releaseAreaId (integer, optional): 发布区域ID ,
+releaseAreaName (string, optional): 发布区域名称 ,
+contactPhone (string, optional): 联系电话 ,
+contactName (string, optional): 联系人名称 ,
+sex (integer, optional): 性别 0.先生 1.小姐 ,
+waresFrameCode (string, optional): 商品框架号 ,
+couBrandId (integer, optional): 所属品牌ID ,
+couBrandName (string, optional): 所属品牌名称 ,
+couSeriesId (integer, optional): 所属品牌系列ID ,
+couSeriesName (string, optional): 所属品牌系列名称 ,
+couWaresId (integer, optional): 所属商品ID ,
+couWaresName (string, optional): 所属商品名称 ,
+couModelId (integer, optional): 所属商品型号ID ,
+couModelName (string, optional): 所属商品型号名称 ,
+tradePrice (string, optional): 批发价 ,
+retailPrice (string, optional): 零售价 ,
+registerTime (string, optional): 上牌时间 ,
+distance (integer, optional): 行驶里程 ,
+licenseId (integer, optional): 牌照ID ,
+licenseCode (string, optional): 牌照 ,
+proAreaId (integer, optional): 省级区域ID ,
+cityAreaId (integer, optional): 市级区域ID ,
+countyAreaId (integer, optional): 县/区级区域ID ,
+addr (string, optional): 详细地址 ,
+waresRemark (string, optional): 商品描述 ,
+transferNum (integer, optional): 过户次数 ,
+isTransfer (integer, optional): 是否含过户费 0.无 1.是 ,
+isMortgage (integer, optional): 是否有抵押 0.无 1.是 ,
+isMaintain (integer, optional): 是否有定期4s保养 0.无 1.是 ,
+sellStatus (integer, optional): 出售状态 0.未出售 1.已出售 ,
+onlineStatus (integer, optional): 上线状态 0.驳回 1.销售审核中 2.经理审核中 3.上架 4.下架 ,
+coverImage (inline_model_24, optional),
+driveImage (inline_model_25, optional),
+waresImages (Array[Inline Model 1], optional),
+dealStoreId (integer, optional): 所属企业客户ID ,
+dealUserName (string, optional): 所属企业客户名称 ,
+submitTime (string, optional): 提交时间 -->
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称">
           </el-table-column>
@@ -96,7 +136,7 @@
 </template>
 <script>
 
-  import Products from '@/api/brand/product'
+  import Products from '@/api/customer/product'
   import AddOrUpdate from './product-update'
   import StatusSelect from '@/views/common-select/select-status'
   import BrandSelect from '@/views/common-select/brand-select'

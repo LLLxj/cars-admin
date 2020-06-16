@@ -5,7 +5,7 @@
       <el-main>
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
           <el-form-item>
-            <el-input v-model="dataForm.brandName" placeholder="请输入商品名称" clearable></el-input>
+            <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入商品标题" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -16,12 +16,12 @@
         </el-form>
         <el-table :data="dataList" border v-loading="dataListLoading" @row-dblclick="handleRowDblclick" @row-click="handleRowlclick" style="width: 100%;">
           <el-table-column type="index" label="NO" align="center" header-align="center" width="80"/>
-          <el-table-column prop="brandName" header-align="center" align="center" label="商品名称"/>
-          <el-table-column prop="image" header-align="center" align="center" label="商品图片">
+          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题"/>
+          <!-- <el-table-column prop="image" header-align="center" align="center" label="商品图片">
             <template slot-scope="scope">
               <img :src="scope.row.image" alt="" style="width:50px">
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <el-pagination @size-change="sizeChangeHandle" background @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize"
           :total="totalPage"
@@ -36,21 +36,24 @@
 
 <script>
 
-  import Brand from '@/api/brand/brand'
+  import Product from '@/api/customer/product'
 
   export default {
     data () {
       return {
         dataForm: {
-          brandName: '',
-          brandId: ''
+          dealWaresTitle: '',
         },
         visible:false,
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
-        selectItem: {},
+        selectItem: {
+          dealWaresTitle: '',
+          dealWaresId: '',
+          coverImage: ''
+        },
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
@@ -67,7 +70,7 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.dataForm || null
-        Brand.norList(params).then(res => {
+        Product.list(params).then(res => {
           this.dataListLoading = false
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data.list
@@ -98,17 +101,24 @@
       },
        // 双击事件
       handleRowDblclick (val, row) {
-        this.selectItem = val
+        this.selectItem = {
+          dealWaresTitle: val.dealWaresTitle,
+          dealWaresId: val.dealWaresId,
+          coverImage: ''
+        }
         this.selectHandle(val)
-        // console.log(1)
       },
       // 单击事件
       handleRowlclick (val) {
-        this.selectItem = val
+        this.selectItem = {
+          dealWaresTitle: val.dealWaresTitle,
+          dealWaresId: val.dealWaresId,
+          coverImage: ''
+        }
       },
       // 确认
       selectHandle () {
-        if (this.selectItem.brandId == '') {
+        if (this.selectItem.dealWaresId == '') {
           this.$message.error('请选择商品!')
           return
         }

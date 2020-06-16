@@ -130,7 +130,6 @@
       setData(data) {
         Product.info(data).then(({data}) => {
           if (data.code === 0) {
-            console.log(data)
             this.dataForm = data.data
           }else {
             this.$message.error(data.msg)

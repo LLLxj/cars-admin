@@ -69,7 +69,7 @@
   import SelectStatus from '@/views/common-select/select-status'
   import Banner from '@/api/banner'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './banner-add'
+  import AddOrUpdate from './banner-update'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'

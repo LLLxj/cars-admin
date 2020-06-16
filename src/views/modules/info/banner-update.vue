@@ -4,39 +4,38 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="1000px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="100px">
-      <el-form-item label="标题" prop="name">
-        <el-input v-model="dataForm.name" placeholder="请输入标题"></el-input>
+      <el-form-item label="标题" prop="bannerName">
+        <el-input v-model="dataForm.bannerName" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="上传">
         <el-button size="small" type="primary" @click="chooseProduct">点击上传</el-button>
-        <!-- <el-row :gutter="24">
-          <el-col :span="24">
-            <el-upload
-              :action="GLOBAL.UPLOAD_BRAND_URL"
-              :show-file-list="false"
-              :on-success="imageUploadSuccess2"
-              :before-upload="beforeAvatarUpload"
-              :headers="myHeaders">
-              
-            </el-upload>
-          </el-col>
-        </el-row> -->
+        <!-- <el-upload :action="GLOBAL.UPLOAD_BRAND_URL" :file-list="fileList" list-type="picture-card" :on-success="imageUploadSuccess2" :before-upload="beforeAvatarUpload"
+          :headers="myHeaders"
+          :accept="'.jpg, .png'"
+          >
+          <i class="el-icon-plus" />
+        </el-upload> -->
         <el-row :gutter="24">
           <el-col :span="24">
-            <el-table :data="dataForm.images" ref="body-images" stripe>
+            <el-table :data="dataForm.dealWaresIdList" @row-click="handleRowlclick" stripe>
               <el-table-column header-align="center" align="center" type="index" label="NO" width="80"/>
-              <el-table-column label="产品名称" prop="brandName" header-align="center" align="center" width="80"/>
-              <el-table-column label="图片" prop="img" header-align="center" align="center">
+              <el-table-column label="商品标题" prop="dealWaresTitle" header-align="center" align="center" width="80"/>
+              <el-table-column label="图片" prop="coverImage" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <img :src="scope.row.image" :alt="scope.row.img" style="width: 100px;" />
+                  <img v-if="scope.row.coverImage" :src="scope.row.coverImage" :alt="scope.row.coverImage" style="width: 80px;" />
+                  <el-upload v-else :action="GLOBAL.UPLOAD_BRAND_URL" :show-file-list="false" :on-success="imageUploadSuccess2" :before-upload="beforeAvatarUpload"
+                    :headers="myHeaders"
+                    :accept="'.jpg, .png'"
+                    >
+                    <i class="el-icon-plus" />
+                  </el-upload>
                 </template>
               </el-table-column>
-
               <el-table-column label="操作" header-align="center" align="center" min-idth="200" v-loading="bodyImagesLoading">
                 <template slot-scope="scope">
                   <el-button-group>
                     <el-button size="mini" v-if="scope.$index > 0" type="primary" title="上移" icon="el-icon-caret-top" @click.stop="imagesUp(scope.$index)"></el-button>
-                    <el-button size="mini"  type="primary" v-if="scope.$index != dataForm.images.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
+                    <el-button size="mini"  type="primary" v-if="scope.$index != dataForm.dealWaresIdList.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
                   </el-button-group>
                   <el-button-group>
                     <el-button size="mini" type="danger" title="删除" icon="el-icon-delete" @click.stop="imagesDel(scope.$index)" ></el-button>
@@ -76,6 +75,9 @@
         proPopVisible: false,
         roleList: [],
         menuList: [],
+        imgList: [],
+        fileList: [],
+        selectItem: {},
         menuListTreeProps: {
           label: 'deptName',
           children: 'children'
@@ -87,8 +89,8 @@
         bodyImagesLoading: false,
         dataForm: {
           bannerId: '',
-          name: '',
-          images: [],
+          bannerName: '',
+          dealWaresIdList: [],
           sort: ''
         },
         body: {
@@ -98,8 +100,8 @@
         },
         bannerId: '',
         dataRule: {
-          name: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' },
+          bannerName: [
+            { required: true, message: 'banner名称不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
           // phone: [
@@ -143,13 +145,20 @@
       // 多图上传 成功回调
       imageUploadSuccess2(res, file, fileList) {
         if (res.code === 0) {
-          if (this.body.images === null) {
-            this.body.images = []
-          }
-          this.body.images.push({ 'img': res.data.url, 'url': '#' })
+          this.dataForm.dealWaresIdList.forEach(item => {
+            if (item.dealWaresId === item.dealWaresId) {
+              item.coverImage = res.data.url
+            }
+          })
+          console.log(res.data.url)
+          // console.log(fileList)
         } else {
           this.$message(res.data.msg)
         }
+      },
+       // 单击事件
+      handleRowlclick (val) {
+        this.selectItem = val
       },
       // 上传图片 格式和大小校验
       beforeAvatarUpload(file) {
@@ -165,7 +174,7 @@
       },
        // 多图片 删除图片方法
       imagesDel(index) {
-        this.dataForm.images.splice(index, 1)
+        this.dataForm.dealWaresIdList.splice(index, 1)
         // this.body.images = this.body.images.splice(index, 1)
       },
       // 多图片 上移
@@ -173,7 +182,7 @@
         this.bodyImagesLoading = true
         if (index !== 0) {
           // 将当前数组index索引与前面一个元素互换位置，向数组前面移动一位
-          this.dataForm.images[index] = this.dataForm.images.splice(index - 1, 1, this.dataForm.images[index])[0]
+          this.dataForm.dealWaresIdList[index] = this.dataForm.dealWaresIdList.splice(index - 1, 1, this.dataForm.dealWaresIdList[index])[0]
         }
         this.bodyImagesLoading = false
       },
@@ -182,7 +191,7 @@
         this.bodyImagesLoading = true
         if (index + 1 !== this.dataForm.images.length) {
           // 将当前数组index索引与后面一个元素互换位置，向数组后面移动一位
-          this.dataForm.images[index] = this.dataForm.images.splice(index + 1, 1, this.dataForm.images[index])[0]
+          this.dataForm.dealWaresIdList[index] = this.dataForm.dealWaresIdList.splice(index + 1, 1, this.dataForm.dealWaresIdList[index])[0]
         }
         this.bodyImagesLoading = false
       },
@@ -194,14 +203,12 @@
         this.resetForm()
       },
       getProInfo (val) {
-        console.log(val)
-        this.dataForm.images.push(val)
+        this.dataForm.dealWaresIdList.push(val)
       },
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            console.log(this.dataForm)
             if (!this.id) {
               Banner.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
@@ -250,3 +257,8 @@
     }
   }
 </script>
+<style>
+  .imgBox{
+    display: flex;
+  }
+</style>
