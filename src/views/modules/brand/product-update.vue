@@ -23,7 +23,7 @@
         <el-date-picker v-model="dataForm.marketYear" type="year" placeholder="选择年">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="年款" prop="marketTime">
+      <el-form-item label="上市时间" prop="marketTime">
         <el-date-picker v-model="dataForm.marketTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
