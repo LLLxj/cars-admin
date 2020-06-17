@@ -28,69 +28,73 @@
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
-            <!-- dealWaresId (string, optional): 出售商品ID ,
-dealWaresTitle (string, optional): 出售商品标题 ,
-dealWaresNo (string, optional): 出售商品编号 ,
-releaseAreaId (integer, optional): 发布区域ID ,
-releaseAreaName (string, optional): 发布区域名称 ,
-contactPhone (string, optional): 联系电话 ,
-contactName (string, optional): 联系人名称 ,
-sex (integer, optional): 性别 0.先生 1.小姐 ,
-waresFrameCode (string, optional): 商品框架号 ,
-couBrandId (integer, optional): 所属品牌ID ,
-couBrandName (string, optional): 所属品牌名称 ,
-couSeriesId (integer, optional): 所属品牌系列ID ,
-couSeriesName (string, optional): 所属品牌系列名称 ,
-couWaresId (integer, optional): 所属商品ID ,
-couWaresName (string, optional): 所属商品名称 ,
-couModelId (integer, optional): 所属商品型号ID ,
-couModelName (string, optional): 所属商品型号名称 ,
-tradePrice (string, optional): 批发价 ,
-retailPrice (string, optional): 零售价 ,
-registerTime (string, optional): 上牌时间 ,
-distance (integer, optional): 行驶里程 ,
-licenseId (integer, optional): 牌照ID ,
-licenseCode (string, optional): 牌照 ,
-proAreaId (integer, optional): 省级区域ID ,
-cityAreaId (integer, optional): 市级区域ID ,
-countyAreaId (integer, optional): 县/区级区域ID ,
-addr (string, optional): 详细地址 ,
-waresRemark (string, optional): 商品描述 ,
-transferNum (integer, optional): 过户次数 ,
-isTransfer (integer, optional): 是否含过户费 0.无 1.是 ,
-isMortgage (integer, optional): 是否有抵押 0.无 1.是 ,
-isMaintain (integer, optional): 是否有定期4s保养 0.无 1.是 ,
-sellStatus (integer, optional): 出售状态 0.未出售 1.已出售 ,
-onlineStatus (integer, optional): 上线状态 0.驳回 1.销售审核中 2.经理审核中 3.上架 4.下架 ,
+          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
+          <el-table-column prop="dealWaresNo" header-align="center" align="center" label="商品编号" fixed="left"/>
+          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题" />
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="所属企业客户名称" />
+          <el-table-column prop="releaseAreaName" header-align="center" align="center" label="区域名称" />
+          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话" />
+          <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
+          <el-table-column prop="sex" header-align="center" align="center" label="性别">
+            <template slot-scope="scope">
+              <span v-if="scope.row.sex === 0" type="info">先生</span>
+              <span v-else>女士</span>
+            </template>
+          </el-table-column>
+          <!-- dealWaresId (string, optional): 出售商品ID ,
 coverImage (inline_model_24, optional),
 driveImage (inline_model_25, optional),
 waresImages (Array[Inline Model 1], optional),
 dealStoreId (integer, optional): 所属企业客户ID ,
-dealUserName (string, optional): 所属企业客户名称 ,
 submitTime (string, optional): 提交时间 -->
-          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称">
+          <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" />
+          <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" />
+          <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" />
+          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" />
+          <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称" />
+          <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价" />
+          <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价" />
+          <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" />
+          <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" />
+          <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" />
+          <el-table-column prop="licenseCode" header-align="center" align="center" label="牌照" />
+          <el-table-column prop="addr" header-align="center" align="center" label="详细地址" />
+          <el-table-column prop="waresRemark" header-align="center" align="center" label="商品描述" />
+          <el-table-column prop="transferNum" header-align="center" align="center" label="过户次数" />
+          <el-table-column prop="isTransfer" header-align="center" align="center" label="是否含过户费">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isTransfer === 0">无</span>
+              <span v-else>有</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌">
+          <el-table-column prop="isMortgage" header-align="center" align="center" label="是否有抵押">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isTransfer === 0">无</span>
+              <span v-else>有</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列">
+          <el-table-column prop="isMaintain" header-align="center" align="center" label="是否有定期4s保养">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isTransfer === 0">无</span>
+              <span v-else>有</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="couModelName" header-align="center" align="center" label="所属型号名称">
+          <el-table-column prop="sellStatus" header-align="center" align="center" label="出售状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isTransfer === 0">驳回</span>
+              <span v-if="scope.row.isTransfer === 1">销售审核中</span>
+              <span v-if="scope.row.isTransfer === 2">经理审核中</span>
+              <span v-if="scope.row.isTransfer === 3">上架</span>
+              <span v-if="scope.row.isTransfer === 4">下架</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="couWaresPrice" header-align="center" align="center" label="厂商指导价">
+          <el-table-column prop="onlineStatus" header-align="center" align="center" label="上线状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isTransfer === 0">未出售</span>
+              <span v-else>已出售</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="marketYear" header-align="center" align="center" label="年款">
-          </el-table-column>
-          <el-table-column prop="marketTime" header-align="center" align="center" label="上市时间">
-          </el-table-column>
-          <el-table-column prop="disMent" header-align="center" align="center" label="排量">
-          </el-table-column>
-          <el-table-column prop="varBox" header-align="center" align="center" label="变速箱">
-          </el-table-column>
-          <el-table-column prop="drive" header-align="center" align="center" label="驱动方式">
-          </el-table-column>
-          <el-table-column prop="consume" header-align="center" align="center" label="油耗量">
-          </el-table-column>
+          <el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" />
           <!-- <el-table-column prop="image" header-align="center" align="center" label="品牌logo">
             <template slot-scope="scope">
               <img :src="scope.row.image" alt="" style="max-height: 100px;max-width: 100px">
@@ -104,12 +108,12 @@ submitTime (string, optional): 提交时间 -->
               <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column> -->
-          <el-table-column prop="status" header-align="center" align="center" label="状态">
+          <!-- <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.status === 0" type="info">禁用</el-tag>
               <el-tag v-else>正常</el-tag>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couWaresId)">编辑</el-button>

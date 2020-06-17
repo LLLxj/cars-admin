@@ -26,10 +26,10 @@
         <el-date-picker v-model="dataForm.registerTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-			<el-form-item label="logo">
+			<el-form-item label="上传驾驶证">
 					<el-upload
 						class="avatar-uploader"
-						:action="driverImage"
+						:action="'/apiPro/deal/assess/drivingImage/' + phone"
 						:show-file-list="false"
 						:on-success="imageUploadSuccess"
 						:before-upload="beforeAvatarUpload"
@@ -109,7 +109,8 @@
         visible: false,
         myHeaders: {
           token: getToken()
-				},
+        },
+        phone: '13422356022',
 				driverImage: '', // 上传驾驶证路径
 //         dealAssessId (integer, optional): 评估ID ,
 // couBrandId (integer, optional): 所属品牌ID ,
