@@ -13,11 +13,14 @@
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
+      <el-form-item label="电话号码" prop="phone">
+        <el-input v-model="dataForm.phone" placeholder="请输入电话号码" clearable></el-input>
+      </el-form-item>
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
     	</el-form-item>
       <el-form-item label="选择县/区">
-        <AreaSelect v-model="dataForm.countryAreaId" :disabled="!dataForm.cityAreaId" :countryId="dataForm.cityAreaId"></AreaSelect>
+        <AreaSelect v-model="dataForm.countyAreaId" :disabled="!dataForm.cityAreaId" :countryId="dataForm.cityAreaId"></AreaSelect>
       </el-form-item>
 			<el-form-item label="行驶里程" prop="distance">
 				<el-input-number v-model="dataForm.distance" :min="1" label=""></el-input-number>
@@ -27,22 +30,45 @@
         </el-date-picker>
       </el-form-item>
 			<el-form-item label="上传驾驶证">
-					<el-upload
-						class="avatar-uploader"
-						:action="'/apiPro/deal/assess/drivingImage/' + phone"
-						:show-file-list="false"
-						:on-success="imageUploadSuccess"
-						:before-upload="beforeAvatarUpload"
-						:headers="myHeaders"
-						:accept="'.jpg, .png'">
-						<el-image v-if="dataForm.driveImage && dataForm.driveImage.image !== ''" :src="dataForm.driveImage.image" alt="" lazy style="width:80px">
-							<div slot="error" class="image-slot">
-								<i class="el-icon-picture-outline"></i>
-							</div>
-						</el-image>
-						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-					</el-upload>
-				</el-form-item>
+        <el-upload
+          :action="'/apiPro/deal/assess/upload/drivingImage'"
+          :data="{ phone: dataForm.phone }"
+          :headers="myHeaders"
+          :on-success="imageUploadSuccess"
+          :accept="'.jpg, .png'"
+          list-type="picture-card"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <!-- <el-upload
+          class="avatar-uploader"
+          :action="'/apiPro/deal/assess/upload/drivingImage'"
+          :data="{ phone: dataForm.phone }"
+          :show-file-list="false"
+          :on-success="imageUploadSuccess"
+          :before-upload="beforeAvatarUpload"
+          :headers="myHeaders"
+          :accept="'.jpg, .png'">
+          <el-image v-if="dataForm.driveImage && dataForm.driveImage.image !== ''" :src="dataForm.driveImage.image" alt="" lazy style="width:80px">
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload> -->
+      </el-form-item>
+      <el-form-item label="上传评估图片">
+        <el-upload
+          :action="'/apiPro/deal/assess/upload/waresImage'"
+          :data="{ phone: dataForm.phone }"
+          :headers="myHeaders"
+          :on-success="imageUploadSuccess1"
+          :accept="'.jpg, .png'"
+          list-type="picture-card"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+      </el-form-item>
       <!-- <el-form-item label="选择型号" prop="couModelId">
         <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
       </el-form-item>
@@ -163,6 +189,7 @@
           cityAreaId: '',
           countyAreaId: '',
           distance: '',
+          phone: '',
           registerTime: '', //上牌时间
           driveImage: { // 驾驶证
 
@@ -185,6 +212,9 @@
           ],
           couModelId: [
             { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
+          ],
+          phone: [
+            { required: true, message: '请输入用户电话号码', trigger: 'blur'},
           ]
         }
       }
@@ -226,7 +256,20 @@
       // 单图上传 成功回调
       imageUploadSuccess(res, file) {
         if (res.code === 0) {
-          this.dataForm.image = res.data.url
+          this.dataForm.driveImage.image = res.data.url
+        } else {
+          this.$message(res.msg)
+        }
+      },
+      handleRemove(file, fileList) {
+        console.log(file)
+        this.dataForm.driveImage.image = ''
+      },
+      imageUploadSuccess1(res, file) {
+        if (res.code === 0) {
+          let obj = { image: '' }
+          obj.image = res.data.url
+          this.dataForm.waresImages.push(obj)
         } else {
           this.$message(res.msg)
         }
@@ -248,46 +291,45 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.id) {
-							console.log(this.dataForm)
-              // Assess.save(this.dataForm).then(({data}) => {
-              //   if (data && data.code === 0) {
-              //     this.$message({
-              //       message: '操作成功',
-              //       type: 'success',
-              //       duration: 1500,
-              //       onClose: () => {
-              //         this.visible = false
-              //         this.resetForm()
-              //         this.$emit('refreshDataList')
-              //       }
-              //     })
-              //   } else {
-              //     this.$message.error(data.msg)
-              //   }
-              // }).catch(err => {
-              //   console.log(err)
-              //   this.$message.error(err)
-              // })
+              Assess.save(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
             } else {
-              // Assess.update(this.dataForm).then(({data}) => {
-              //   if (data && data.code === 0) {
-              //     this.$message({
-              //       message: '操作成功',
-              //       type: 'success',
-              //       duration: 1500,
-              //       onClose: () => {
-              //         this.visible = false
-              //         this.resetForm()
-              //         this.$emit('refreshDataList')
-              //       }
-              //     })
-              //   } else {
-              //     this.$message.error(data.msg)
-              //   }
-              // }).catch(err => {
-              //   console.log(err)
-              //   this.$message.error(err)
-              // })
+              Assess.update(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
             }
           }
         })
