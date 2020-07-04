@@ -3,11 +3,11 @@ import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
 
-class Customer{
+class ComCustomer{
 
   static norList(params) {
     return request({
-      url: `${baseUrl}/deal/user/getDealUserList`,
+      url: `${baseUrl}/deal/user/list`,
       method: 'get',
       params: params
     })
@@ -68,4 +68,4 @@ class Customer{
 
 }
 
-export default Customer
+export default ComCustomer

@@ -6,14 +6,26 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
+          <el-form-item label="客户名称">
+            <el-input v-model="dataForm.dealUserName" placeholder="请输入客户名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          <el-form-item label="商品标题">
+            <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入商品标题" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
+          <el-form-item label="联系人名称">
+            <el-input v-model="dataForm.contactName" placeholder="请输入联系人名称" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="联系人电话">
+            <el-input v-model="dataForm.contactPhone" placeholder="请输入联系电话" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="跟进状态">
+            <followStatusSelect v-model="dataForm.followStatus"></followStatusSelect>
+          </el-form-item>
+          <el-form-item label="创建日期" prop="dateTime">
+            <el-date-picker v-model="dataForm.dateTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -30,36 +42,40 @@
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
           </el-table-column>
-          <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
+          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="咨询商品标题">
           </el-table-column>
-          <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
+          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话">
           </el-table-column>
-          <el-table-column prop="integral" header-align="center" align="center" label="积分">
+          <el-table-column prop="contactName" header-align="center" align="center" label="联系人名称">
           </el-table-column>
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属公司">
+           <el-table-column prop="sex" header-align="center" align="center" label="性别" width="80">
             <template slot-scope="scope">
-              <span>{{scope.row.storeName || '--'}}</span>
+              <span v-if="scope.row.sex === 0">先生</span>
+              <span v-if="scope.row.sex === 1">小姐</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="email" header-align="center" align="center" label="邮箱">
-          </el-table-column> -->
-          <el-table-column prop="phone" header-align="center" align="center" label="手机号">
+          <el-table-column prop="submitTime" header-align="center" align="center" label="提交咨询时间" width="150">
           </el-table-column>
-          <!-- <el-table-column prop="schoolName" header-align="center" align="center" label="校区">
-          </el-table-column> -->
-          <el-table-column prop="type" header-align="center" align="center" label="客户类型">
+          <el-table-column prop="sysUserName" header-align="center" align="center" label="跟进人">
             <template slot-scope="scope">
-              <span v-if="scope.row.type === 0">个人用户</span>
-              <span v-else>企业用户</span>
+              <span>{{scope.row.sysUserName || '--'}}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
-          </el-table-column> -->
+          <el-table-column prop="followRemark" header-align="center" align="center" label="备注">
+            <template slot-scope="scope">
+              <span>{{scope.row.followRemark || '--'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="followTime" header-align="center" align="center" label="跟进时间" width="150">
+            <template slot-scope="scope">
+              <span>{{scope.row.followTime || '--'}}</span>
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
+              <el-button type="text" size="small" v-if="scope.row.installmentId === 1" @click="disHandle(scope.row.installmentId)">作废</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.installmentId === 1" @click="norHandle(scope.row.installmentId)">已跟进</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.installmentId)">查看</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -83,9 +99,10 @@
 </template>
 <script>
 
-  import Customer from '@/api/customer/customer'
+  import Fenqi from '@/api/customer/fenqi'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
+  import followStatusSelect from '@/views/common-select/follow-status-select'
+  import AddOrUpdate from './fenqi-add'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -97,9 +114,15 @@
     data () {
       return {
         dataForm: {
-          userName: '',
-          phone: '',
-          type: ''
+          dealUserName: '',
+          contactPhone: '',
+          contactName: '',
+          dealWaresTitle: '',
+          contactName: '',
+          contactName: '',
+          dateTime: '',
+          startTime: '',
+          endTime: ''
         },
         dataList: [],
         isShow: true,
@@ -121,7 +144,8 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop
+      uploadPop,
+      followStatusSelect
     },
     activated () {
       this.getDataList()
@@ -129,12 +153,24 @@
     methods: {
       // 获取数据列表
       getDataList (params) {
+        this.dataForm.startTime = this.dataForm.dateTime[0]
+        this.dataForm.endTime = this.dataForm.dateTime[1]
+        let dataForm = {
+          dealUserName: this.dataForm.dealUserName,
+          contactPhone: this.dataForm.contactPhone,
+          contactName: this.dataForm.contactName,
+          dealWaresTitle: this.dataForm.dealWaresTitle,
+          contactName: this.dataForm.contactName,
+          contactName: this.dataForm.contactName,
+          startTime: this.dataForm.dateTime[0],
+          endTime: this.dataForm.dateTime[1]
+        }
         this.dataListLoading = true
-        params = this.dataForm || null
-        Customer.norList(params).then(res => {
+        params = dataForm || null
+        Fenqi.list(params).then(res => {
           if (res.data && res.data.code === 0) {
-            this.dataList = res.data.data
-            this.totalPage = res.data.totalCount
+            this.dataList = res.data.data.list
+            this.totalPage = res.data.data.totalCount
             if(this.dataList !== null){
               this.isShow = false
             }
@@ -149,9 +185,9 @@
         this.dataForm.deptId = deptId
         this.getDataList()
       },
-      // 禁用
+      // 作废
       disHandle (data) {
-        Customer.disable(data.userId).then(res => {
+        Fenqi.waste(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -175,9 +211,9 @@
         })
         // disable
       },
-      // 启用
+      // 已跟进
       norHandle (data) {
-        Customer.awake(data.userId).then(res => {
+        Fenqi.success(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -194,9 +230,17 @@
       },
       resetFrom () {
         this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+          dataForm: {
+          dealUserName: '',
+          contactPhone: '',
+          contactName: '',
+          dealWaresTitle: '',
+          contactName: '',
+          contactName: '',
+          dateTime: '',
+          startTime: '',
+          endTime: ''
+        },
         }
         this.getDataList()
       },

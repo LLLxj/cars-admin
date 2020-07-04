@@ -85,7 +85,7 @@
 
   import Customer from '@/api/customer/customer'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
+  import AddOrUpdate from './com-user-update'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -133,8 +133,8 @@
         params = this.dataForm || null
         Customer.norList(params).then(res => {
           if (res.data && res.data.code === 0) {
-            this.dataList = res.data.data
-            this.totalPage = res.data.totalCount
+            this.dataList = res.data.data.list
+            this.totalPage = res.data.data.totalCount
             if(this.dataList !== null){
               this.isShow = false
             }

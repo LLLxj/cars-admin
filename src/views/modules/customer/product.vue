@@ -41,12 +41,6 @@
               <span v-else>女士</span>
             </template>
           </el-table-column>
-          <!-- dealWaresId (string, optional): 出售商品ID ,
-coverImage (inline_model_24, optional),
-driveImage (inline_model_25, optional),
-waresImages (Array[Inline Model 1], optional),
-dealStoreId (integer, optional): 所属企业客户ID ,
-submitTime (string, optional): 提交时间 -->
           <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" />
           <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" />
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" />

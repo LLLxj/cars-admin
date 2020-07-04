@@ -54,6 +54,11 @@
           dealWaresId: '',
           coverImage: ''
         },
+        selectProItem: {
+          dealWaresId: '',
+          dealUserId: '',
+          dealWaresTitle: ''
+        },
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
@@ -89,7 +94,6 @@
       },
       // 当前页
       currentChangeHandle (val) {
-        console.log(val)
         this.pageIndex = val
         this.getDataList()
       },
@@ -106,6 +110,11 @@
           dealWaresId: val.dealWaresId,
           coverImage: ''
         }
+        this.selectProItem = {
+          dealWaresId: val.dealWaresId,
+          dealUserId: val.dealUserId,
+          dealWaresTitle: val.dealWaresTitle
+        }
         this.selectHandle(val)
       },
       // 单击事件
@@ -115,6 +124,11 @@
           dealWaresId: val.dealWaresId,
           coverImage: ''
         }
+        this.selectProItem = {
+          dealWaresId: val.dealWaresId,
+          dealUserId: val.dealUserId,
+          dealWaresTitle: val.dealWaresTitle
+        }
       },
       // 确认
       selectHandle () {
@@ -122,7 +136,7 @@
           this.$message.error('请选择商品!')
           return
         }
-        this.$emit('product-pop-event', this.selectItem)
+        this.$emit('product-pop-event', this.selectItem, this.selectProItem)
         this.visible = false
       },
       // 取消
