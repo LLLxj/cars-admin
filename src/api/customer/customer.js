@@ -5,13 +5,22 @@ const baseUrl = '/apiPro'
 
 class Customer{
 
-  static norList(params) {
+  static list(params) {
     return request({
-      url: `${baseUrl}/deal/user/getDealUserList`,
+      url: `${baseUrl}/deal/user/list`,
       method: 'get',
       params: params
     })
   }
+
+  static comList() {
+    return request({
+      url: `${baseUrl}/deal/user/getStoreUserList`,
+      method: 'get'
+    })
+  }
+
+  
 
   static disList(params) {
     return request({

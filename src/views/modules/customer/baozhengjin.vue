@@ -19,42 +19,44 @@
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
-            <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-            <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
-            <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
-            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button> -->
             
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
+          <el-table-column prop="depositNo" header-align="center" align="center" label="保证金单编号">
           </el-table-column>
-          <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
-          </el-table-column>
-          <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
-          </el-table-column>
-          <el-table-column prop="integral" header-align="center" align="center" label="积分">
-          </el-table-column>
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属公司">
+					<el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
+					<el-table-column prop="depositPrice" header-align="center" align="center" label="保证金金额" />
+					<el-table-column prop="remark" header-align="center" align="center" label="备注">
+						<template slot-scope="scope">
+              <span>{{scope.row.remark || '--'}}</span>
+            </template>
+					</el-table-column>
+					<el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <span>{{scope.row.storeName || '--'}}</span>
+              <span v-if="scope.row.status === 0">放弃</span>
+              <span v-if="scope.row.status === 1">驳回</span>
+              <span v-if="scope.row.status === 2">财务审核中</span>
+              <span v-if="scope.row.status === 3">经理审核中</span>
+              <span v-if="scope.row.status === 4">通过</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="email" header-align="center" align="center" label="邮箱">
-          </el-table-column> -->
-          <el-table-column prop="phone" header-align="center" align="center" label="手机号">
-          </el-table-column>
-          <!-- <el-table-column prop="schoolName" header-align="center" align="center" label="校区">
-          </el-table-column> -->
-          <el-table-column prop="type" header-align="center" align="center" label="客户类型">
-            <template slot-scope="scope">
-              <span v-if="scope.row.type === 0">个人用户</span>
-              <span v-else>企业用户</span>
+					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间">
+						<template slot-scope="scope">
+              <span>{{scope.row.submitTime || '--'}}</span>
             </template>
-          </el-table-column>
-          <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
-          </el-table-column> -->
+					</el-table-column>
+					<el-table-column prop="examineUserName" header-align="center" align="center" label="审核人名称">
+						<template slot-scope="scope">
+              <span>{{scope.row.examineUserName || '--'}}</span>
+            </template>
+					</el-table-column>
+					<el-table-column prop="examineTime" header-align="center" align="center" label="审核时间">
+						<template slot-scope="scope">
+              <span>{{scope.row.examineTime || '--'}}</span>
+            </template>
+					</el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
@@ -83,9 +85,9 @@
 </template>
 <script>
 
-  import Customer from '@/api/customer/customer'
+  import Baozhengjin from '@/api/customer/baozhengjin'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './com-user-update'
+  import AddOrUpdate from './user-add'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -131,10 +133,10 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.dataForm || null
-        Customer.norList(params).then(res => {
+        Baozhengjin.list(params).then(res => {
           if (res.data && res.data.code === 0) {
-            this.dataList = res.data.data.list
-            this.totalPage = res.data.data.totalCount
+            this.dataList = res.data.list
+            this.totalPage = res.data.totalCount
             if(this.dataList !== null){
               this.isShow = false
             }
@@ -151,7 +153,7 @@
       },
       // 禁用
       disHandle (data) {
-        Customer.disable(data.userId).then(res => {
+        Baozhengjin.disable(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -177,7 +179,7 @@
       },
       // 启用
       norHandle (data) {
-        Customer.awake(data.userId).then(res => {
+        Baozhengjin.awake(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',

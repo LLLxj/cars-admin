@@ -4,11 +4,11 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="客户名称" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="请输入客户名称"></el-input>
+      <el-form-item label="客户名称" prop="dealUserName">
+        <el-input v-model="dataForm.dealUserName" placeholder="请输入客户名称"></el-input>
       </el-form-item>
       <el-form-item label="客户电话号码" prop="phone">
-        <el-input v-model="dataForm.phone" placeholder="请输入客户电话号码" :readonly="!this.id ? false : true " maxlength="11"></el-input>
+        <el-input v-model="dataForm.phone" placeholder="请输入客户电话号码" maxlength="11"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -45,12 +45,12 @@
         positionList: [],
         dataForm: {
           userId: '',
-          userName: '',
+          dealUserName: '',
           phone: '',
         },
         id: '',
         dataRule: {
-          userName: [
+          dealUserName: [
             { required: true, message: '用户名不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
@@ -67,9 +67,7 @@
     },
     methods: {
       init (id) {
-        console.log(id)
         this.id = id
-        console.log(this.id)
         this.visible = true
         if(id) {
           this.setData(id)

@@ -17,6 +17,7 @@
         </el-upload> -->
         <el-row :gutter="24">
           <el-col :span="24">
+            <!-- <el-table :data="dataForm.dealWaresIdList" @row-click="handleRowlclick" stripe> -->
             <el-table :data="dataForm.dealWaresIdList" @row-click="handleRowlclick" stripe>
               <el-table-column header-align="center" align="center" type="index" label="NO" width="80"/>
               <el-table-column label="商品标题" prop="dealWaresTitle" header-align="center" align="center" width="80"/>
@@ -150,7 +151,6 @@
               item.coverImage = res.data.url
             }
           })
-          console.log(res.data.url)
           // console.log(fileList)
         } else {
           this.$message(res.data.msg)

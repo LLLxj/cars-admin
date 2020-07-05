@@ -26,7 +26,7 @@
             <template slot-scope="scope">
               <div v-if="scope.row.bannerWaresList.length !== 0">
                  <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId">
-                  <img :src="item.coverImage" alt="" style="max-height: 100px;max-width: 100px">
+                  <img :src="item.image" alt="" style="max-height: 100px;max-width: 100px">
                 </div>
               </div>
               <span v-else>-</span>

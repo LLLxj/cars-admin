@@ -12,33 +12,36 @@
           <el-form-item label="请输入手机号">
             <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
+          <el-form-item label="客户">
+            <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
+            <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+            <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
+            <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
+            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button> -->
+            
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
-          </el-table-column>
-          <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
+         <!-- dealUserId (integer, optional): 客户ID ,
+examineUserId (integer, optional): 审核人ID ,
+examineTime (string, optional): 审核时间 -->
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
+          <el-table-column prop="phone" header-align="center" align="center" label="客户手机号码">
           </el-table-column>
           <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
           </el-table-column>
           <el-table-column prop="integral" header-align="center" align="center" label="积分">
           </el-table-column>
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="企业名称">
+          <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称" />
+          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属公司">
             <template slot-scope="scope">
               <span>{{scope.row.storeName || '--'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称">
-            <template slot-scope="scope">
-              <span>{{scope.row.sysUserName || '--'}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="phone" header-align="center" align="center" label="手机号">
@@ -55,11 +58,17 @@
               <el-tag v-else size="small">正常</el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间">
+            <template slot-scope="scope">
+              <span>{{scope.row.examineTime || '--'}}</span>
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealUserId)">启用</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
+              <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -82,9 +91,9 @@
 </template>
 <script>
 
-  import Customer from '@/api/customer/customer'
-  import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
+  import ComApply from '@/api/customer/com-apply'
+  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
+  import AddOrUpdate from './com-apply-update'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -98,7 +107,7 @@
         dataForm: {
           userName: '',
           phone: '',
-          type: ''
+          dealUserId: ''
         },
         dataList: [],
         isShow: true,
@@ -116,22 +125,21 @@
     },
     components: {
       AddOrUpdate,
-      TypeSelect,
+      CustomerSelect,
       ElContainer,
       ElAside,
       ElMain,
       uploadPop
     },
     activated () {
-      this.getDataList()
+      // this.getDataList()
     },
     methods: {
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
         params = this.dataForm || null
-        Customer.list(params).then(res => {
-          console.log(res)
+        ComApply.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -151,7 +159,7 @@
       },
       // 禁用
       disHandle (data) {
-        Customer.disable(data).then(res => {
+        Customer.disable(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -177,7 +185,7 @@
       },
       // 启用
       norHandle (data) {
-        Customer.awake(data).then(res => {
+        Customer.awake(data.userId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
