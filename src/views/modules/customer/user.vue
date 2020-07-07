@@ -18,10 +18,11 @@
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="baozhengjin()">保证金</el-button>
             <el-button @click="resetFrom()">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
+        <el-table :data="dataList" border stripe v-loading="dataListLoading" @row-click="handleRowlclick" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
           </el-table-column>
@@ -57,6 +58,7 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
+              <el-button type="text" size="small" v-if="scope.row.type === 0" @click="comAuth(scope.row.dealUserId)">企业认证</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealUserId)">启用</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
@@ -74,6 +76,8 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+        <comAuth v-if="comAuthVisible" ref="comAuth" @refreshDataList="getDataList"></comAuth>
+        <ensureMoney v-if="ensureMoneyVisible" ref="ensureMoney" @refreshDataList="getDataList"></ensureMoney>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -85,6 +89,8 @@
   import Customer from '@/api/customer/customer'
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './user-add'
+  import comAuth from './user-com-auth'
+  import ensureMoney from './user-ensure-money'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -100,6 +106,9 @@
           phone: '',
           type: ''
         },
+        ensureMoneyVisible: false,
+        selectItem: {},
+        comAuthVisible: false,
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -120,7 +129,9 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop
+      uploadPop,
+      comAuth,
+      ensureMoney
     },
     activated () {
       this.getDataList()
@@ -131,7 +142,6 @@
         this.dataListLoading = true
         params = this.dataForm || null
         Customer.list(params).then(res => {
-          console.log(res)
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -145,9 +155,25 @@
           this.dataListLoading = false
         })
       },
+      // 单击事件
+      handleRowlclick (val) {
+        this.selectItem = val
+      },
       schoolTreeChangeEvent (deptId) {
         this.dataForm.deptId = deptId
         this.getDataList()
+      },
+      comAuth(id) {
+        this.comAuthVisible = true
+        this.$nextTick(() => {
+          this.$refs.comAuth.init(id)
+        })
+      },
+      baozhengjin() {
+        this.ensureMoneyVisible = true
+        this.$nextTick(() => {
+          this.$refs.ensureMoney.init(this.selectItem)
+        })
       },
       // 禁用
       disHandle (data) {
@@ -256,7 +282,6 @@
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
-        console.log(id)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)

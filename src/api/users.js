@@ -13,6 +13,13 @@ class Users{
     })
   }
 
+  static allList() {
+    return request({
+      url: `${baseUrl}/sys/user/getSysUser`,
+      method: 'get'
+    })
+  }
+
   static disList(params) {
     return request({
       url: `${baseUrl}/sys/user/disableList`,
