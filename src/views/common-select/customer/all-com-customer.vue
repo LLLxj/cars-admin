@@ -57,7 +57,7 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Customer.comList().then(res => {
+        Customer.dealList().then(res => {
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
           }else{

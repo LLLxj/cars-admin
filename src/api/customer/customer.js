@@ -20,7 +20,12 @@ class Customer{
     })
   }
 
-  
+  static dealList() {
+    return request({
+      url: `${baseUrl}/deal/user/getDealUserList`,
+      method: 'get'
+    })
+  }
 
   static disList(params) {
     return request({

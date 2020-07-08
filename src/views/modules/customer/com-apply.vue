@@ -28,9 +28,6 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-         <!-- dealUserId (integer, optional): 客户ID ,
-examineUserId (integer, optional): 审核人ID ,
-examineTime (string, optional): 审核时间 -->
           <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
           <el-table-column prop="phone" header-align="center" align="center" label="客户手机号码">
           </el-table-column>
@@ -65,8 +62,9 @@ examineTime (string, optional): 审核时间 -->
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
+              <el-button type="text" size="small" @click="failHandle(scope.row.dealStoreId)">失败</el-button> 
+              <el-button type="text" size="small" @click="successHandle(scope.row.dealStoreId)">成功</el-button>
+              <el-button type="text" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
@@ -157,9 +155,8 @@ examineTime (string, optional): 审核时间 -->
         this.dataForm.deptId = deptId
         this.getDataList()
       },
-      // 禁用
-      disHandle (data) {
-        Customer.disable(data.userId).then(res => {
+      failHandle (data) { // 失败
+        ComApply.fail(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -183,9 +180,24 @@ examineTime (string, optional): 审核时间 -->
         })
         // disable
       },
-      // 启用
-      norHandle (data) {
-        Customer.awake(data.userId).then(res => {
+      successHandle (data) { // 成功
+        ComApply.success(data).then(res => {
+          if(res.data && res.data.code === 0){
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          }else{
+            this.$message.error(res.data.msg)
+          }
+        })
+      },
+      disHandle (data) { // 作废
+        ComApply.waste(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -222,45 +234,6 @@ examineTime (string, optional): 审核时间 -->
       // 多选
       selectionChangeHandle (val) {
         this.dataListSelections = val
-      },
-      // 下载模板
-      downFile () {
-         window.open(this.$http.adornUrl('/sys/user/down?token=' + Vue.cookie.get('token')), '_blank')
-      },
-       // 上传操作
-      uploadHandle () {
-        this.uploadPopVisible = true
-        this.$nextTick(() => {
-          this.$refs.uploadPop.init()
-        })
-      },
-      // 导出操作
-      exportHandle () {
-        var fix = document.querySelector('.el-table__fixed');
-        var wb;
-        if (fix) {
-          wb = XLSX.utils.table_to_book(document.querySelector('#dataListUser').removeChild(fix));
-          document.querySelector('#dataListUser').appendChild(fix);
-        } else {
-          wb = XLSX.utils.table_to_book(document.querySelector('#dataListUser'));
-        }
-        /* get binary string as output */
-        var wbout = XLSX.write(wb, {
-          bookType: 'xlsx',
-          bookSST: true,
-          type: 'array'
-        });
-        try {
-          FileSaver.saveAs(
-            new Blob([wbout], {
-              type: 'application/octet-stream'
-            }),
-            '管理员列表.xlsx'
-          );
-        } catch (e) {
-          if (typeof console !== 'undefined') console.log(e, wbout);
-        }
-        return wbout;
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {

@@ -12,8 +12,6 @@ class ComApply{
     })
   }
 
-  
-
   static fail(data) {
     return request({
       url: `${baseUrl}/deal/user/store/fail/` + data,
