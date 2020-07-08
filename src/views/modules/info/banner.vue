@@ -25,8 +25,8 @@
           <el-table-column header-align="center" align="center" label="缩略图">
             <template slot-scope="scope">
               <div v-if="scope.row.bannerWaresList.length !== 0">
-                 <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId">
-                  <img :src="item.image" alt="" style="max-height: 100px;max-width: 100px">
+                <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId">
+                  <img :src="item.image" alt="" style="max-height: 50px;max-width: 50px">
                 </div>
               </div>
               <span v-else>-</span>

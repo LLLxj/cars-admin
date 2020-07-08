@@ -17,13 +17,13 @@
         </el-upload> -->
         <el-row :gutter="24">
           <el-col :span="24">
-            <!-- <el-table :data="dataForm.dealWaresIdList" @row-click="handleRowlclick" stripe> -->
-            <el-table :data="dataForm.dealWaresIdList" @row-click="handleRowlclick" stripe>
+            <!-- <el-table :data="dataForm.bannerWaresList" @row-click="handleRowlclick" stripe> -->
+            <el-table :data="dataForm.bannerWaresList" @row-click="handleRowlclick" stripe>
               <el-table-column header-align="center" align="center" type="index" label="NO" width="80"/>
               <el-table-column label="商品标题" prop="dealWaresTitle" header-align="center" align="center" width="80"/>
-              <el-table-column label="图片" prop="coverImage" header-align="center" align="center">
+              <el-table-column label="图片" prop="image" header-align="center" align="center">
                 <template slot-scope="scope">
-                  <img v-if="scope.row.coverImage" :src="scope.row.coverImage" :alt="scope.row.coverImage" style="width: 80px;" />
+                  <img v-if="scope.row.image" :src="scope.row.image" :alt="scope.row.image" style="width: 80px;" />
                   <el-upload v-else :action="GLOBAL.UPLOAD_BRAND_URL" :show-file-list="false" :on-success="imageUploadSuccess2" :before-upload="beforeAvatarUpload"
                     :headers="myHeaders"
                     :accept="'.jpg, .png'"
@@ -36,7 +36,7 @@
                 <template slot-scope="scope">
                   <el-button-group>
                     <el-button size="mini" v-if="scope.$index > 0" type="primary" title="上移" icon="el-icon-caret-top" @click.stop="imagesUp(scope.$index)"></el-button>
-                    <el-button size="mini"  type="primary" v-if="scope.$index != dataForm.dealWaresIdList.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
+                    <el-button size="mini"  type="primary" v-if="scope.$index != dataForm.bannerWaresList.length-1" title="下移" icon="el-icon-caret-bottom" @click.stop="imagesDown(scope.$index)"></el-button>
                   </el-button-group>
                   <el-button-group>
                     <el-button size="mini" type="danger" title="删除" icon="el-icon-delete" @click.stop="imagesDel(scope.$index)" ></el-button>
@@ -91,7 +91,7 @@
         dataForm: {
           bannerId: '',
           bannerName: '',
-          dealWaresIdList: [],
+          bannerWaresList: [],
           sort: ''
         },
         body: {
@@ -146,9 +146,9 @@
       // 多图上传 成功回调
       imageUploadSuccess2(res, file, fileList) {
         if (res.code === 0) {
-          this.dataForm.dealWaresIdList.forEach(item => {
+          this.dataForm.bannerWaresList.forEach(item => {
             if (item.dealWaresId === item.dealWaresId) {
-              item.coverImage = res.data.url
+              item.image = res.data.url
             }
           })
           // console.log(fileList)
@@ -174,7 +174,7 @@
       },
        // 多图片 删除图片方法
       imagesDel(index) {
-        this.dataForm.dealWaresIdList.splice(index, 1)
+        this.dataForm.bannerWaresList.splice(index, 1)
         // this.body.images = this.body.images.splice(index, 1)
       },
       // 多图片 上移
@@ -182,7 +182,7 @@
         this.bodyImagesLoading = true
         if (index !== 0) {
           // 将当前数组index索引与前面一个元素互换位置，向数组前面移动一位
-          this.dataForm.dealWaresIdList[index] = this.dataForm.dealWaresIdList.splice(index - 1, 1, this.dataForm.dealWaresIdList[index])[0]
+          this.dataForm.bannerWaresList[index] = this.dataForm.bannerWaresList.splice(index - 1, 1, this.dataForm.bannerWaresList[index])[0]
         }
         this.bodyImagesLoading = false
       },
@@ -191,7 +191,7 @@
         this.bodyImagesLoading = true
         if (index + 1 !== this.dataForm.images.length) {
           // 将当前数组index索引与后面一个元素互换位置，向数组后面移动一位
-          this.dataForm.dealWaresIdList[index] = this.dataForm.dealWaresIdList.splice(index + 1, 1, this.dataForm.dealWaresIdList[index])[0]
+          this.dataForm.bannerWaresList[index] = this.dataForm.bannerWaresList.splice(index + 1, 1, this.dataForm.bannerWaresList[index])[0]
         }
         this.bodyImagesLoading = false
       },
@@ -203,7 +203,7 @@
         this.resetForm()
       },
       getProInfo (val) {
-        this.dataForm.dealWaresIdList.push(val)
+        this.dataForm.bannerWaresList.push(val)
       },
       // 表单提交
       dataFormSubmit () {

@@ -12,6 +12,13 @@ class Products{
     })
   }
 
+  static getProductList(data) {
+    return request({
+      url: `${baseUrl}/cou/wares/getCouWaresList/` + data,
+      method: 'get'
+    })
+  }
+
   static disList(params) {
     return request({
       url: `${baseUrl}/deal/wares/disableList`,

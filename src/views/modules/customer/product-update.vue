@@ -4,20 +4,21 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="商品名称" prop="couWaresName">
-        <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input>
-      </el-form-item>
       <el-form-item label="品牌名称" prop="couBrandId">
         <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
       </el-form-item>
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
-      <el-form-item label="选择型号" prop="couModelId">
-        <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
+      <el-form-item label="商品名称" prop="couWaresId">
+        <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect>
+        <!-- <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
       </el-form-item>
       <el-form-item label="厂商指导价" prop="couWaresPrice">
-        <el-input-number v-model="dataForm.couWaresPrice" :min="1" label=""></el-input-number>
+        <el-input-number v-model="dataForm.couWaresPrice" disabled="" :min="1" label=""></el-input-number>
+      </el-form-item>
+      <el-form-item label="选择型号" prop="couModelId">
+        <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
       </el-form-item>
       <el-form-item label="年款" prop="marketYear">
         <el-date-picker v-model="dataForm.marketYear" type="year" value-format="yyyy" placeholder="选择年">
@@ -28,30 +29,22 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="排量" prop="disMent">
-        <DisMent v-model="dataForm.disMent"></DisMent>
+        <el-input v-model="dataForm.disMent"></el-input>
+        <!-- <DisMent v-model="dataForm.disMent"></DisMent> -->
       </el-form-item>
       <el-form-item label="变速箱" prop="varBox">
-        <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect>
+        <el-input v-model="dataForm.varBox"></el-input>
+        <!-- <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect> -->
       </el-form-item>
       <el-form-item label="驱动方式" prop="drive">
-        <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect>
+        <el-input v-model="dataForm.drive"></el-input>
+        <!-- <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect> -->
       </el-form-item>
       <el-form-item label="油耗量" prop="consume">
-        <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect>
+        <el-input v-model="dataForm.consume"></el-input>
+        <!-- <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect> -->
       </el-form-item>
     </el-form>
-    <!-- {
-  "couWaresName": "string",
-  "couSeriesId": 0,
-  "couModelId": 0,
-  "couWaresPrice": "string",
-  "marketYear": 0,
-  "marketTime": "2020-06-10",
-  "disMent": "string",
-  "varBox": "string",
-  "drive": "string",
-  "consume": "string"
-} -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -62,6 +55,7 @@
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
   import Product from '@/api/brand/product'
+  import ProductSelect from '@/views/common-select/customer/product-select'
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
   import ModelSelect from '@/views/common-select/model-select'
@@ -97,9 +91,8 @@
         },
         id: '',
         dataRule: {
-          couWaresName: [
+          couWaresId: [
             { required: true, message: '商品名不能为空', trigger: 'blur' },
-            { validator: removeSpace, trigger: 'blur'}
           ],
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
@@ -114,7 +107,7 @@
       }
     },
     components: {
-      BrandSelect, ModelSelect, DisMent, VarBoxSelect, DriveStyleSelect, ConsumeSelect, SeriesSelect
+      BrandSelect, ModelSelect, DisMent, VarBoxSelect, DriveStyleSelect, ConsumeSelect, SeriesSelect, ProductSelect
     },
     watch: {
     },
@@ -138,6 +131,10 @@
           console.log(err)
           this.$message.error(data.msg)
         })
+      },
+      getProInfo(val) {
+        this.dataForm.couWaresPrice = val.couWaresPrice
+        console.log(val)
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
