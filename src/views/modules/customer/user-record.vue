@@ -1,34 +1,25 @@
 <template>
-  <!-- <div class="list-histor-box" :style="{right:right ,width: width,zIndex:9999}">
-    <span class="button" @click="isShowHistor()" :style="{top: 20 + 'px', background: classStuListVisible? '#19be6b': '#2d8cf0'}">学员信息</span>
-    <classStuList v-show="classStuListVisible" ref="classStuListRef"></classStuList>
-  </div> -->
-  
   <div class="list-histor-box" :style="{right:right ,width: width,zIndex:9999}">
-    <!-- <span class="button" v-if="isAuth('stu:reg:read:list')" @click="isShowHistor()" :style="{top: 20 + 'px', background: regHandleRecordVisible? '#19be6b': '#2d8cf0'}">操作记录</span>
-    <transition :name="transitionName" >
-      <regHandleRecord v-show="regHandleRecordVisible" ref="regHandleRecord"></regHandleRecord>
-    </transition> -->
-    <!-- 缴费记录 -->
-    <span class="button" @click="isShowpaymentHistor()" :style="{top: 20 + 'px', background: paymentRecordVisible? '#19be6b': '#2d8cf0'}">缴费记录</span>
+    <!-- 申请记录 -->
+    <span class="button" @click="isShowpaymentHistor()" :style="{top: 20 + 'px', background: paymentRecordVisible? '#19be6b': '#2d8cf0'}">申请记录</span>
     <transition :name="paymentTransition">
       <paymentRecord v-show="paymentRecordVisible" ref="paymentRecord"></paymentRecord>
     </transition>
 
-    <!-- 优惠记录 -->
-    <span class="button" @click="isShowBenefitHistor()" :style="{top: 150 + 'px', background: benefitRecordVisible? '#19be6b': '#2d8cf0'}">优惠记录</span>
+    <!-- 保证金 -->
+    <span class="button" @click="isShowBenefitHistor()" :style="{top: 150 + 'px', background: benefitRecordVisible? '#19be6b': '#2d8cf0'}">保证金记录</span>
     <transition :name="benefitTransition">
       <benefitRecord v-show="benefitRecordVisible" ref="benefitRecord"></benefitRecord>
     </transition>
 
-    <!-- 退费记录 -->
+    <!-- 退费单 -->
     <span class="button" @click="isShowQuitHistor()" :style="{top: 280 + 'px', background: quitRecordVisible? '#19be6b': '#2d8cf0'}">退费记录</span>
     <transition :name="quitTransition">
       <quitRecord v-show="quitRecordVisible" ref="quitRecord"></quitRecord>
     </transition>
 
-    <!-- 分班记录 -->
-    <span class="button" @click="isShowClassHistor()" :style="{top: 410 + 'px', background: assignClassRecordVisible? '#19be6b': '#2d8cf0'}">分班记录</span>
+    <!-- 金融单 -->
+    <span class="button" @click="isShowClassHistor()" :style="{top: 410 + 'px', background: assignClassRecordVisible? '#19be6b': '#2d8cf0'}">金融记录</span>
     <transition :name="transitionNam">
       <assignClassRecord  v-show="assignClassRecordVisible" ref="assignClassRecord"></assignClassRecord>
     </transition>
@@ -36,11 +27,11 @@
 </template>
 
 <script>
-  import regHandleRecord from './reg-record-list'
-  import assignClassRecord from './reg-assign-class-record'
-  import paymentRecord from './reg-payment-record'
-  import quitRecord from './reg-refund-record'
-  import benefitRecord from './reg-benefit-record'
+  import regHandleRecord from './user-apply-record'
+  import assignClassRecord from './user-bzj-record'
+  import paymentRecord from './user-finance-record'
+  import quitRecord from './user-refund-record'
+  import benefitRecord from './user-apply-record'
 
   export default {
     data () {
@@ -179,7 +170,8 @@
     }
     .button {
       display: block;
-      height: 90px;
+    //   height: 90px;
+      padding: 4px 0;
       width: 28px;
       background: #2d8cf0;
       border-radius: 4px;

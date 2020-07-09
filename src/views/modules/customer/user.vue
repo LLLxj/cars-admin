@@ -74,6 +74,8 @@
           :total="totalPage"
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
+        <!-- 操作记录右边展示 -->
+        <regRecordRight v-show="selectItem.sysUserName" ref="regRecordRight"></regRecordRight>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <comAuth v-if="comAuthVisible" ref="comAuth" @refreshDataList="getDataList"></comAuth>
@@ -90,6 +92,7 @@
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './user-add'
   import comAuth from './user-com-auth'
+  import regRecordRight from './user-record'
   import ensureMoney from './user-ensure-money'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
@@ -131,7 +134,8 @@
       ElMain,
       uploadPop,
       comAuth,
-      ensureMoney
+      ensureMoney,
+      regRecordRight
     },
     activated () {
       this.getDataList()
