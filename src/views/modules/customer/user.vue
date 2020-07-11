@@ -139,6 +139,7 @@
     },
     activated () {
       this.getDataList()
+      this.selectItem = {}
     },
     methods: {
       // 获取数据列表
@@ -162,6 +163,9 @@
       // 单击事件
       handleRowlclick (val) {
         this.selectItem = val
+        this.$nextTick(() => {
+          this.$refs.regRecordRight.init(val.dealUserId)
+        })
       },
       schoolTreeChangeEvent (deptId) {
         this.dataForm.deptId = deptId

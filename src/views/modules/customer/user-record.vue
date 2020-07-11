@@ -3,7 +3,7 @@
     <!-- 申请记录 -->
     <span class="button" @click="isShowpaymentHistor()" :style="{top: 20 + 'px', background: paymentRecordVisible? '#19be6b': '#2d8cf0'}">申请记录</span>
     <transition :name="paymentTransition">
-      <paymentRecord v-show="paymentRecordVisible" ref="paymentRecord"></paymentRecord>
+      <applyRecord v-show="paymentRecordVisible" ref="applyRecord"></applyRecord>
     </transition>
 
     <!-- 保证金 -->
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-  import regHandleRecord from './user-apply-record'
+  import applyRecord from './user-apply-record'
   import assignClassRecord from './user-bzj-record'
-  import paymentRecord from './user-finance-record'
+  // import applyRecord from './user-finance-record'
   import quitRecord from './user-refund-record'
-  import benefitRecord from './user-apply-record'
+  import benefitRecord from './user-ensure-money'
 
   export default {
     data () {
@@ -56,17 +56,18 @@
       top: {}
     },
     components: {
-      regHandleRecord, assignClassRecord, paymentRecord, quitRecord, benefitRecord
+      assignClassRecord, applyRecord, quitRecord, benefitRecord
     },
     methods: {
       init (id) {
         this.regId = id
+        console.log(this.regId)
         // 初始化 学员
         // this.$refs.regHandleRecord.init(this.regId)
-        this.$refs.assignClassRecord.init(this.regId)
-        this.$refs.paymentRecord.init(this.regId)
-        this.$refs.quitRecord.init(this.regId)
-        this.$refs.benefitRecord.init(this.regId)
+        // this.$refs.assignClassRecord.init(this.regId)
+        this.$refs.applyRecord.init(this.regId)
+        // this.$refs.quitRecord.init(this.regId)
+        // this.$refs.benefitRecord.init(this.regId)
       },
       // 打开历史记录
       isShowHistor () {

@@ -6,14 +6,17 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          <el-form-item label="请输入客户手机号">
+            <el-input v-model="dataForm.dealPhone" placeholder="请输入手机号" clearable></el-input>
           </el-form-item>
           <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
+            <TypeSelect v-model="dataForm.status"></TypeSelect>
+          </el-form-item>
+          <el-form-item label="创建日期" prop="rangeTime">
+            <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -103,6 +106,7 @@
           phone: '',
           type: ''
         },
+        // 审核状态 0.放弃 1.驳回 2.财务审核中 3.经理审核中 4.通过
         dataList: [],
         isShow: true,
         pageIndex: 1,

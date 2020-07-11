@@ -17,7 +17,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
@@ -28,8 +28,8 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
-          <el-table-column prop="phone" header-align="center" align="center" label="客户手机号码">
+          <el-table-column prop="dealStoreName" header-align="center" align="center" label="申请企业名称" />
+          <!-- <el-table-column prop="phone" header-align="center" align="center" label="客户手机号码">
           </el-table-column>
           <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
           </el-table-column>
@@ -48,7 +48,7 @@
               <span v-if="scope.row.type === 0">个人用户</span>
               <span v-else>企业用户</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.status === 0" size="small" type="info">禁用</el-tag>

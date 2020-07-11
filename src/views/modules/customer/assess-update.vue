@@ -4,17 +4,18 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="商品名称" prop="couWaresName">
-        <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input>
-      </el-form-item>
       <el-form-item label="品牌名称" prop="couBrandId">
         <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
       </el-form-item>
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
+      <el-form-item label="商品名称" prop="couWaresId">
+        <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect>
+        <!-- <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
+      </el-form-item>
       <el-form-item label="电话号码" prop="phone">
-        <el-input v-model="dataForm.phone" placeholder="请输入电话号码" clearable></el-input>
+        <el-input v-model="dataForm.phone" placeholder="请输入电话号码" maxlength="11" clearable></el-input>
       </el-form-item>
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
@@ -119,6 +120,7 @@
   import SeriesSelect from '@/views/common-select/brand-series-select'
   import CitySelect from '@/views/common-select/assess/city-select'
   import AreaSelect from '@/views/common-select/assess/area-select'
+  import ProductSelect from '@/views/common-select/customer/product-select'
 //   import ModelSelect from '@/views/common-select/model-select'
 //   import DisMent from '@/views/common-select/disment-select'
 //   import VarBoxSelect from '@/views/common-select/var-box-select'
@@ -220,7 +222,7 @@
       }
     },
     components: {
-      BrandSelect, SeriesSelect, CitySelect, AreaSelect
+      BrandSelect, SeriesSelect, CitySelect, AreaSelect, ProductSelect
     },
     watch: {
     },
@@ -262,8 +264,11 @@
         }
       },
       handleRemove(file, fileList) {
-        console.log(file)
         this.dataForm.driveImage.image = ''
+      },
+      getProInfo(val) {
+        this.dataForm.couWaresId = val.couWaresId
+        // this.dataForm.couWaresPrice = val.couWaresPrice
       },
       imageUploadSuccess1(res, file) {
         if (res.code === 0) {

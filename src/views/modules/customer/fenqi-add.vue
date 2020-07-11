@@ -20,7 +20,7 @@
 				</el-radio-group>
 			</el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer" v-if="id">
+    <span slot="footer" class="dialog-footer" v-if="!id">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
