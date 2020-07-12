@@ -13,19 +13,10 @@ class Sell{
   }
 
 
-  static reject(data) {
+  static cancle(data) {
     return request({
-      url: `${baseUrl}/deal/assess/sell/reject`,
-      method: 'post',
-      data
-    })
-  }
-
-  static manager(data) {
-    return request({
-      url: `${baseUrl}/deal/assess/sell/manager`,
-      method: 'post',
-      data
+      url: `${baseUrl}/deal/assess/sell/cancel/` + data,
+      method: 'get'
     })
   }
 

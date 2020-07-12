@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
@@ -83,10 +83,12 @@
           </el-table-column> -->
           <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button>
+              <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealSellId)">编辑</el-button>
+              <el-button type="text" size="small" @click="cancleHandle(scope.row.dealSellId)">已取消</el-button>
+              <el-button type="text" size="small" @click="successHandle(scope.row)">已完成</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -112,7 +114,7 @@
 
   import Sell from '@/api/customer/sell'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './sell-update'
+  import AddOrUpdate from './sell-add'
   import AssessPrice from './assess-price'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
@@ -193,9 +195,9 @@
           this.$refs.AssessPrice.init(id)
         })
 			},
-      // 禁用
-      disHandle (data) {
-        Assess.disable(data).then(res => {
+      // 已取消
+      cancleHandle (data) {
+        Sell.cancle(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -220,8 +222,11 @@
         // disable
       },
       // 启用
-      norHandle (data) {
-        Assess.awake(data).then(res => {
+      successHandle (data) {
+        Assess.success({
+					dealSellId: data.dealSellId,
+					sellPrice: data.sellPrice
+				}).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',

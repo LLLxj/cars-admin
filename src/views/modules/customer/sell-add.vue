@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="编辑"
+    :title="index === 1 ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
@@ -60,8 +60,8 @@
 				},
 				index: '',
         dataForm: {
-					dealSellId: '',
           dealSellTitle: '',
+					dealAssessId: '',
 					contactName: '',
 					contactPhone: '',
 					sex: 0,
@@ -91,15 +91,20 @@
     watch: {
     },
     methods: {
-      init (id) {
-        this.id = id
-        this.index = index
-        this.visible = true
-        this.setData(id)
+      init (id, index) {
+				console.log(index)
+				this.id = id
+				this.index = index
+				this.visible = true
+        this.dataForm.dealAssessId = id
+        if(index === 2) {
+          this.setData(id)
+        } 
       },
       setData(data) {
         Sell.info(data).then(({data}) => {
           if (data.code === 0) {
+            console.log(data)
             this.dataForm = data.data
           }else {
             this.$message.error(data.msg)
@@ -156,26 +161,48 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-						Sell.update(this.dataForm).then(({data}) => {
-							if (data && data.code === 0) {
-								this.$message({
-									message: '操作成功',
-									type: 'success',
-									duration: 1500,
-									onClose: () => {
-										this.visible = false
-										this.resetForm()
-										this.$emit('refreshDataList')
-									}
-								})
-							} else {
-								this.$message.error(data.msg)
-							}
-						}).catch(err => {
-							console.log(err)
-							this.$message.error(err)
-						})
-					}
+            if (this.index == 1) {
+              Sell.save(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
+            } else {
+              Sell.update(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
+            }
+          }
         })
       }
     }

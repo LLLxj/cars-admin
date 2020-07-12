@@ -73,9 +73,10 @@
           </el-table-column> -->
           <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button>
+              <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
+              <el-button type="text" size="small" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
               <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
@@ -94,6 +95,7 @@
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!-- 弹窗, 上传文件 -->
         <AssessPrice v-if="AssessPriceVisible" ref="AssessPrice" @refreshDataList="getDataList"></AssessPrice>
+        <SellUpdate v-if="sellUpdateVisible" ref="SellUpdate" @refreshDataList="getDataList"></SellUpdate>
       </el-main>
     </el-container>
   </div>
@@ -103,6 +105,7 @@
   import Assess from '@/api/customer/assess'
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './assess-update'
+  import SellUpdate from './sell-add'
   import AssessPrice from './assess-price'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
@@ -131,6 +134,7 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         uploadPopVisible: false,
+        sellUpdateVisible: false,
         searchData: {
         },
       }
@@ -142,7 +146,8 @@
       ElAside,
       ElMain,
 			uploadPop,
-			AssessPrice
+      AssessPrice,
+      SellUpdate
     },
     activated () {
       this.getDataList()
@@ -174,6 +179,12 @@
 				this.AssessPriceVisible = true
         this.$nextTick(() => {
           this.$refs.AssessPrice.init(id)
+        })
+			},
+			sellHandle(id, index) { // 评估价格操作
+				this.sellUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.SellUpdate.init(id, index)
         })
 			},
       // 禁用
