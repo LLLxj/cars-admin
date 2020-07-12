@@ -1,11 +1,11 @@
 <template>
   <el-dialog
-    :title="!id ? '新增' : '编辑'"
+    :title="edit !== true ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label=" 保证金金额" prop="depositPrice">
-        <el-input-number v-model="dataForm.depositPrice" :min="1" label=""></el-input-number>
+      <el-form-item label="保证金金额" prop="depositPrice">
+        <el-input-number v-model="dataForm.depositPrice" label="请输入保证金金额"></el-input-number>
       </el-form-item>
 			<el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="dataForm.remark" placeholder="请输入备注"></el-input>
@@ -39,7 +39,9 @@
         },
         id: '',
         dataRule: {
-        }
+        },
+        edit: false,
+        status: '',
       }
     },
     components: {
@@ -47,9 +49,28 @@
     watch: {
     },
     methods: {
-      init (item) {
+      init (item, id) {
         this.visible = true
-        this.dataForm.dealStoreId = item.dealStoreId
+        if (item) {
+          this.dataForm.dealStoreId = item.dealStoreId
+        } else {
+          this.edit = true
+          this.setInfo(id)
+        }
+      },
+      setInfo(data) {
+        Baozhengjin.info(data).then(({data}) => {
+          if (data.code === 0) {
+            this.dataForm.remark = data.data.remark
+            this.dataForm.depositPrice = data.data.depositPrice
+            this.dataForm.dealStoreId = data.data.dealDtoreId
+          }else {
+            this.$message.error(data.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(data.msg)
+        })
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
@@ -62,25 +83,47 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-						Baozhengjin.save(this.dataForm).then(({data}) => {
-							if (data && data.code === 0) {
-								this.$message({
-									message: '操作成功',
-									type: 'success',
-									duration: 1500,
-									onClose: () => {
-										this.visible = false
-										this.resetForm()
-										this.$emit('refreshDataList')
-									}
-								})
-							} else {
-								this.$message.error(data.msg)
-							}
-						}).catch(err => {
-							console.log(err)
-							this.$message.error(err)
-						})
+            if (this.edit) {
+              Baozhengjin.update(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
+            } else {
+              Baozhengjin.save(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
+            }
 					} 
         })
       }

@@ -1,17 +1,17 @@
 <template>
   <el-dialog
-    title="企业验证"
+    :title="edit === true ? '详情' : '企业验证'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
       <el-form-item label="公司名称" prop="dealStoreName">
-        <el-input v-model="dataForm.dealStoreName" placeholder="请输入公司名称"></el-input>
+        <el-input v-model="dataForm.dealStoreName" :disabled="edit" placeholder="请输入公司名称"></el-input>
       </el-form-item>
       <el-form-item label="客户职位" prop="dealUserJob">
-        <el-input v-model="dataForm.dealUserJob" placeholder="请输入客户职位"></el-input>
+        <el-input v-model="dataForm.dealUserJob" :disabled="edit" placeholder="请输入客户职位"></el-input>
       </el-form-item>
       <el-form-item label="所属用户" prop="sysUserId">
-        <UserSelect v-model="dataForm.sysUserId"></UserSelect>
+        <UserSelect v-model="dataForm.sysUserId" :disabled="edit"></UserSelect>
       </el-form-item>
 			<el-form-item label="上传门面图">
         <el-upload
@@ -21,17 +21,13 @@
           :on-success="imageUploadSuccess"
           :accept="'.jpg, .png'"
           list-type="picture-card"
-          :on-remove="handleRemove">
+          :on-remove="handleRemove"
+          :disabled="edit">
           <i class="el-icon-plus"></i>
         </el-upload>
 			</el-form-item>
-			<!-- dealUserId (integer, optional): 客户ID ,
-dealStoreName (string, optional): 客户所属公司名称 ,
-image (string, optional): 企业门面图路径 ,
-dealUserJob (string, optional): 客户职位 ,
-sysUserId (integer, optional): 所属用户ID -->
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <span slot="footer" class="dialog-footer" v-if="!edit">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
@@ -61,6 +57,7 @@ sysUserId (integer, optional): 所属用户ID -->
 				myHeaders: {
           token: getToken()
         },
+        edit: false,
         visible: false,
         roleList: [],
         menuList: [],
@@ -96,11 +93,19 @@ sysUserId (integer, optional): 所属用户ID -->
     watch: {
     },
     methods: {
-      init (id) {
-				this.id = id
-				this.dataForm.dealUserId = id
-				this.visible = true
-				this.setData(id)
+      init (id, authId, index) {
+        console.log(id)
+        console.log(authId)
+        console.log(index)
+        this.visible = true
+        if (index === 2) {
+          this.edit = true
+          this.getAuthInfo(authId)
+        } else {
+          this.id = id
+				  this.dataForm.dealUserId = id
+          this.setData(id)
+        }
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
@@ -114,6 +119,23 @@ sysUserId (integer, optional): 所属用户ID -->
         } else {
           this.$message(res.msg)
         }
+      },
+      getAuthInfo(data) {
+        ComApply.info(data).then(({data}) => {
+          if (data.code === 0) {
+            this.dataForm.dealUserId = data.data.dealUserId
+            this.dataForm.dealStoreName = data.data.dealStoreName
+            this.dataForm.image = data.data.image
+            this.dataForm.dealUserJob = data.data.dealUserJob
+            this.dataForm.sysUserId = data.data.sysUserId
+            this.dataForm.phone = data.data.phone
+          }else {
+            this.$message.error(data.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$message.error(data.msg)
+        })
       },
 			setData(data) {
         Customer.info(data).then(({data}) => {

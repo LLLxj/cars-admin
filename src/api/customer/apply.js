@@ -38,14 +38,14 @@ class Apply{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/list/` + data,
+      url: `${baseUrl}/deal/user/store/info/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/list/save`,
+      url: `${baseUrl}/deal/user/store/save`,
       method: 'post',
       data
     })
@@ -53,7 +53,7 @@ class Apply{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/list/update`,
+      url: `${baseUrl}/deal/user/store/update`,
       method: 'post',
       data
     })

@@ -28,31 +28,15 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="申请企业名称" />
-          <!-- <el-table-column prop="phone" header-align="center" align="center" label="客户手机号码">
-          </el-table-column>
-          <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
-          </el-table-column>
-          <el-table-column prop="integral" header-align="center" align="center" label="积分">
-          </el-table-column>
-          <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称" />
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属公司">
+          <el-table-column prop="dealStoreName" header-align="center" align="center" label="客户企业名称" />
+          <el-table-column prop="dealUserJob" header-align="center" align="center" label="客户职位" >
             <template slot-scope="scope">
-              <span>{{scope.row.storeName || '--'}}</span>
+              <span>{{scope.row.dealUserJob || '--'}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="phone" header-align="center" align="center" label="手机号">
-          </el-table-column>
-          <el-table-column prop="type" header-align="center" align="center" label="客户类型">
+          <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称">
             <template slot-scope="scope">
-              <span v-if="scope.row.type === 0">个人用户</span>
-              <span v-else>企业用户</span>
-            </template>
-          </el-table-column> -->
-          <el-table-column prop="status" header-align="center" align="center" label="状态">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0" size="small" type="info">禁用</el-tag>
-              <el-tag v-else size="small">正常</el-tag>
+              <span>{{scope.row.sysUserName || '--'}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间">
@@ -65,7 +49,7 @@
               <el-button type="text" size="small" @click="failHandle(scope.row.dealStoreId)">失败</el-button> 
               <el-button type="text" size="small" @click="successHandle(scope.row.dealStoreId)">成功</el-button>
               <el-button type="text" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId, scope.row.dealStoreId, 2)">编辑</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -91,7 +75,7 @@
 
   import ComApply from '@/api/customer/com-apply'
   import CustomerSelect from '@/views/common-select/customer/all-com-customer'
-  import AddOrUpdate from './com-apply-update'
+  import AddOrUpdate from './user-com-auth'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -236,11 +220,10 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
-        console.log(id)
+      addOrUpdateHandle (id, id1, id2) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, id1, id2)
         })
       },
       // 删除

@@ -19,6 +19,8 @@
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="baozhengjin()">保证金</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="refundHandle()">退费</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="financeHandle()">金融单</el-button>
             <el-button @click="resetFrom()">重置</el-button>
           </el-form-item>
         </el-form>
@@ -58,7 +60,7 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.type === 0" @click="comAuth(scope.row.dealUserId)">企业认证</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.type === 0" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealUserId)">启用</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
@@ -80,6 +82,8 @@
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <comAuth v-if="comAuthVisible" ref="comAuth" @refreshDataList="getDataList"></comAuth>
         <ensureMoney v-if="ensureMoneyVisible" ref="ensureMoney" @refreshDataList="getDataList"></ensureMoney>
+        <Refund v-if="refundVisible" ref="refund" @refreshDataList="getDataList"></Refund>
+        <UserFinance v-if="userFinanceVisible" ref="UserFinance" @refreshDataList="getDataList"></UserFinance>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -92,8 +96,10 @@
   import TypeSelect from '@/views/common-select/customer-type-select'
   import AddOrUpdate from './user-add'
   import comAuth from './user-com-auth'
+  import UserFinance from './user-finance'
   import regRecordRight from './user-record'
   import ensureMoney from './user-ensure-money'
+  import Refund from './user-refund'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -122,6 +128,8 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         uploadPopVisible: false,
+        refundVisible: false,
+        userFinanceVisible: false,
         searchData: {
         },
       }
@@ -135,7 +143,9 @@
       uploadPop,
       comAuth,
       ensureMoney,
-      regRecordRight
+      regRecordRight,
+      Refund,
+      UserFinance
     },
     activated () {
       this.getDataList()
@@ -181,6 +191,18 @@
         this.ensureMoneyVisible = true
         this.$nextTick(() => {
           this.$refs.ensureMoney.init(this.selectItem)
+        })
+      },
+      refundHandle() {
+        this.refundVisible = true
+        this.$nextTick(() => {
+          this.$refs.refund.init(this.selectItem)
+        })
+      },
+      financeHandle() {
+        this.userFinanceVisible = true
+        this.$nextTick(() => {
+          this.$refs.UserFinance.init(this.selectItem)
         })
       },
       // 禁用

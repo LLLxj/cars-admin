@@ -2,11 +2,11 @@
 import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
-class Baozhengjin{
+class Refund{
 
   static list(params) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/list`,
+      url: `${baseUrl}/deal/user/store/refund/list`,
       method: 'get',
       params: params
     })
@@ -15,7 +15,7 @@ class Baozhengjin{
 
   static reject(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/reject`,
+      url: `${baseUrl}/deal/user/store/refund/reject`,
       method: 'post',
       data
     })
@@ -23,7 +23,7 @@ class Baozhengjin{
 
   static manager(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/manager`,
+      url: `${baseUrl}/deal/user/store/refund/manager`,
       method: 'post',
       data
     })
@@ -31,7 +31,7 @@ class Baozhengjin{
 
   static success(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/success`,
+      url: `${baseUrl}/deal/user/store/refund/success`,
       method: 'post',
       data
     })
@@ -39,21 +39,21 @@ class Baozhengjin{
 
   static info(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/info/` + data,
+      url: `${baseUrl}/deal/user/store/refund/info/` + data,
       method: 'get',
     })
   }
 
   static recordList(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/getExamineList/` + data,
+      url: `${baseUrl}/deal/user/store/refund/getExamineList/` + data,
       method: 'get',
     })
   }
 
   static save(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/save`,
+      url: `${baseUrl}/deal/user/store/refund/save`,
       method: 'post',
       data
     })
@@ -61,7 +61,7 @@ class Baozhengjin{
 
   static update(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/deposit/update`,
+      url: `${baseUrl}/deal/user/store/refund/update`,
       method: 'post',
       data
     })
@@ -69,4 +69,4 @@ class Baozhengjin{
 
 }
 
-export default Baozhengjin
+export default Refund

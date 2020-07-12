@@ -9,8 +9,11 @@
           <el-form-item label="请输入客户手机号">
             <el-input v-model="dataForm.dealPhone" placeholder="请输入手机号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.status"></TypeSelect>
+          <el-form-item label="审核状态">
+            <el-select v-model="dataForm.status" placeholder="请选择">
+              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="创建日期" prop="rangeTime">
             <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
@@ -20,7 +23,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetFrom()">重置</el-button>
             
           </el-form-item>
@@ -62,10 +65,13 @@
 					</el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
-              <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
+              <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.depositId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.depositId)">启用</el-button> -->
+              <el-button type="text" size="small" @click="addOrUpdateHandle(null, scope.row.depositId)">编辑</el-button>
+              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 1)">驳回</el-button>
+              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 2)">经理审核</el-button>
+              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 3)">通过</el-button>
+              <el-button type="text" size="small" @click="getRecord(scope.row.depositId)">审核记录</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -80,6 +86,8 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+        <checkOrder v-if="checkOrderVisible" ref="checkOrder" @refreshDataList="getDataList"></checkOrder>
+        <recordList v-if="recordListVisible" ref="recordList"></recordList>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -90,7 +98,9 @@
 
   import Baozhengjin from '@/api/customer/baozhengjin'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
+  import AddOrUpdate from './user-ensure-money'
+  import checkOrder from './baozhengjin-check'
+  import recordList from './bzj-record'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -102,11 +112,19 @@
     data () {
       return {
         dataForm: {
-          userName: '',
-          phone: '',
-          type: ''
+          dealPhone: '',
+          status: '',
+          startTime: '',
+          endTime: '',
+          rangeTime: ''
         },
-        // 审核状态 0.放弃 1.驳回 2.财务审核中 3.经理审核中 4.通过
+        statusList: [
+          { label: '放弃', value: 0 },
+          { label: '驳回', value: 1 },
+          { label: '财务审核中', value: 2 },
+          { label: '经理审核中', value: 3 },
+          { label: '通过', value: 4 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -117,6 +135,8 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         uploadPopVisible: false,
+        checkOrderVisible: false,
+        recordListVisible: false,
         searchData: {
         },
       }
@@ -127,7 +147,9 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop
+      uploadPop,
+      checkOrder,
+      recordList
     },
     activated () {
       this.getDataList()
@@ -136,11 +158,20 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
+        params = {
+          startTime: '',
+          endTime: '',
+          dealPhone: '',
+          status: ''
+        }
+        params.startTime = this.dataForm.rangeTime[0]
+        params.endTime = this.dataForm.rangeTime[1]
+        params.dealPhone = this.dataForm.dealPhone
+        params.status = this.dataForm.status
         Baozhengjin.list(params).then(res => {
           if (res.data && res.data.code === 0) {
-            this.dataList = res.data.list
-            this.totalPage = res.data.totalCount
+            this.dataList = res.data.data.list
+            this.totalPage = res.data.data.totalCount
             if(this.dataList !== null){
               this.isShow = false
             }
@@ -157,7 +188,7 @@
       },
       // 禁用
       disHandle (data) {
-        Baozhengjin.disable(data.userId).then(res => {
+        Baozhengjin.disable(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -183,7 +214,7 @@
       },
       // 启用
       norHandle (data) {
-        Baozhengjin.awake(data.userId).then(res => {
+        Baozhengjin.awake(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -261,11 +292,22 @@
         return wbout;
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
-        console.log(id)
+      addOrUpdateHandle (id, id1, id2) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, id1, id2)
+        })
+      },
+      checkOrder (id1, id2) {
+        this.checkOrderVisible = true
+        this.$nextTick(() => {
+          this.$refs.checkOrder.init(id1, id2)
+        })
+      },
+      getRecord (id) {
+        this.recordListVisible = true
+        this.$nextTick(() => {
+          this.$refs.recordList.init(id)
         })
       },
       // 删除

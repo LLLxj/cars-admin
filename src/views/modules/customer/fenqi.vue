@@ -66,6 +66,13 @@
               <span>{{scope.row.followRemark || '--'}}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="followStatus" header-align="center" align="center" label="单据状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.followStatus === 0">待处理</span>
+              <span v-if="scope.row.followStatus === 1">待处理</span>
+              <span v-if="scope.row.followStatus === 2">已处理</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="followTime" header-align="center" align="center" label="跟进时间" width="150">
             <template slot-scope="scope">
               <span>{{scope.row.followTime || '--'}}</span>
@@ -73,8 +80,8 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.installmentId === 1" @click="disHandle(scope.row.installmentId)">作废</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.installmentId === 1" @click="norHandle(scope.row.installmentId)">已跟进</el-button>
+              <el-button type="text" size="small" v-if="scope.row.followStatus === 1" @click="checkOrder(scope.row, 1)">作废</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.followStatus === 1" @click="checkOrder(scope.row, 2)">已跟进</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.installmentId)">查看</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
@@ -91,6 +98,7 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+        <CheckOrder v-if="checkOrderVisible" ref="checkOrder" @refreshDataList="getDataList"></CheckOrder>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -103,6 +111,7 @@
   import TypeSelect from '@/views/common-select/customer-type-select'
   import followStatusSelect from '@/views/common-select/follow-status-select'
   import AddOrUpdate from './fenqi-add'
+  import CheckOrder from './fenqi-check'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -134,6 +143,7 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         uploadPopVisible: false,
+        checkOrderVisible: false,
         searchData: {
         },
       }
@@ -145,7 +155,8 @@
       ElAside,
       ElMain,
       uploadPop,
-      followStatusSelect
+      followStatusSelect,
+      CheckOrder
     },
     activated () {
       this.getDataList()
@@ -268,6 +279,12 @@
         this.uploadPopVisible = true
         this.$nextTick(() => {
           this.$refs.uploadPop.init()
+        })
+      },
+      checkOrder (item, index) {
+        this.checkOrderVisible = true
+        this.$nextTick(() => {
+          this.$refs.checkOrder.init(item, index)
         })
       },
       // 导出操作

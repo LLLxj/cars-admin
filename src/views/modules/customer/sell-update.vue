@@ -4,109 +4,32 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="品牌名称" prop="couBrandId">
-        <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
+      <el-form-item label="品牌名称" prop="dealSellTitle">
+        <el-input v-model="dataForm.dealSellTitle" placeholder="请输入品牌名称" /> 
       </el-form-item>
-      <el-form-item label="选择系列" prop="couSeriesId">
-        <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
+      <el-form-item label="联系人" prop="contactName">
+        <el-input v-model="dataForm.contactName" placeholder="请输入联系人" />
       </el-form-item>
-      <el-form-item label="商品名称" prop="couWaresId">
-        <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect>
-        <!-- <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
+			<el-form-item label="联系人电话" prop="contactPhone">
+        <el-input v-model="dataForm.contactPhone" placeholder="请输入联系人电话" />
       </el-form-item>
-      <el-form-item label="客户" prop="dealUserId">
-        <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
-        <!-- <el-input v-model="dataForm.phone" placeholder="请输入电话号码" maxlength="11" clearable></el-input> -->
-      </el-form-item>
+  "dealAssessId": 0,
+  "sex": 0,
+  "proAreaId": 0,
+  "cityAreaId": 0,
+  "countyAreaId": 0,
+  "addr": "string"
+      
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
     	</el-form-item>
       <el-form-item label="选择县/区">
         <AreaSelect v-model="dataForm.countyAreaId" :disabled="!dataForm.cityAreaId" :countryId="dataForm.cityAreaId"></AreaSelect>
       </el-form-item>
-			<el-form-item label="行驶里程" prop="distance">
-				<el-input-number v-model="dataForm.distance" :min="1" label=""></el-input-number>
+			<el-form-item label="详细地址" prop="addr">
+        <el-input v-model="dataForm.addr" placeholder="请输入详细地址" />
       </el-form-item>
-			<el-form-item label="上牌时间" prop="registerTime">
-        <el-date-picker v-model="dataForm.registerTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-			<el-form-item label="上传驾驶证">
-        <el-upload
-          :action="'/apiPro/deal/assess/upload/drivingImage'"
-          :data="{ phone: dataForm.phone }"
-          :headers="myHeaders"
-          :on-success="imageUploadSuccess"
-          :accept="'.jpg, .png'"
-          list-type="picture-card"
-          :on-remove="handleRemove">
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <!-- <el-upload
-          class="avatar-uploader"
-          :action="'/apiPro/deal/assess/upload/drivingImage'"
-          :data="{ phone: dataForm.phone }"
-          :show-file-list="false"
-          :on-success="imageUploadSuccess"
-          :before-upload="beforeAvatarUpload"
-          :headers="myHeaders"
-          :accept="'.jpg, .png'">
-          <el-image v-if="dataForm.driveImage && dataForm.driveImage.image !== ''" :src="dataForm.driveImage.image" alt="" lazy style="width:80px">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload> -->
-      </el-form-item>
-      <el-form-item label="上传评估图片">
-        <el-upload
-          :action="'/apiPro/deal/assess/upload/waresImage'"
-          :data="{ phone: dataForm.phone }"
-          :headers="myHeaders"
-          :on-success="imageUploadSuccess1"
-          :accept="'.jpg, .png'"
-          list-type="picture-card"
-          :on-remove="handleRemove">
-          <i class="el-icon-plus"></i>
-        </el-upload>
-      </el-form-item>
-      <!-- <el-form-item label="选择型号" prop="couModelId">
-        <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
-      </el-form-item>
-      <el-form-item label="厂商指导价" prop="couWaresPrice">
-        <el-input-number v-model="dataForm.couWaresPrice" :min="1" label=""></el-input-number>
-      </el-form-item>
-      
-      <el-form-item label="年款" prop="marketTime">
-        <el-date-picker v-model="dataForm.marketTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="排量" prop="disMent">
-        <DisMent v-model="dataForm.disMent"></DisMent>
-      </el-form-item>
-      <el-form-item label="变速箱" prop="varBox">
-        <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect>
-      </el-form-item>
-      <el-form-item label="驱动方式" prop="drive">
-        <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect>
-      </el-form-item>
-      <el-form-item label="油耗量" prop="consume">
-        <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect>
-      </el-form-item> -->
     </el-form>
-    <!-- {
-  "couWaresName": "string",
-  "couSeriesId": 0,
-  "couModelId": 0,
-  "couWaresPrice": "string",
-  "marketYear": 0,
-  "marketTime": "2020-06-10",
-  "disMent": "string",
-  "varBox": "string",
-  "drive": "string",
-  "consume": "string"
-} -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -123,10 +46,6 @@
   import CitySelect from '@/views/common-select/assess/city-select'
   import AreaSelect from '@/views/common-select/assess/area-select'
   import ProductSelect from '@/views/common-select/customer/product-select'
-//   import ModelSelect from '@/views/common-select/model-select'
-//   import DisMent from '@/views/common-select/disment-select'
-//   import VarBoxSelect from '@/views/common-select/var-box-select'
-//   import DriveStyleSelect from '@/views/common-select/drive-style-select'
   import ConsumeSelect from '@/views/common-select/consume-select'
   import { getToken } from '@/utils/userInfoUtil'
   export default {
@@ -140,50 +59,6 @@
         myHeaders: {
           token: getToken()
         },
-        phone: '13422356022',
-				driverImage: '', // 上传驾驶证路径
-//         dealAssessId (integer, optional): 评估ID ,
-// couBrandId (integer, optional): 所属品牌ID ,
-// couBrandName (string, optional): 所属品牌名称 ,
-// couSeriesId (integer, optional): 所属品牌系列ID ,
-// couSeriesName (string, optional): 所属品牌系列名称 ,
-// couWaresId (integer, optional): 所属商品ID ,
-// couWaresName (string, optional): 所属商品名称 ,
-// registerTime (string, optional): 上牌时间 ,
-// proAreaId (integer, optional): 省级区域ID ,
-// proAreaName (string, optional): 省级区域名称 ,
-// cityAreaId (integer, optional): 市级区域ID ,
-// cityAreaName (string, optional): 市级区域名称 ,
-// countyAreaId (integer, optional): 县/区级区域ID ,
-// countyAreaName (string, optional): 县/区级区域名称 ,
-// distance (integer, optional): 行驶里程 ,
-// dealUserId (integer, optional): 客户ID ,
-// images (Array[string], optional): 图片路径集合 ,
-// status (integer, optional): 状态 0.待审核 1.已审核 ,
-// dealAssessPrice (string, optional): 评估价格 ,
-// sellStatus (integer, optional): 交易状态 0.未交易 1.交易中 2.已交易 ,
-// driveImage (inline_model_22, optional),
-// waresImages (Array[Inline Model 1], optional),
-// examineUserId (integer, optional): 审核人ID ,
-// examineTime (string, optional): 审核时间
-
-// {
-//   "couBrandId": 0,
-//   "couSeriesId": 0,
-//   "couWaresId": 0,
-//   "registerTime": "2020-06-13T06:07:39.131Z",
-//   "proAreaId": 0,
-//   "cityAreaId": 0,
-//   "countyAreaId": 0,
-//   "distance": 0,
-//   "dealUserId": 0,
-//   "driveImage": {
-//     "image": "string"
-//   },
-//   "waresImages": [
-//     {}
-//   ]
-// }
         dataForm: {
           couWaresId: '',
           couWaresName: '',

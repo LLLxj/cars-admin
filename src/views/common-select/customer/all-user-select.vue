@@ -1,5 +1,5 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择客户" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" :disabled="disabled" placeholder="请选择客户" @change="getCity">
     <el-option
       v-for="item in dataList"
       :key="item.userId"

@@ -6,77 +6,78 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
+          <!-- <el-form-item label="客户手机号">
+            <el-input v-model="dataForm.dealPhone" placeholder="请输入手机号" clearable></el-input>
+          </el-form-item> -->
+          <el-form-item label="联系人手机号">
+            <el-input v-model="dataForm.contactPhone" placeholder="请输入手机号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          <el-form-item label="联系人">
+            <el-input v-model="dataForm.contactName" placeholder="请输入联系人" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
+          <el-form-item label="审核状态">
+            <el-select v-model="dataForm.status" placeholder="请选择">
+              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="创建日期" prop="rangeTime">
+            <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
-            <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-            <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
-            <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
-            <el-button type="primary" :loading="downloadLoading" @click="uploadHandle()">上传文件</el-button> -->
             
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
-          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
-          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" fixed="left" width="120"/>
-          <!-- <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" /> -->
-          <el-table-column prop="dealAssessPrice" header-align="center" align="center" label="评估价格" width="100"/>
-          <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
+          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
+          <el-table-column prop="financeNo" header-align="center" align="center" label="金融单编号">
+          </el-table-column>
+            <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
+            <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
+            <el-table-column prop="contactPhone" header-align="center" align="center" label="联系人手机号" />
+            <el-table-column prop="financePrice" header-align="center" align="center" label="金融单金额" />
+            <el-table-column prop="remark" header-align="center" align="center" label="备注">
+                <template slot-scope="scope">
+        <span>{{scope.row.remark || '--'}}</span>
+            </template>
+					</el-table-column>
+					<el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-							<div v-if="scope.row.waresImages && scope.row.waresImages.length !==0 ">
-								<div v-for="(item, index) in scope.row.waresImages" :key="index">
-									<img :src="item.image" style="width:40px" alt="">
-								</div>
-							</div>
-							<span v-else>-</span>
+              <span v-if="scope.row.status === 0">作废</span>
+              <span v-if="scope.row.status === 1">处理中</span>
+              <span v-if="scope.row.status === 4">已完成</span>
             </template>
           </el-table-column>
-          <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌名称" width="120"/>
-          <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列名称" width="120"/>
-          <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" width="100"/>
-          <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" width="100"/>
-          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" width="100"/>
-          <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" width="80"/>
-          <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="80">
-            <template slot-scope="scope">
-							<div v-if="scope.row.driveImage && scope.row.driveImage.image !== ''">
-              	<img :src="scope.row.driveImage.image" style="width:40px" alt="">
-							</div>
-							<span v-else>-</span>
+					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间">
+						<template slot-scope="scope">
+              <span>{{scope.row.submitTime || '--'}}</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="status" header-align="center" align="center" label="评估状态" width="80">
-            <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">待审核</span>
-              <span v-else>已审核</span>
+					</el-table-column>
+					<el-table-column prop="examineUserName" header-align="center" align="center" label="审核人名称">
+						<template slot-scope="scope">
+              <span>{{scope.row.examineUserName || '--'}}</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
-            <template slot-scope="scope">
-              <span v-if="scope.row.sellStatus === 0">未交易</span>
-              <span v-else-if="scope.row.sellStatus === 1">交易中</span>
-              <span v-else>已交易</span>
+					</el-table-column>
+					<el-table-column prop="examineTime" header-align="center" align="center" label="审核时间">
+						<template slot-scope="scope">
+              <span>{{scope.row.examineTime || '--'}}</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="100"/>          
-          <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
-          </el-table-column> -->
-          <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
+					</el-table-column>
+          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
+              <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.depositId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.depositId)">启用</el-button> -->
+              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.financeId)">查看</el-button> -->
+              <el-button type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
+              <el-button type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
+              <el-button type="text" size="small" @click="success(scope.row)">已完成</el-button>
+							<el-button type="text" size="small" @click="getRecord(scope.row.financeId)">审核记录</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -92,18 +93,19 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+				<recordList v-if="recordListVisible" ref="recordList"></recordList>
         <!-- 弹窗, 上传文件 -->
-        <AssessPrice v-if="AssessPriceVisible" ref="AssessPrice" @refreshDataList="getDataList"></AssessPrice>
+        <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
     </el-container>
   </div>
 </template>
 <script>
 
-  import Assess from '@/api/customer/assess'
+  import Finance from '@/api/customer/finance'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './assess-update'
-  import AssessPrice from './assess-price'
+	import AddOrUpdate from './user-finance'
+	import recordList from './finance-record'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -115,22 +117,31 @@
     data () {
       return {
         dataForm: {
-          dealUserId: '',
-          startTime: '',
-          endTime: '',
+          dealPhone: '',
           status: '',
+          startTime: '',
+          contactPhone: '',
+          contactName: '',
+          endTime: '',
+          rangeTime: ''
         },
+        statusList: [
+          { label: '作废', value: 0 },
+          { label: '待处理', value: 1 },
+          { label: '待处理', value: 2 },
+          { label: '已完成', value: 3 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
         pageSize: 10,
-				totalPage: 0,
-				AssessPriceVisible: false,
+        totalPage: 0,
         downloadLoading: false,
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
-        uploadPopVisible: false,
+				uploadPopVisible: false,
+				recordListVisible: false,
         searchData: {
         },
       }
@@ -142,7 +153,7 @@
       ElAside,
       ElMain,
 			uploadPop,
-			AssessPrice
+			recordList
     },
     activated () {
       this.getDataList()
@@ -151,8 +162,21 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
-        Assess.list(params).then(res => {
+        params = {
+          startTime: '',
+          endTime: '',
+          dealPhone: '',
+          status: '',
+          contactPhone: '',
+          contactName: '',
+        }
+        params.startTime = this.dataForm.rangeTime[0]
+        params.endTime = this.dataForm.rangeTime[1]
+        params.dealPhone = this.dataForm.dealPhone
+        params.contactPhone = this.dataForm.contactPhone
+        params.contactName = this.dataForm.contactName
+        params.status = this.dataForm.status
+        Finance.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -169,16 +193,42 @@
       schoolTreeChangeEvent (deptId) {
         this.dataForm.deptId = deptId
         this.getDataList()
-			},
-			assesHandle(id) { // 评估价格操作
-				this.AssessPriceVisible = true
-        this.$nextTick(() => {
-          this.$refs.AssessPrice.init(id)
+      },
+      // 处理中
+      ingHandle (data) {
+        Finance.checking({
+					financeId: data.financeId,
+  				followUserId: data.sysUserId
+				}).then(res => {
+          if(res.data && res.data.code === 0){
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          }else{
+            this.$message.error(res.data.msg)
+          }
+        }).catch(err => {
+          this.listLoading = false
+          console.log(err)
+          this.$message({
+            message: err || '读取接口失败！',
+            type: 'error',
+            duration: 1500
+          })
         })
-			},
-      // 禁用
-      disHandle (data) {
-        Assess.disable(data).then(res => {
+        // disable
+      },
+      // 完成
+      success (data) {
+        Finance.success({
+					financeId: data.financeId,
+  				financePrice: data.financePrice
+				}).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -203,8 +253,8 @@
         // disable
       },
       // 启用
-      norHandle (data) {
-        Assess.awake(data).then(res => {
+      waste (data) {
+        Finance.waste(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -283,9 +333,16 @@
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
+        console.log(id)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+			},
+			getRecord (id) {
+        this.recordListVisible = true
+        this.$nextTick(() => {
+          this.$refs.recordList.init(id)
         })
       },
       // 删除

@@ -7,13 +7,22 @@
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
           <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
+            <el-input v-model="dataForm.contactName" placeholder="请输入用户名" clearable></el-input>
           </el-form-item>
           <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+            <el-input v-model="dataForm.contactPhone" placeholder="请输入手机号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
+            <el-form-item label="出售状态">
+            <el-select v-model="dataForm.status" placeholder="请选择">
+              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+					<el-form-item label="创建日期" prop="rangeTime">
+            <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -63,9 +72,10 @@
           </el-table-column>
           <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
             <template slot-scope="scope">
-              <span v-if="scope.row.sellStatus === 0">未交易</span>
-              <span v-else-if="scope.row.sellStatus === 1">交易中</span>
-              <span v-else>已交易</span>
+              <span v-if="scope.row.sellStatus === 0">已取消</span>
+              <span v-else-if="scope.row.sellStatus === 1">待处理</span>
+              <span v-else-if="scope.row.sellStatus === 1">处理中</span>
+              <span v-else>已完成</span>
             </template>
           </el-table-column>
           <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="100"/>          
@@ -100,9 +110,9 @@
 </template>
 <script>
 
-  import Assess from '@/api/customer/assess'
+  import Sell from '@/api/customer/sell'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './assess-update'
+  import AddOrUpdate from './sell-update'
   import AssessPrice from './assess-price'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
@@ -115,11 +125,18 @@
     data () {
       return {
         dataForm: {
-          dealUserId: '',
+					contactName: '',
+					contactPhone: '',
           startTime: '',
           endTime: '',
           status: '',
-        },
+				},
+				statusList: [
+          { label: '已取消', value: 0 },
+          { label: '待处理', value: 1 },
+          { label: '处理中', value: 2 },
+          { label: '已完成', value: 3 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -141,8 +158,8 @@
       ElContainer,
       ElAside,
       ElMain,
-			uploadPop,
-			AssessPrice
+        uploadPop,
+        AssessPrice
     },
     activated () {
       this.getDataList()
@@ -152,7 +169,7 @@
       getDataList (params) {
         this.dataListLoading = true
         params = this.dataForm || null
-        Assess.list(params).then(res => {
+        Sell.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount

@@ -7,22 +7,22 @@
     </transition>
 
     <!-- 保证金 -->
-    <span class="button" @click="isShowBenefitHistor()" :style="{top: 150 + 'px', background: benefitRecordVisible? '#19be6b': '#2d8cf0'}">保证金记录</span>
+    <!-- <span class="button" @click="isShowBenefitHistor()" :style="{top: 150 + 'px', background: benefitRecordVisible? '#19be6b': '#2d8cf0'}">保证金记录</span>
     <transition :name="benefitTransition">
       <benefitRecord v-show="benefitRecordVisible" ref="benefitRecord"></benefitRecord>
-    </transition>
+    </transition> -->
 
     <!-- 退费单 -->
-    <span class="button" @click="isShowQuitHistor()" :style="{top: 280 + 'px', background: quitRecordVisible? '#19be6b': '#2d8cf0'}">退费记录</span>
+    <!-- <span class="button" @click="isShowQuitHistor()" :style="{top: 280 + 'px', background: quitRecordVisible? '#19be6b': '#2d8cf0'}">退费记录</span>
     <transition :name="quitTransition">
       <quitRecord v-show="quitRecordVisible" ref="quitRecord"></quitRecord>
-    </transition>
+    </transition> -->
 
     <!-- 金融单 -->
-    <span class="button" @click="isShowClassHistor()" :style="{top: 410 + 'px', background: assignClassRecordVisible? '#19be6b': '#2d8cf0'}">金融记录</span>
+    <!-- <span class="button" @click="isShowClassHistor()" :style="{top: 410 + 'px', background: assignClassRecordVisible? '#19be6b': '#2d8cf0'}">金融记录</span>
     <transition :name="transitionNam">
       <assignClassRecord  v-show="assignClassRecordVisible" ref="assignClassRecord"></assignClassRecord>
-    </transition>
+    </transition> -->
   </div>
 </template>
 
