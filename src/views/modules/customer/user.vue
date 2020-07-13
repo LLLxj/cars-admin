@@ -18,9 +18,9 @@
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="baozhengjin()">保证金</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="refundHandle()">退费</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId" @click="financeHandle()">金融单</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="baozhengjin()">保证金</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="refundHandle()">退费</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="financeHandle()">金融单</el-button>
             <el-button @click="resetFrom()">重置</el-button>
           </el-form-item>
         </el-form>
