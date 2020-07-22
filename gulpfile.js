@@ -74,15 +74,14 @@ gulp.task('clean', function () {
   return del([versionPath])
 });
 
-gulp.task('default', gulp.series('clean', function () {
+gulp.task('default', ['clean'], function () {
   // 获取环境配置
   env = process.env.npm_config_qa ? 'qa' : process.env.npm_config_uat ? 'uat' : 'prod'
 
   // 开始打包编译
-
   gulp.start(['build', 'create:versionCatalog', 'replace:cdnUrl', 'replace:version', 'concat:config'], function () {
     // 清除, 编译 / 处理项目中产生的文件
     del([`${distPath}/static`, `${versionPath}/static/config`])
   })
-}));
+});
 
