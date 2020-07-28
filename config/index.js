@@ -4,6 +4,7 @@
 
 const path = require('path')
 const devEnv = require('./dev.env')
+console.log(devEnv)
 
 module.exports = {
   dev: {
