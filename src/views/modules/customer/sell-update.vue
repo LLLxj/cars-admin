@@ -97,9 +97,9 @@
         this.visible = true
         this.setData(id)
       },
-      setData(data) {
-        Sell.info(data).then(({data}) => {
-          if (data.code === 0) {
+      setData(id) {
+        Sell.info(id).then(res => {
+          if (res.data.code === 0) {
             this.dataForm = data.data
           }else {
             this.$message.error(data.msg)

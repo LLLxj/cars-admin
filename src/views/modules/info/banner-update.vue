@@ -146,12 +146,13 @@
       // 多图上传 成功回调
       imageUploadSuccess2(res, file, fileList) {
         if (res.code === 0) {
+          console.log(res)
           this.dataForm.bannerWaresList.forEach(item => {
             if (item.dealWaresId === item.dealWaresId) {
               item.image = res.data.url
             }
           })
-          // console.log(fileList)
+          console.log(this.dataForm.bannerWaresList)
         } else {
           this.$message(res.data.msg)
         }
@@ -203,6 +204,7 @@
         this.resetForm()
       },
       getProInfo (val) {
+        console.log(val)
         this.dataForm.bannerWaresList.push(val)
       },
       // 表单提交

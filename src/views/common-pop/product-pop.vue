@@ -108,7 +108,7 @@
         this.selectItem = {
           dealWaresTitle: val.dealWaresTitle,
           dealWaresId: val.dealWaresId,
-          coverImage: ''
+          image: ''
         }
         this.selectProItem = {
           dealWaresId: val.dealWaresId,
@@ -122,7 +122,7 @@
         this.selectItem = {
           dealWaresTitle: val.dealWaresTitle,
           dealWaresId: val.dealWaresId,
-          coverImage: ''
+          image: ''
         }
         this.selectProItem = {
           dealWaresId: val.dealWaresId,

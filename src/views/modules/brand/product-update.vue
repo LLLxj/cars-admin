@@ -27,7 +27,7 @@
         <el-date-picker v-model="dataForm.marketTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="排量" prop="disMent">
+      <!-- <el-form-item label="排量" prop="disMent">
         <DisMent v-model="dataForm.disMent"></DisMent>
       </el-form-item>
       <el-form-item label="变速箱" prop="varBox">
@@ -38,20 +38,24 @@
       </el-form-item>
       <el-form-item label="油耗量" prop="consume">
         <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect>
+      </el-form-item> -->
+      <el-form-item label="排量" prop="disMent">
+        <el-input v-model="dataForm.disMent"></el-input>
+        <!-- <DisMent v-model="dataForm.disMent"></DisMent> -->
+      </el-form-item>
+      <el-form-item label="变速箱" prop="varBox">
+        <el-input v-model="dataForm.varBox"></el-input>
+        <!-- <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect> -->
+      </el-form-item>
+      <el-form-item label="驱动方式" prop="drive">
+        <el-input v-model="dataForm.drive"></el-input>
+        <!-- <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect> -->
+      </el-form-item>
+      <el-form-item label="油耗量" prop="consume">
+        <el-input v-model="dataForm.consume"></el-input>
+        <!-- <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect> -->
       </el-form-item>
     </el-form>
-    <!-- {
-  "couWaresName": "string",
-  "couSeriesId": 0,
-  "couModelId": 0,
-  "couWaresPrice": "string",
-  "marketYear": 0,
-  "marketTime": "2020-06-10",
-  "disMent": "string",
-  "varBox": "string",
-  "drive": "string",
-  "consume": "string"
-} -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -130,7 +134,6 @@
       setData(data) {
         Product.info(data).then(({data}) => {
           if (data.code === 0) {
-            console.log(data)
             this.dataForm = data.data
           }else {
             this.$message.error(data.msg)
