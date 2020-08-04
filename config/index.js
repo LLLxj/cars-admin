@@ -14,7 +14,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apiPro': {
-        target: 'http://118.190.26.73:8086/',
+        target: 'http:/39.100.108.10:8086/',
+        // target: 'http://118.190.26.73:8086/',
         // target: 'http://192.168.2.20:8086/',
         // target: 'http://192.168.2.137/hgls-school/',
         changeOrigin: true,
