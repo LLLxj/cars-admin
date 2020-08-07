@@ -1,11 +1,12 @@
 <template>
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
-    <!-- <div class="site-navbar__header">
-      <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu_long.png" style="width: 156px;height: 40px;"/></a>
+    <div class="site-navbar__header">
+      <div class="site-navbar__brand" @click="$router.push({ name: 'home' })">
+        <!-- <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu_long.png" style="width: 156px;height: 40px;"/></a> -->
+        <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.jpeg" style="width: 100%"/></a>
         <a class="site-navbar__brand-mini" href="javascript:;"><img src="~@/assets/img/menu_short.png" style="width: 40px;height: 38px;"/></a>
-      </h1>
-    </div> -->
+      </div>
+    </div>
     <div class="site-navbar__body clearfix">
       <el-menu class="site-navbar__menu" mode="horizontal">
         <el-menu-item class="site-navbar__switch" index="0" @click="sidebarFold = !sidebarFold">
@@ -594,6 +595,9 @@
   }
 </script>
 <style lang="scss" scoped>
+  .site-navbar__header{
+    // width: 100%;
+  }
   .message-wrap{
     padding:5px 15px;
     .item{

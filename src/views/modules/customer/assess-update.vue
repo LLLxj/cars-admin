@@ -16,7 +16,6 @@
       </el-form-item>
       <el-form-item label="客户" prop="dealUserId">
         <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
-        <!-- <el-input v-model="dataForm.phone" placeholder="请输入电话号码" maxlength="11" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
@@ -42,22 +41,6 @@
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
-        <!-- <el-upload
-          class="avatar-uploader"
-          :action="'/apiPro/deal/assess/upload/drivingImage'"
-          :data="{ phone: dataForm.phone }"
-          :show-file-list="false"
-          :on-success="imageUploadSuccess"
-          :before-upload="beforeAvatarUpload"
-          :headers="myHeaders"
-          :accept="'.jpg, .png'">
-          <el-image v-if="dataForm.driveImage && dataForm.driveImage.image !== ''" :src="dataForm.driveImage.image" alt="" lazy style="width:80px">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload> -->
       </el-form-item>
       <el-form-item label="上传评估图片">
         <el-upload
@@ -71,29 +54,6 @@
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <!-- <el-form-item label="选择型号" prop="couModelId">
-        <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
-      </el-form-item>
-      <el-form-item label="厂商指导价" prop="couWaresPrice">
-        <el-input-number v-model="dataForm.couWaresPrice" :min="1" label=""></el-input-number>
-      </el-form-item>
-      
-      <el-form-item label="年款" prop="marketTime">
-        <el-date-picker v-model="dataForm.marketTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="排量" prop="disMent">
-        <DisMent v-model="dataForm.disMent"></DisMent>
-      </el-form-item>
-      <el-form-item label="变速箱" prop="varBox">
-        <VarBoxSelect v-model="dataForm.varBox"></VarBoxSelect>
-      </el-form-item>
-      <el-form-item label="驱动方式" prop="drive">
-        <DriveStyleSelect v-model="dataForm.drive"></DriveStyleSelect>
-      </el-form-item>
-      <el-form-item label="油耗量" prop="consume">
-        <ConsumeSelect v-model="dataForm.consume"></ConsumeSelect>
-      </el-form-item> -->
     </el-form>
     <!-- {
   "couWaresName": "string",

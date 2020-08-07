@@ -84,7 +84,6 @@ export default {
           this.loading = true
           login(this.loginForm).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data.data.userId)
               setToken(data.data.token)
               setUserId(data.data.userId)
               this.$router.replace({name: 'home'})

@@ -49,6 +49,44 @@ class Products{
     })
   }
 
+  static reject(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/reject`,
+      method: 'post',
+      data
+    })
+  }
+
+  static manage(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/manage`,
+      method: 'post',
+      data
+    })
+  }
+
+  static onLine(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/onLine`,
+      method: 'post',
+      data
+    })
+  }
+
+  static unLine(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/unLine/` + data,
+      method: 'get'
+    })
+  }
+
+  static sale(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/sale/` + data,
+      method: 'get'
+    })
+  }
+
   static save(data) {
     return request({
       url: `${baseUrl}/deal/wares/save`,

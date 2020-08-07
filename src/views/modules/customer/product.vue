@@ -89,30 +89,14 @@
             </template>
           </el-table-column>
           <el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" />
-          <!-- <el-table-column prop="image" header-align="center" align="center" label="品牌logo">
-            <template slot-scope="scope">
-              <img :src="scope.row.image" alt="" style="max-height: 100px;max-width: 100px">
-            </template>
-          </el-table-column>
-          <el-table-column prop="firstLetter" header-align="center" align="center" label="品牌首字母">
-          </el-table-column> 
-          <el-table-column prop="status" header-align="center" align="center" label="状态">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.type === 0">禁用</el-tag>
-              <el-tag v-else>正常</el-tag>
-            </template>
-          </el-table-column> -->
-          <!-- <el-table-column prop="status" header-align="center" align="center" label="状态">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0" type="info">禁用</el-tag>
-              <el-tag v-else>正常</el-tag>
-            </template>
-          </el-table-column> -->
           <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couWaresId)">编辑</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couWaresId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.couWaresId)">启用</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
+              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
+              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
+              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 3)">上架</el-button>
+              <el-button type="text" size="small" @click="unLineHandle(scope.row.dealWaresId)">下架</el-button>
+              <el-button type="text" size="small" @click="saleHandle(scope.row.dealWaresId)">已出售</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -127,6 +111,7 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+        <CheckOrder v-if="checkOrderVisible" ref="checkOrder" @refreshDataList="getDataList"></CheckOrder>
         <!-- 弹窗, 上传文件 -->
       </el-main>
     </el-container>
@@ -140,6 +125,7 @@
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
   import ModelSelect from '@/views/common-select/model-select'
+  import CheckOrder from './product-check'
   import Vue from 'vue'
   export default {
     data () {
@@ -157,11 +143,12 @@
           couModelId: '',
           page: 1,
           limit: 10
-        }
+        },
+        checkOrderVisible: false
       }
     },
     components: {
-      AddOrUpdate, StatusSelect, BrandSelect, SeriesSelect, ModelSelect
+      AddOrUpdate, StatusSelect, BrandSelect, SeriesSelect, ModelSelect, CheckOrder
     },
     activated () {
       this.getDataList()
@@ -216,9 +203,15 @@
         this.searchData.page = val
         this.getDataList(this.searchData)
       },
-      // 禁用
-      disHandle (data) {
-        Products.disable(data).then(res => {
+      manageHandle(id, index) {
+        this.checkOrderVisible = true
+        this.$nextTick(() => {
+          this.$refs.checkOrder.init(id, index)
+        })
+      },
+      // 下架
+      unLineHandle (data) {
+        Products.unLine(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -242,9 +235,9 @@
         })
         // disable
       },
-      // 启用
-      norHandle (data) {
-        Products.awake(data).then(res => {
+      // 已出售
+      saleHandle (data) {
+        Products.sale(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
