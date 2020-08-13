@@ -97,7 +97,7 @@
     methods: {
       // 获取数据列表
       getDataList (params) {
-        // this.searchData.page = 1
+        this.searchData.page = 1
         this.dataListLoading = true
         var params = this.searchData || null
         this.paramsSearch()

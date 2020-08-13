@@ -3,7 +3,7 @@
     <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()"> -->
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.name" placeholder="配置名称" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="配置名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -58,7 +58,7 @@
     data () {
       return {
         dataForm: {
-          // name: ''
+          key: ''
         },
         dataList: [],
         pageIndex: 1,

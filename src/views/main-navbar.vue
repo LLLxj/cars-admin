@@ -3,7 +3,7 @@
     <div class="site-navbar__header">
       <div class="site-navbar__brand" @click="$router.push({ name: 'home' })">
         <!-- <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu_long.png" style="width: 156px;height: 40px;"/></a> -->
-        <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.jpeg" style="width: 100%"/></a>
+        <div class="img-box"><a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.jpeg" style="width: 100%"/></a></div>
         <a class="site-navbar__brand-mini" href="javascript:;"><img src="~@/assets/img/menu_short.png" style="width: 40px;height: 38px;"/></a>
       </div>
     </div>
@@ -597,6 +597,14 @@
 <style lang="scss" scoped>
   .site-navbar__header{
     // width: 100%;
+    .navbar__brand{
+      .img-box{
+        width: 100%;
+        &>img{
+          width: 100%;
+        }
+      }
+    }
   }
   .message-wrap{
     padding:5px 15px;
