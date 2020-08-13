@@ -5,7 +5,7 @@
   window.SITE_CONFIG = {}
 
   // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://192.168.1.102:8080/'
+  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086/'
   // window.SITE_CONFIG['baseUrl'] = 'http://localhost:8080/'
 
   // cdn地址 = 域名 + 版本号

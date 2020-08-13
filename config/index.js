@@ -16,6 +16,7 @@ module.exports = {
       '/apiPro': {
         // target: 'http:/39.100.108.10:8086/',
         target: 'http://39.100.108.10:8086/',
+        // target: 'http://www.ysch99.com',
         // target: 'http://118.190.26.73:8086/',
         // target: 'http://192.168.2.20:8086/',
         // target: 'http://192.168.2.137/hgls-school/',
