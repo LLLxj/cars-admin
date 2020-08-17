@@ -6,7 +6,7 @@
 
   // api接口请求地址
   // window.SITE_CONFIG['baseUrl'] = 'https://admin.school.heigrace.com/api/'
-  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086/'
+  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086/apiPro/'
 
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain'] = './' // 域名
