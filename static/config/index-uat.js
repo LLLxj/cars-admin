@@ -7,6 +7,7 @@
   // api接口请求地址
   // window.SITE_CONFIG['baseUrl'] = 'http://192.168.1.137:8080/hgls-admin';
   // window.SITE_CONFIG['baseUrl'] = 'http://192.168.1.137:8080/hgls-admin';
+  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086/'
 
   // cdn地址 = 域名 + 版本号
   window.SITE_CONFIG['domain']  = './'; // 域名
