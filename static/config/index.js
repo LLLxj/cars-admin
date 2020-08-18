@@ -8,7 +8,7 @@
   // window.SITE_CONFIG['baseUrl'] = 'http://admin.school.heigrace.com/api'
   // window.SITE_CONFIG['baseUrl'] = 'http://120.78.143.29:8080/'
   // window.SITE_CONFIG['baseUrl'] = 'http://192.168.1.102:9080'
-  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086/'
+  window.SITE_CONFIG['baseUrl'] = 'http://39.100.108.10:8086'
   // window.SITE_CONFIG['baseUrl'] = 'http://192.168.1.26:8080'
   // window.SITE_CONFIG['baseUrl'] = 'http://localhost:9080'
 
