@@ -38,9 +38,10 @@
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
           <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" fixed="left" width="120"/>
+          <el-table-column prop="dealSellTitle" header-align="center" align="center" label="出售标题" width="120"/>
           <!-- <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" /> -->
-          <el-table-column prop="dealAssessPrice" header-align="center" align="center" label="评估价格" width="100"/>
-          <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
+          <el-table-column prop="sellPrice" header-align="center" align="center" label="最终出售金额" width="100"/>
+          <!-- <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
             <template slot-scope="scope">
 							<div v-if="scope.row.waresImages && scope.row.waresImages.length !==0 ">
 								<div v-for="(item, index) in scope.row.waresImages" :key="index">
@@ -49,35 +50,38 @@
 							</div>
 							<span v-else>-</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌名称" width="120"/>
-          <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列名称" width="120"/>
-          <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" width="100"/>
-          <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" width="100"/>
-          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" width="100"/>
-          <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" width="80"/>
-          <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="80">
+          </el-table-column> -->
+          <!-- <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌名称" width="120"/>
+          <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列名称" width="120"/> -->
+          <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" min-width="100"/>
+          <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" min-width="100"/>
+          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" min-width="100"/>
+          <el-table-column prop="addr" header-align="center" align="center" show-overflow-tooltip label="详细地址" min-width="100"/>
+          <!-- <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" width="80"/> -->
+          <!-- <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="80">
             <template slot-scope="scope">
 							<div v-if="scope.row.driveImage && scope.row.driveImage.image !== ''">
               	<img :src="scope.row.driveImage.image" style="width:40px" alt="">
 							</div>
 							<span v-else>-</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="status" header-align="center" align="center" label="评估状态" width="80">
+          </el-table-column> -->
+          <el-table-column prop="status" header-align="center" align="center" label="出售情况" width="80">
             <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">待审核</span>
-              <span v-else>已审核</span>
+              <span v-if="scope.row.status === 0">已取消</span>
+              <span v-if="scope.row.status === 1">待处理</span>
+              <span v-if="scope.row.status === 2">处理中</span>
+              <span v-if="scope.row.status === 3">已完成</span>
             </template>
           </el-table-column>
-          <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
+          <!-- <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
             <template slot-scope="scope">
               <span v-if="scope.row.sellStatus === 0">已取消</span>
               <span v-else-if="scope.row.sellStatus === 1">待处理</span>
-              <span v-else-if="scope.row.sellStatus === 1">处理中</span>
+              <span v-else-if="scope.row.sellStatus === 2">处理中</span>
               <span v-else>已完成</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="100"/>          
           <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
           </el-table-column> -->
@@ -85,9 +89,9 @@
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealSellId)">编辑</el-button>
-              <el-button type="text" size="small" @click="cancleHandle(scope.row.dealSellId)">已取消</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealWellId)">评估</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWellId, 2)">编辑</el-button>
+              <el-button type="text" size="small" @click="cancleHandle(scope.row.dealWellId)">已取消</el-button>
               <el-button type="text" size="small" @click="successHandle(scope.row)">已完成</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
@@ -304,10 +308,10 @@
         return wbout;
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle (id, index) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, index)
         })
       },
       // 删除

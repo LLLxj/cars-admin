@@ -76,7 +76,7 @@
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <el-button type="text" size="small" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
+              <el-button type="text" size="small" v-if="scope.row.sellStatus === 0" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
               <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>

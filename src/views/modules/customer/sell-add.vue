@@ -92,6 +92,7 @@
     },
     methods: {
       init (id, index) {
+        console.log(id, index)
 				this.id = id
 				this.index = index
 				this.visible = true

@@ -12,6 +12,13 @@ class ComApply{
     })
   }
 
+  static getBusinessList() {
+    return request({
+      url: `${baseUrl}/sys/user/getSaleUser`,
+      method: 'get'
+    })
+  }
+
   static fail(data) {
     return request({
       url: `${baseUrl}/deal/user/store/fail/` + data,
@@ -21,8 +28,9 @@ class ComApply{
 
   static success(data) {
     return request({
-      url: `${baseUrl}/deal/user/store/success/` + data,
-      method: 'get',
+      url: `${baseUrl}/deal/user/store/success`,
+      method: 'post',
+      data
     })
   }
 

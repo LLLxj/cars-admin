@@ -67,6 +67,20 @@
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
+        <el-dialog
+          title="分配业务员"
+          :close-on-click-modal="false"
+          :visible.sync="visible">
+          <el-form :model="form" ref="form" label-width="120px">
+            <el-form-item label="选择业务员" prop="sysUserId">
+              <BusinessSelect v-model="form.sysUserId"></BusinessSelect>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="visible = false">取消</el-button>
+            <el-button :disabled="!form.sysUserId" type="primary" @click="dataFormSubmit()">确定</el-button>
+          </span>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -80,6 +94,7 @@
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
   import ElMain from 'element-ui/packages/main/index'
+  import BusinessSelect from '@/views/common-select/business-select'
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
   import Vue from 'vue'
@@ -91,6 +106,10 @@
           phone: '',
           dealUserId: ''
         },
+        form: {
+          sysUserId: ''
+        },
+        id: '',
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -103,6 +122,7 @@
         uploadPopVisible: false,
         searchData: {
         },
+        visible: false
       }
     },
     components: {
@@ -111,7 +131,8 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop
+      uploadPop,
+      BusinessSelect
     },
     activated () {
       // this.getDataList()
@@ -165,7 +186,11 @@
         // disable
       },
       successHandle (data) { // 成功
-        ComApply.success(data).then(res => {
+        this.visible = true
+        this.id = data
+      },
+      disHandle (data) { // 作废
+        ComApply.waste(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -180,8 +205,12 @@
           }
         })
       },
-      disHandle (data) { // 作废
-        ComApply.waste(data).then(res => {
+      dataFormSubmit() {
+        const obj = { 
+          belongUserId: this.form.sysUserId,
+          storeId: this.id
+        }
+        ComApply.success(obj).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -189,6 +218,9 @@
               duration: 1500,
               onClose: () => {
                 this.getDataList()
+                this.visible = false
+                this.id = ''
+                this.form.sysUserId = ''
               }
             })
           }else{

@@ -100,7 +100,8 @@
       setData(id) {
         Sell.info(id).then(res => {
           if (res.data.code === 0) {
-            this.dataForm = data.data
+            console.log(res.data.data)
+            this.dataForm = res.data.data
           }else {
             this.$message.error(data.msg)
           }
