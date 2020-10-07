@@ -7,7 +7,7 @@
           <!-- <svg-icon icon-class="user" /> -->
           <icon-svg name="user"></icon-svg>
         </span>
-        <el-input name="phone" type="text" v-model="loginForm.phone" autoComplete="on" placeholder="phone" />
+        <el-input name="phone" type="text" v-model="loginForm.phone" maxlength="11" autoComplete="on" placeholder="phone" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
