@@ -22,7 +22,7 @@
 			<el-form-item label="详细地址" prop="addr">
         <el-input v-model="dataForm.addr" placeholder="请输入详细地址" />
       </el-form-item>
-			<el-form-item label="状态" size="mini" prop="sex">
+			<el-form-item label="性别" size="mini" prop="sex">
         <el-radio-group v-model="dataForm.sex">
           <el-radio :label="0" border>先生</el-radio>
           <el-radio :label="1" border>小姐</el-radio>
@@ -100,8 +100,9 @@
       setData(id) {
         Sell.info(id).then(res => {
           if (res.data.code === 0) {
-            console.log(res.data.data)
             this.dataForm = res.data.data
+            // this.dataForm.countyAreaId = parseInt(res.data.data.countyAreaId)
+            // this.dataForm.proAreaId = parseInt(res.data.data.proAreaId)
           }else {
             this.$message.error(data.msg)
           }

@@ -10,9 +10,10 @@
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
-      <el-form-item label="商品名称" prop="couWaresId">
-        <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect>
-        <!-- <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
+      <!-- <el-form-item label="商品名称" prop="couWaresId"> -->
+      <el-form-item label="商品名称" prop="assessWaresTitle">
+        <!-- <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect> -->
+        <el-input v-model="dataForm.assessWaresTitle" placeholder="请输入商品名称"></el-input>
       </el-form-item>
       <el-form-item label="客户" prop="dealUserId">
         <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
@@ -147,6 +148,7 @@
         dataForm: {
           couWaresId: '',
           couWaresName: '',
+          assessWaresTitle: '',
           couBrandId: '',
           couSeriesId: '',
           proAreaId: 19,
@@ -173,6 +175,9 @@
           ],
           couSeriesId: [
             { required: true, message: '请选择所属系列', trigger: 'blur', type: 'number' },
+          ],
+          assessWaresTitle: [
+            { required: true, message: '请输入评估商品名称', trigger: 'blur' },
           ],
           couModelId: [
             { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },

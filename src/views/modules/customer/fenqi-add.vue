@@ -5,18 +5,18 @@
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
       <el-form-item label="商品标题" prop="dealWaresTitle">
-        <el-input v-model="dataForm.dealWaresTitle" :disabled="id" @focus="selectpRroduct" style="width:200px;" placeholder="请输入商品标题"></el-input>
+        <el-input v-model="dataForm.dealWaresTitle" :disabled="id ? true : false" @focus="selectpRroduct" style="width:200px;" placeholder="请输入商品标题"></el-input>
       </el-form-item>
       <el-form-item label="联系电话" prop="contactPhone">
-        <el-input v-model="dataForm.contactPhone" :disabled="id" placeholder="请输入联系电话" maxlength="11"></el-input>
+        <el-input v-model="dataForm.contactPhone" :disabled="id ? true : false" placeholder="请输入联系电话" maxlength="11"></el-input>
       </el-form-item>
 			<el-form-item label="联系人姓名" prop="contactName">
-        <el-input v-model="dataForm.contactName" :disabled="id" placeholder="请输入联系人姓名"></el-input>
+        <el-input v-model="dataForm.contactName" :disabled="id ? true : false" placeholder="请输入联系人姓名"></el-input>
       </el-form-item>
-			<el-form-item label="性别" prop="sex" :disabled="id">
+			<el-form-item label="性别" prop="sex">
 				<el-radio-group v-model="dataForm.sex">
-					<el-radio :label="0">男</el-radio>
-					<el-radio :label="1">女</el-radio>
+					<el-radio :disabled="id ? true : false" :label="0">男</el-radio>
+					<el-radio :disabled="id ? true : false" :label="1">女</el-radio>
 				</el-radio-group>
 			</el-form-item>
     </el-form>
@@ -134,7 +134,6 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.id) {
-							console.log(this.dataForm)
               Fenqi.save(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
