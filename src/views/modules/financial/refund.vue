@@ -98,7 +98,7 @@
 
   import Refund from '@/api/customer/refund'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-refund'
+  import AddOrUpdate from '@/views/modules/customer/user-refund'
   import checkOrder from './refund-check'
   import recordList from './refund-record'
   import uploadPop from '@/views/common-pop/upload-user-pop'

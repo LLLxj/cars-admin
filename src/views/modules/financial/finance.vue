@@ -6,8 +6,14 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入客户手机号">
+          <!-- <el-form-item label="客户手机号">
             <el-input v-model="dataForm.dealPhone" placeholder="请输入手机号" clearable></el-input>
+          </el-form-item> -->
+          <el-form-item label="联系人手机号">
+            <el-input v-model="dataForm.contactPhone" placeholder="请输入手机号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="联系人">
+            <el-input v-model="dataForm.contactName" placeholder="请输入联系人" clearable></el-input>
           </el-form-item>
           <el-form-item label="审核状态">
             <el-select v-model="dataForm.status" placeholder="请选择">
@@ -23,29 +29,29 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
-            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
+            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
             
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="depositNo" header-align="center" align="center" label="保证金单编号">
+          <el-table-column prop="financeNo" header-align="center" align="center" label="金融单编号">
           </el-table-column>
-					<el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
-					<el-table-column prop="depositPrice" header-align="center" align="center" label="保证金金额" />
-					<el-table-column prop="remark" header-align="center" align="center" label="备注">
-						<template slot-scope="scope">
-              <span>{{scope.row.remark || '--'}}</span>
+            <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
+            <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
+            <el-table-column prop="contactPhone" header-align="center" align="center" label="联系人手机号" />
+            <el-table-column prop="financePrice" header-align="center" align="center" label="金融单金额" />
+            <el-table-column prop="remark" header-align="center" align="center" label="备注">
+                <template slot-scope="scope">
+        <span>{{scope.row.remark || '--'}}</span>
             </template>
 					</el-table-column>
 					<el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">放弃</span>
-              <span v-if="scope.row.status === 1">驳回</span>
-              <span v-if="scope.row.status === 2">财务审核中</span>
-              <span v-if="scope.row.status === 3">经理审核中</span>
-              <span v-if="scope.row.status === 4">通过</span>
+              <span v-if="scope.row.status === 0">作废</span>
+              <span v-if="scope.row.status === 1">处理中</span>
+              <span v-if="scope.row.status === 4">已完成</span>
             </template>
           </el-table-column>
 					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间">
@@ -67,11 +73,12 @@
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.depositId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.depositId)">启用</el-button> -->
-              <el-button type="text" size="small" @click="addOrUpdateHandle(null, scope.row.depositId)">编辑</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 1)">驳回</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 2)">经理审核</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.depositId, 3)">通过</el-button>
-              <el-button type="text" size="small" @click="getRecord(scope.row.depositId)">审核记录</el-button>
+              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.financeId)">查看</el-button> -->
+              <el-button type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
+              <el-button type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
+              <el-button type="text" size="small" @click="success(scope.row)">已完成</el-button>
+							<el-button type="text" size="small" @click="getRecord(scope.row.financeId)">审核记录</el-button>
+              <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -86,8 +93,7 @@
         </el-pagination>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-        <checkOrder v-if="checkOrderVisible" ref="checkOrder" @refreshDataList="getDataList"></checkOrder>
-        <recordList v-if="recordListVisible" ref="recordList"></recordList>
+				<recordList v-if="recordListVisible" ref="recordList"></recordList>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -96,11 +102,10 @@
 </template>
 <script>
 
-  import Baozhengjin from '@/api/customer/baozhengjin'
+  import Finance from '@/api/customer/finance'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-ensure-money'
-  import checkOrder from './baozhengjin-check'
-  import recordList from './bzj-record'
+	import AddOrUpdate from '@/views/modules/customer/user-finance'
+	import recordList from './finance-record'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -115,15 +120,16 @@
           dealPhone: '',
           status: '',
           startTime: '',
+          contactPhone: '',
+          contactName: '',
           endTime: '',
           rangeTime: ''
         },
         statusList: [
-          { label: '放弃', value: 0 },
-          { label: '驳回', value: 1 },
-          { label: '财务审核中', value: 2 },
-          { label: '经理审核中', value: 3 },
-          { label: '通过', value: 4 }
+          { label: '作废', value: 0 },
+          { label: '待处理', value: 1 },
+          { label: '待处理', value: 2 },
+          { label: '已完成', value: 3 }
         ],
         dataList: [],
         isShow: true,
@@ -134,9 +140,8 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
-        uploadPopVisible: false,
-        checkOrderVisible: false,
-        recordListVisible: false,
+				uploadPopVisible: false,
+				recordListVisible: false,
         searchData: {
         },
       }
@@ -147,9 +152,8 @@
       ElContainer,
       ElAside,
       ElMain,
-      uploadPop,
-      checkOrder,
-      recordList
+			uploadPop,
+			recordList
     },
     activated () {
       this.getDataList()
@@ -162,13 +166,17 @@
           startTime: '',
           endTime: '',
           dealPhone: '',
-          status: ''
+          status: '',
+          contactPhone: '',
+          contactName: '',
         }
         params.startTime = this.dataForm.rangeTime[0]
         params.endTime = this.dataForm.rangeTime[1]
         params.dealPhone = this.dataForm.dealPhone
+        params.contactPhone = this.dataForm.contactPhone
+        params.contactName = this.dataForm.contactName
         params.status = this.dataForm.status
-        Baozhengjin.list(params).then(res => {
+        Finance.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -186,9 +194,41 @@
         this.dataForm.deptId = deptId
         this.getDataList()
       },
-      // 禁用
-      disHandle (data) {
-        Baozhengjin.disable(data).then(res => {
+      // 处理中
+      ingHandle (data) {
+        Finance.checking({
+					financeId: data.financeId,
+  				followUserId: data.sysUserId
+				}).then(res => {
+          if(res.data && res.data.code === 0){
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          }else{
+            this.$message.error(res.data.msg)
+          }
+        }).catch(err => {
+          this.listLoading = false
+          console.log(err)
+          this.$message({
+            message: err || '读取接口失败！',
+            type: 'error',
+            duration: 1500
+          })
+        })
+        // disable
+      },
+      // 完成
+      success (data) {
+        Finance.success({
+					financeId: data.financeId,
+  				financePrice: data.financePrice
+				}).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -213,8 +253,8 @@
         // disable
       },
       // 启用
-      norHandle (data) {
-        Baozhengjin.awake(data).then(res => {
+      waste (data) {
+        Finance.waste(data).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -292,19 +332,14 @@
         return wbout;
       },
       // 新增 / 修改
-      addOrUpdateHandle (id, id1, id2) {
+      addOrUpdateHandle (id) {
+        console.log(id)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id, id1, id2)
+          this.$refs.addOrUpdate.init(id)
         })
-      },
-      checkOrder (id1, id2) {
-        this.checkOrderVisible = true
-        this.$nextTick(() => {
-          this.$refs.checkOrder.init(id1, id2)
-        })
-      },
-      getRecord (id) {
+			},
+			getRecord (id) {
         this.recordListVisible = true
         this.$nextTick(() => {
           this.$refs.recordList.init(id)
