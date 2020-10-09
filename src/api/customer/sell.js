@@ -12,6 +12,13 @@ class Sell{
     })
   }
 
+  static ingHandle(data) {
+    return request({
+      url: `${baseUrl}/deal/assess/sell/processing`,
+      method: 'post',
+      data
+    })
+  }
 
   static cancle(data) {
     return request({

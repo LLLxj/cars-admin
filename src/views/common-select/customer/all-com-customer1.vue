@@ -1,16 +1,16 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择业务员" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择客户" @change="getCity">
     <el-option
       v-for="item in dataList"
-      :key="item.userId"
-      :label="item.userName"
-      :value="item.userId">
+      :key="item.dealStoreId"
+      :label="item.dealUserName"
+      :value="item.dealStoreId">
     </el-option>
   </el-select>
 </template>
 
 <script>
-  import ComApply from '@/api/customer/com-apply'
+  import Customer from '@/api/customer/customer'
   import Bus from '@/utils/bus'
   export default {
     props: {
@@ -25,10 +25,6 @@
       disabled: {
         type: [Boolean]
       },
-      showAll:{
-        type: [Boolean],
-        default: false
-      }
     },
     mounted () {
       this.getDataList()
@@ -39,7 +35,8 @@
           return this.value
         },
         set: function (val) {
-          this.$emit('input', val) // 通过$emit触发父组件
+          this.$emit('input', val)
+          // this.$emit('get-brand-val', val) // 通过$emit触发父组件
         }
       },
     },
@@ -60,12 +57,13 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        ComApply.getBusinessList().then(res => {
+        Customer.dealList().then(res => {
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
           }else{
             this.dataList = []
           }
+            
           this.dataListLoading = false
         })
       },

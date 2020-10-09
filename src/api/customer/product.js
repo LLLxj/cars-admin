@@ -49,6 +49,14 @@ class Products{
     })
   }
 
+  static sussess(data) {
+    return request({
+      url: `${baseUrl}/deal/wares/sussess`,
+      method: 'post',
+      data
+    })
+  }
+
   static reject(data) {
     return request({
       url: `${baseUrl}/deal/wares/reject`,
@@ -59,7 +67,7 @@ class Products{
 
   static manage(data) {
     return request({
-      url: `${baseUrl}/deal/wares/manage`,
+      url: `${baseUrl}/deal/wares/manager`,
       method: 'post',
       data
     })

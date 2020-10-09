@@ -28,7 +28,8 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
-          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" fixed="left" width="120"/>
+          <!-- <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" fixed="left" width="120"/> -->
+          <el-table-column prop="assessWaresTitle" header-align="center" align="center" label="评估商品名称" fixed="left" width="120"/>
           <!-- <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" /> -->
           <el-table-column prop="dealAssessPrice" header-align="center" align="center" label="评估价格" width="100"/>
           <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
@@ -45,9 +46,9 @@
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列名称" width="120"/>
           <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" width="100"/>
           <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" width="100"/>
-          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" width="100"/>
+          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" width="120"/>
           <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" width="80"/>
-          <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="80">
+          <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="120">
             <template slot-scope="scope">
 							<div v-if="scope.row.driveImage && scope.row.driveImage.image !== ''">
               	<img :src="scope.row.driveImage.image" style="width:40px" alt="">
@@ -68,7 +69,7 @@
               <span v-else>已交易</span>
             </template>
           </el-table-column>
-          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="100"/>          
+          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="140"/>          
           <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
           </el-table-column> -->
           <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">

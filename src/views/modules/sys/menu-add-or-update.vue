@@ -173,7 +173,6 @@
       setData(data) {
         Menu.info(data).then(({data}) => {
           if (data.code === 0) {
-            console.log(data.data)
             // this.dataForm = data.data
             // console.log(this.dataForm)
             this.dataForm.menuId = data.data.menuId
@@ -206,6 +205,7 @@
         this.$refs['dataForm'].resetFields()
       },
       cancle () {
+        this.visible = false
         this.resetForm()
       },
       getMenu() {

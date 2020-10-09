@@ -30,7 +30,7 @@
         },
         positionList: [],
         dataForm: {
-            dealWaresId: '',
+          dealWaresId: '',
   		    remark: ''
         },
         index: '',
@@ -121,7 +121,27 @@
 									console.log(err)
 									this.$message.error(err)
 							})
-						}
+						} else if (this.index === 4) {
+              Product.success(this.dataForm).then(({data}) => {
+								if (data && data.code === 0) {
+									this.$message({
+										message: '操作成功',
+										type: 'success',
+										duration: 1500,
+										onClose: () => {
+										this.visible = false
+										this.resetForm()
+										this.$emit('refreshDataList')
+										}
+									})
+								} else {
+									this.$message.error(data.msg)
+								}
+							}).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+							})
+            }
 					}		 
         })
       }

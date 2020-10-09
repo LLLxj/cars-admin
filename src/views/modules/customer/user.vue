@@ -60,7 +60,7 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.type === 0" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
+              <el-button type="text" size="small" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealUserId)">启用</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>

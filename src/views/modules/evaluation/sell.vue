@@ -6,7 +6,7 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
+          <el-form-item label="请输入用户名1">
             <el-input v-model="dataForm.contactName" placeholder="请输入用户名" clearable></el-input>
           </el-form-item>
           <el-form-item label="请输入手机号">
@@ -91,6 +91,7 @@
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealSellId)">评估</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealSellId, 2)">编辑</el-button>
+              <el-button type="text" size="small" @click="ingHanlde(scope.row.dealSellId, 2)">处理中</el-button>
               <el-button type="text" size="small" @click="cancleHandle(scope.row.dealSellId)">已取消</el-button>
               <el-button type="text" size="small" @click="successHandle(scope.row)">已完成</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
@@ -111,6 +112,20 @@
         <!-- 弹窗, 上传文件 -->
         <AssessPrice v-if="AssessPriceVisible" ref="AssessPrice" @refreshDataList="getDataList"></AssessPrice>
       </el-main>
+      <el-dialog
+          title="分配业务员"
+          :close-on-click-modal="false"
+          :visible.sync="visible">
+          <el-form :model="form" ref="form" label-width="120px">
+            <el-form-item label="选择业务员" prop="sysUserId">
+              <BusinessSelect v-model="form.sysUserId"></BusinessSelect>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="visible = false">取消</el-button>
+            <el-button :disabled="!form.sysUserId" type="primary" @click="dataFormSubmit()">确定</el-button>
+          </span>
+        </el-dialog>
     </el-container>
   </div>
 </template>
@@ -124,19 +139,25 @@
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
   import ElMain from 'element-ui/packages/main/index'
+  import BusinessSelect from '@/views/common-select/business-select'
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
   import Vue from 'vue'
   export default {
     data () {
       return {
+        dealSellId: {},
         dataForm: {
 					contactName: '',
 					contactPhone: '',
           startTime: '',
           endTime: '',
           status: '',
-				},
+        },
+        form: {
+          sysUserId: ''
+        },
+        visible: false,
 				statusList: [
           { label: '已取消', value: 0 },
           { label: '待处理', value: 1 },
@@ -164,8 +185,9 @@
       ElContainer,
       ElAside,
       ElMain,
-        uploadPop,
-        AssessPrice
+      uploadPop,
+      AssessPrice,
+      BusinessSelect
     },
     activated () {
       this.getDataList()
@@ -198,7 +220,38 @@
         this.$nextTick(() => {
           this.$refs.AssessPrice.init(id)
         })
-			},
+      },
+      ingHanlde(data) {
+        console.log(data)
+        this.visible = true
+        this.dealSellId = data
+      },
+      resetForm () {
+        this.$refs['form'].resetFields()
+      },
+      dataFormSubmit () {
+        console.log(this.dealSellId)
+        console.log(this.form.sysUserId)
+        Sell.ingHandle({
+          dealSellId: this.dealSellId,
+          followUserId: this.form.sysUserId
+        }).then(res => {
+          if(res.data && res.data.code === 0){
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+                this.visible = false
+                this.resetForm()
+              }
+            })
+          } else {
+            this.$message.error(res.data.message)
+          }
+        })
+      },
       // 已取消
       cancleHandle (data) {
         Sell.cancle(data).then(res => {
@@ -227,7 +280,7 @@
       },
       // 启用
       successHandle (data) {
-        Assess.success({
+        Sell.success({
 					dealSellId: data.dealSellId,
 					sellPrice: data.sellPrice
 				}).then(res => {

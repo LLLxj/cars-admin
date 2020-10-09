@@ -29,11 +29,11 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
-          <el-table-column prop="dealWaresNo" header-align="center" align="center" label="商品编号" fixed="left"/>
-          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题" />
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="所属企业客户名称" />
-          <el-table-column prop="releaseAreaName" header-align="center" align="center" label="区域名称" />
-          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话" />
+          <el-table-column prop="dealWaresNo" header-align="center" align="center" label="商品编号" fixed="left" min-width="120"/>
+          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题" min-width="120"/>
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="所属企业客户名称" min-width="120" />
+          <el-table-column prop="releaseAreaName" header-align="center" align="center" label="区域名称" min-width="120"/>
+          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话" min-width="120"/>
           <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
           <el-table-column prop="sex" header-align="center" align="center" label="性别">
             <template slot-scope="scope">
@@ -41,19 +41,19 @@
               <span v-else>女士</span>
             </template>
           </el-table-column>
-          <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" />
-          <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" />
-          <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" />
-          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" />
-          <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称" />
+          <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" min-width="120"/>
+          <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" min-width="120"/>
+          <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" min-width="120"/>
+          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" min-width="120"/>
+          <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称" min-width="120"/>
           <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价" />
           <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价" />
-          <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" />
+          <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" min-width="120"/>
           <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" />
-          <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" />
-          <el-table-column prop="licenseCode" header-align="center" align="center" label="牌照" />
-          <el-table-column prop="addr" header-align="center" align="center" label="详细地址" />
-          <el-table-column prop="waresRemark" header-align="center" align="center" label="商品描述" />
+          <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" min-width="120"/>
+          <el-table-column prop="licenseCode" header-align="center" align="center" label="牌照" min-width="120"/>
+          <el-table-column prop="addr" header-align="center" align="center" label="详细地址" min-width="120"/>
+          <el-table-column prop="waresRemark" header-align="center" align="center" label="商品描述" min-width="120"/>
           <el-table-column prop="transferNum" header-align="center" align="center" label="过户次数" />
           <el-table-column prop="isTransfer" header-align="center" align="center" label="是否含过户费">
             <template slot-scope="scope">
@@ -67,36 +67,51 @@
               <span v-else>有</span>
             </template>
           </el-table-column>
-          <el-table-column prop="isMaintain" header-align="center" align="center" label="是否有定期4s保养">
+          <el-table-column prop="isMaintain" header-align="center" align="center" label="是否有定期4s保养" min-width="120">
             <template slot-scope="scope">
               <span v-if="scope.row.isTransfer === 0">无</span>
               <span v-else>有</span>
             </template>
           </el-table-column>
-          <el-table-column prop="sellStatus" header-align="center" align="center" label="出售状态">
+          <el-table-column prop="status" header-align="center" align="center" label="审核状态" min-width="120">
             <template slot-scope="scope">
-              <span v-if="scope.row.isTransfer === 0">驳回</span>
-              <span v-if="scope.row.isTransfer === 1">销售审核中</span>
-              <span v-if="scope.row.isTransfer === 2">经理审核中</span>
-              <span v-if="scope.row.isTransfer === 3">上架</span>
-              <span v-if="scope.row.isTransfer === 4">下架</span>
+              <span v-if="scope.row.status === 0">驳回</span>
+              <span v-if="scope.row.status === 1">销售审核中</span>
+              <span v-if="scope.row.status === 2">经理审核中</span>
+              <span v-if="scope.row.status === 3">审核通过</span>
+              <!-- <span v-if="scope.row.isTransfer === 4">下架</span> -->
             </template>
           </el-table-column>
           <el-table-column prop="onlineStatus" header-align="center" align="center" label="上线状态">
             <template slot-scope="scope">
-              <span v-if="scope.row.isTransfer === 0">未出售</span>
-              <span v-else>已出售</span>
+              <span v-if="scope.row.onlineStatus === 0">上架</span>
+              <span v-if="scope.row.onlineStatus === 1">下架</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="sellStatus" header-align="center" align="center" label="出售状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.sellStatus === 0">未出售</span>
+              <span v-if="scope.row.sellStatus === 1">已出售</span>
             </template>
           </el-table-column>
           <el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" />
           <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
-              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
-              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
-              <el-button type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 3)">上架</el-button>
-              <el-button type="text" size="small" @click="unLineHandle(scope.row.dealWaresId)">下架</el-button>
-              <el-button type="text" size="small" @click="saleHandle(scope.row.dealWaresId)">已出售</el-button>
+              <!-- <span v-if="scope.row.status === 0">驳回</span>
+              <span v-if="scope.row.status === 1">销售审核中</span>
+              <span v-if="scope.row.status === 2">经理审核中</span>
+              <span v-if="scope.row.status === 3">审核通过</span> -->
+              <!-- <span v-if="scope.row.sellStatus === 0">未出售</span>
+              <span v-if="scope.row.sellStatus === 1">已出售</span>
+              <span v-if="scope.row.onlineStatus === 0">上架</span>
+              <span v-if="scope.row.onlineStatus === 1">下架</span> -->
+              <el-button v-if="scope.row.status === 1 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
+              <el-button v-if="(scope.row.status === 1 || scope.row.status === 2) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
+              <el-button v-if="scope.row.status === 1" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
+              <el-button v-if="scope.row.status === 2 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 4)">通过</el-button>
+              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 3)">上架</el-button>
+              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="unLineHandle(scope.row.dealWaresId)">下架</el-button>
+              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="saleHandle(scope.row.dealWaresId)">已出售</el-button>
             </template>
           </el-table-column>
         </el-table>

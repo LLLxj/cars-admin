@@ -5,13 +5,13 @@
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
       <el-form-item label="标题" prop="dealWaresTitle">
-        <el-input v-model="dataForm.dealWaresTitle"></el-input>
+        <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="联系电话" prop="contactPhone">
-        <el-input v-model="dataForm.contactPhone"></el-input>
+        <el-input v-model="dataForm.contactPhone" placeholder="请输入联系电话" maxlength="11"></el-input>
       </el-form-item>
       <el-form-item label="联系人名称" prop="contactName">
-        <el-input v-model="dataForm.contactName"></el-input>
+        <el-input v-model="dataForm.contactName" placeholder="请输入联系人名称"></el-input>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="dataForm.sex">
@@ -28,9 +28,10 @@
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
-      <el-form-item label="商品名称" prop="couWaresId">
-        <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect>
-      </el-form-item>
+      <!-- <el-form-item label="商品名称" prop="couWaresName">
+        <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
+        <!-- <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect> -->
+      <!-- </el-form-item> -->
       <!-- <el-form-item label="厂商指导价" prop="couWaresPrice">
         <el-input-number v-model="dataForm.couWaresPrice" disabled="" :min="1" label=""></el-input-number>
       </el-form-item> -->
@@ -50,8 +51,11 @@
       <el-form-item label="行驶里程" prop="distance">
         <el-input v-model="dataForm.distance"></el-input>
       </el-form-item>
-      <el-form-item label="牌照ID" prop="licenseId">
-        <el-input v-model="dataForm.licenseId"></el-input>
+      <el-form-item label="牌照ID" prop="licenseCode">
+        <el-input v-model="dataForm.licenseCode"></el-input>
+      </el-form-item>
+      <el-form-item label="年款" prop="marketYear">
+        <el-date-picker v-model="dataForm.marketYear" type="year" value-format="yyyy" placeholder="选择年" />
       </el-form-item>
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
@@ -137,7 +141,7 @@
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
   import Product from '@/api/customer/product'
-  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
+  import CustomerSelect from '@/views/common-select/customer/all-com-customer1'
   import ProductSelect from '@/views/common-select/customer/product-select'
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
@@ -162,6 +166,7 @@
         },
         dataForm: {
           phone: 13079244223,
+          marketYear: '',
           couWaresId: '',
           couBrandId: '',
           couWaresName: '',
@@ -175,7 +180,7 @@
           retailPrice: '',
           registerTime: '',
           distance: '',
-          licenseId: '',
+          licenseCode: '',
           proAreaId: 19,
           cityAreaId: '',
           countyAreaId: '',
@@ -185,6 +190,7 @@
           isTransfer: '',
           isMortgage: '',
           isMaintain: '',
+          dealWaresName: '',
           coverImage: {
             image: ''
           },
@@ -295,7 +301,7 @@
       },
       // 表单提交
       dataFormSubmit () {
-        this.dataForm.releaseAreaId = this.dataForm.proAreaId || this.dataForm.cityAreaId || this.dataForm.countyAreaId
+        // this.dataForm.releaseAreaId = this.dataForm.proAreaId || this.dataForm.cityAreaId || this.dataForm.countyAreaId
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (!this.id) {
