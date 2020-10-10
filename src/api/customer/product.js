@@ -49,7 +49,7 @@ class Products{
     })
   }
 
-  static sussess(data) {
+  static success(data) {
     return request({
       url: `${baseUrl}/deal/wares/sussess`,
       method: 'post',
@@ -83,8 +83,9 @@ class Products{
 
   static unLine(data) {
     return request({
-      url: `${baseUrl}/deal/wares/unLine/` + data,
-      method: 'get'
+      url: `${baseUrl}/deal/wares/unLine`,
+      method: 'post',
+      data
     })
   }
 

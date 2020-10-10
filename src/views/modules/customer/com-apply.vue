@@ -44,7 +44,7 @@
               <span>{{scope.row.examineTime || '--'}}</span>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
+          <el-table-column fixed="right" header-align="center"  align="center"  width="200"  label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="failHandle(scope.row.dealStoreId)">失败</el-button> 
               <el-button type="text" size="small" @click="successHandle(scope.row.dealStoreId)">成功</el-button>
