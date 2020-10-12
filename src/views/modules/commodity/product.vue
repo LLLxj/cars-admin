@@ -32,7 +32,7 @@
           <el-table-column prop="dealWaresNo" header-align="center" align="center" label="商品编号" fixed="left" min-width="160"/>
           <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题" min-width="180"/>
           <el-table-column prop="dealUserName" header-align="center" align="center" label="所属企业客户名称" min-width="120" />
-          <el-table-column prop="releaseAreaName" header-align="center" align="center" label="区域名称" min-width="120"/>
+          <!-- <el-table-column prop="releaseAreaName" header-align="center" align="center" label="区域名称" min-width="120"/> -->
           <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话" min-width="120"/>
           <el-table-column prop="contactName" header-align="center" align="center" label="联系人" min-width="120"/>
           <el-table-column prop="sex" header-align="center" align="center" label="性别">
@@ -44,13 +44,13 @@
           <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" min-width="120"/>
           <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" min-width="120"/>
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" min-width="160"/>
-          <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" min-width="120"/>
+          <!-- <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" min-width="120"/> -->
           <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称" min-width="120"/>
           <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价" />
           <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价" />
           <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" min-width="160"/>
           <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" />
-          <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" min-width="120"/>
+          <!-- <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" min-width="120"/> -->
           <el-table-column prop="licenseCode" header-align="center" align="center" label="牌照" min-width="120"/>
           <el-table-column prop="addr" header-align="center" align="center" label="详细地址" min-width="120"/>
           <el-table-column prop="waresRemark" header-align="center" align="center" label="商品描述" min-width="120"/>

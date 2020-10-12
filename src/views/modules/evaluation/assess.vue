@@ -6,7 +6,7 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
+          <!-- <el-form-item label="请输入用户名">
             <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
           </el-form-item>
           <el-form-item label="请输入手机号">
@@ -14,6 +14,27 @@
           </el-form-item>
           <el-form-item label="类型">
             <TypeSelect v-model="dataForm.type"></TypeSelect>
+          </el-form-item> -->
+          <el-form-item label="客户">
+            <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
+          </el-form-item>
+          <el-form-item label="评估状态">
+            <el-select v-model="dataForm.status" placeholder="请选择">
+              <el-option v-for="item in assessStatusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="交易状态">
+            <el-select v-model="dataForm.sellStatus" placeholder="请选择">
+              <el-option v-for="item in sellStatusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="提交日期" prop="rangeTime">
+            <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -59,7 +80,8 @@
           <el-table-column prop="status" header-align="center" align="center" label="评估状态" width="80">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">待审核</span>
-              <span v-else>已审核</span>
+              <span v-if="scope.row.status === 1">已审核</span>
+              <span v-if="scope.row.status === 2">已作废</span>
             </template>
           </el-table-column>
           <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
@@ -77,9 +99,9 @@
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <el-button type="text" size="small" v-if="scope.row.sellStatus === 0" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 1 && scope.row.sellStatus === 0" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
               <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
-              <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
+              <el-button type="text" size="small" v-if="scope.row.status === 0 && scope.row.sellStatus === 0" @click="wasteHandle(scope.row.dealAssessId)">作废</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -112,6 +134,7 @@
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
   import ElMain from 'element-ui/packages/main/index'
+  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
   import Vue from 'vue'
@@ -123,7 +146,18 @@
           startTime: '',
           endTime: '',
           status: '',
+          sellStatus: ''
         },
+        assessStatusList: [
+          { label: '待审核', value: 0 },
+          { label: '已审核', value: 1 },
+          { label: '已作废', value: 2 }
+        ],
+        sellStatusList: [
+          { label: '未交易', value: 0 },
+          { label: '交易中', value: 1 },
+          { label: '已交易', value: 2 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -148,7 +182,8 @@
       ElMain,
 			uploadPop,
       AssessPrice,
-      SellUpdate
+      SellUpdate,
+      CustomerSelect
     },
     activated () {
       this.getDataList()
@@ -157,9 +192,15 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
+        params = {
+          startTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[0] : '',
+          endTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[1] : '',
+          status: this.dataForm.status ? this.dataForm.status : '',
+          dealUserId: this.dataForm.dealUserId ? this.dataForm.dealUserId : ''
+        }
         Assess.list(params).then(res => {
           if (res.data && res.data.code === 0) {
+            this.dataList = []
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
             if(this.dataList !== null){
@@ -190,27 +231,33 @@
         })
 			},
       // 禁用
-      disHandle (data) {
-        Assess.disable(data).then(res => {
-          if(res.data && res.data.code === 0){
+      wasteHandle (data) {
+        this.$confirm(`确定作废?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          Assess.waste(data).then(res => {
+            if(res.data && res.data.code === 0){
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            }else{
+              this.$message.error(res.data.msg)
+            }
+          }).catch(err => {
+            this.listLoading = false
+            console.log(err)
             this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
+              message: err || '读取接口失败！',
+              type: 'error',
+              duration: 1500
             })
-          }else{
-            this.$message.error(res.data.msg)
-          }
-        }).catch(err => {
-          this.listLoading = false
-          console.log(err)
-          this.$message({
-            message: err || '读取接口失败！',
-            type: 'error',
-            duration: 1500
           })
         })
         // disable
@@ -234,9 +281,11 @@
       },
       resetFrom () {
         this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+          dealUserId: '',
+          startTime: '',
+          endTime: '',
+          status: '',
+          sellStatus: ''
         }
         this.getDataList()
       },

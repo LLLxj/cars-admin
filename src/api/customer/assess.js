@@ -20,6 +20,13 @@ class Assess{
     })
   }
 
+  static waste(data) {
+    return request({
+      url: `${baseUrl}/deal/assess/waste/` + data,
+      method: 'get',
+    })
+  }
+
   static awake(data) {
     return request({
       url: `${baseUrl}/deal/assess/normal/` + data,

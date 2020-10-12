@@ -6,13 +6,13 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名1">
-            <el-input v-model="dataForm.contactName" placeholder="请输入用户名" clearable></el-input>
+          <el-form-item label="联系人名称">
+            <el-input v-model="dataForm.contactName" placeholder="请输入联系人名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.contactPhone" placeholder="请输入手机号" clearable></el-input>
+          <el-form-item label="联系人手机号">
+            <el-input v-model="dataForm.contactPhone" placeholder="请输入联系人手机号" clearable></el-input>
           </el-form-item>
-            <el-form-item label="出售状态">
+          <el-form-item label="状态">
             <el-select v-model="dataForm.status" placeholder="请选择">
               <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -39,61 +39,39 @@
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed="left"/>
           <el-table-column prop="assessWaresTitle" header-align="center" align="center" label="商品名称" fixed="left" width="120"/>
           <el-table-column prop="dealSellTitle" header-align="center" align="center" label="出售标题" width="120"/>
-          <!-- <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" /> -->
-          <el-table-column prop="sellPrice" header-align="center" align="center" label="最终出售金额" width="100"/>
-          <!-- <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
+          <el-table-column prop="contactName" header-align="center" align="center" label="联系人名称" min-width="100"/>
+          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系人电话" min-width="100"/>
+           <el-table-column prop="sex" header-align="center" align="center" label="性别" width="80">
             <template slot-scope="scope">
-							<div v-if="scope.row.waresImages && scope.row.waresImages.length !==0 ">
-								<div v-for="(item, index) in scope.row.waresImages" :key="index">
-									<img :src="item.image" style="width:40px" alt="">
-								</div>
-							</div>
-							<span v-else>-</span>
-            </template>
-          </el-table-column> -->
-          <!-- <el-table-column prop="couBrandName" header-align="center" align="center" label="所属品牌名称" width="120"/>
-          <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列名称" width="120"/> -->
-          <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" min-width="100"/>
-          <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" min-width="100"/>
-          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" min-width="100"/>
-          <el-table-column prop="addr" header-align="center" align="center" show-overflow-tooltip label="详细地址" min-width="100"/>
-          <!-- <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" width="80"/> -->
-          <!-- <el-table-column header-align="center" align="center" label="驾驶证照片" min-width="80">
-            <template slot-scope="scope">
-							<div v-if="scope.row.driveImage && scope.row.driveImage.image !== ''">
-              	<img :src="scope.row.driveImage.image" style="width:40px" alt="">
-							</div>
-							<span v-else>-</span>
-            </template>
-          </el-table-column> -->
-          <el-table-column prop="status" header-align="center" align="center" label="出售情况" width="80">
-            <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">已取消</span>
-              <span v-if="scope.row.status === 1">待处理</span>
-              <span v-if="scope.row.status === 2">处理中</span>
-              <span v-if="scope.row.status === 3">已完成</span>
+              <span v-if="scope.row.sex === 0">先生</span>
+              <span v-if="scope.row.sex === 1">小姐</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="sellStatus" header-align="center" align="center" label="交易状态" width="80">
+          <el-table-column prop="sellPrice" header-align="center" align="center" label="最终出售金额" width="100"/>
+          <el-table-column prop="proAreaName" header-align="center" align="center" label="省级区域名称" min-width="100"/>
+          <el-table-column prop="cityAreaName" header-align="center" align="center" label="市级区域名称" min-width="100"/>
+          <el-table-column prop="countyAreaName" header-align="center" align="center" label="县/区级区域名称" min-width="130"/>
+          <el-table-column prop="addr" header-align="center" align="center" show-overflow-tooltip label="详细地址" min-width="100"/>
+          <el-table-column prop="status" header-align="center" align="center" label="出售情况" width="80">
             <template slot-scope="scope">
-              <span v-if="scope.row.sellStatus === 0">已取消</span>
-              <span v-else-if="scope.row.sellStatus === 1">待处理</span>
-              <span v-else-if="scope.row.sellStatus === 2">处理中</span>
-              <span v-else>已完成</span>
+              <span v-if="scope.row.status === 0">撤回</span>
+              <span v-if="scope.row.status === 1">待处理</span>
+              <span v-if="scope.row.status === 2">跟单中</span>
+              <span v-if="scope.row.status === 3">已处理</span>
             </template>
-          </el-table-column> -->
-          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="100"/>          
+          </el-table-column>
+          <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间" width="180"/>          
           <!-- <el-table-column prop="loginTime" header-align="center" align="center" width="180" label="创建时间">
           </el-table-column> -->
           <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealSellId)">评估</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealSellId, 2)">编辑</el-button>
-              <el-button type="text" size="small" @click="ingHanlde(scope.row.dealSellId, 2)">处理中</el-button>
-              <el-button type="text" size="small" @click="cancleHandle(scope.row.dealSellId)">已取消</el-button>
-              <el-button type="text" size="small" @click="successHandle(scope.row)">已完成</el-button>
+              <!-- <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealSellId)">评估</el-button> -->
+              <el-button type="text" v-if="scope.row.status === 1" size="small" @click="addOrUpdateHandle(scope.row.dealSellId, 2)">编辑</el-button>
+              <el-button type="text" v-if="scope.row.status === 1" size="small" @click="ingHanlde(scope.row.dealSellId, 2)">开始跟进</el-button>
+              <el-button type="text" v-if="scope.row.status === 1 || scope.row.status === 2" size="small" @click="cancleHandle(scope.row.dealSellId)">撤回</el-button>
+              <el-button type="text" v-if="scope.row.status === 2" size="small" @click="successHandle(scope.row)">已跟进</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -148,10 +126,11 @@
       return {
         dealSellId: {},
         dataForm: {
-					contactName: '',
-					contactPhone: '',
+          rangeTime: [],
           startTime: '',
           endTime: '',
+          contactName: '',
+          contactPhone: '',
           status: '',
         },
         form: {
@@ -159,10 +138,10 @@
         },
         visible: false,
 				statusList: [
-          { label: '已取消', value: 0 },
+          { label: '撤回', value: '0' },
           { label: '待处理', value: 1 },
-          { label: '处理中', value: 2 },
-          { label: '已完成', value: 3 }
+          { label: '跟单中', value: 2 },
+          { label: '已处理', value: 3 }
         ],
         dataList: [],
         isShow: true,
@@ -196,7 +175,13 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
+        params = {
+          startTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[0] : '',
+          endTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[1] : '',
+          contactName: this.dataForm.contactName ? this.dataForm.contactName : '',
+          contactPhone: this.dataForm.contactPhone ? this.dataForm.contactPhone : '',
+          status: this.dataForm.status ? this.dataForm.status : '',
+        }
         Sell.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
@@ -222,7 +207,6 @@
         })
       },
       ingHanlde(data) {
-        console.log(data)
         this.visible = true
         this.dealSellId = data
       },
@@ -230,8 +214,6 @@
         this.$refs['form'].resetFields()
       },
       dataFormSubmit () {
-        console.log(this.dealSellId)
-        console.log(this.form.sysUserId)
         Sell.ingHandle({
           dealSellId: this.dealSellId,
           followUserId: this.form.sysUserId
