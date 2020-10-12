@@ -63,7 +63,9 @@
           deptId: ''
         },
         searchData: {
-          deptId: ''
+          deptId: '',
+          page: 1,
+          limit: 10
         },
         dataList: [],
         pageIndex: 1,
@@ -83,8 +85,12 @@
     },
     methods: {
       init (id) {
-        
-        this.searchData.deptId = id
+        // this.searchData.deptId = id
+        this.searchData = {
+          deptId: id,
+          page: 1,
+          limit: 10
+        }
         this.getDataList(this.searchData)
       },
       getDataList1 () {
@@ -94,7 +100,7 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        this.params = this.searchData || null
+        params = this.searchData || null
         Dept.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
@@ -159,12 +165,14 @@
       // 每页数
       sizeChangeHandle (val) {
         this.pageSize = val
+        this.searchData.page = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
         this.pageIndex = val
+        this.searchData.limit = val
         this.getDataList()
       },
       // 多选

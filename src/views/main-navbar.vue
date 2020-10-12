@@ -301,8 +301,16 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          clearLoginInfo()
-          this.$router.push({ name: 'login' })
+          System.loginOut().then(res => {
+            if (res.data.code === 0) {
+              clearLoginInfo()
+              this.$router.push({ name: 'login' })
+            } else {
+              this.$message.error(res.data.message)
+            }
+          })
+          // clearLoginInfo()
+          // this.$router.push({ name: 'login' })
           // this.$http({
           //   url: this.$http.adornUrl('/sys/logout'),
           //   method: 'post',

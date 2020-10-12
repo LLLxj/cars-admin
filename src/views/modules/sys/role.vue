@@ -88,6 +88,8 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
+        this.searchData.page = this.pageIndex
+        this.searchData.pageSize = this.pageSize
         params = this.searchData || null
         Role.list(params).then(({data}) => {
           if (data && data.code === 0) {

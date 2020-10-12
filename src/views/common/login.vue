@@ -90,6 +90,7 @@ export default {
               setUserId(data.data.userId)
               this.$router.replace({name: 'home'})
             } else {
+              this.loading = false
               this.$message.error(data.msg)
             }
           })

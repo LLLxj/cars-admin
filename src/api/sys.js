@@ -182,6 +182,13 @@ class System{
     })
   }
 
+  static loginOut () {
+    return request({
+      url: `${baseUrl}/logout`,
+      method: 'post',
+    })
+  }
+
   static getInfo (data) {
     return request({
       url: `${baseUrl}/sys/user/info/` + data,

@@ -16,7 +16,7 @@
             <countrySelect v-model="searchData.countryId" ref="countrySelect" :disabled="chooseCity" @get-country-val="getCountryData"></countrySelect>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button> 
+            <el-button @click="getDataList1()">查询</el-button> 
             <el-button @click="resetForm()" type="primary">重置</el-button> 
           </el-form-item>
         </el-form>
@@ -95,9 +95,14 @@
      deep:true, //深度监听设置为 true
     },
     methods: {
+      getDataList1() {
+        this.searchData.page = 1
+        this.pageIndex = 1
+        this.getDataList()
+      },
       // 获取数据列表
       getDataList (params) {
-        this.searchData.page = 1
+        // this.searchData.page = 1
         this.dataListLoading = true
         var params = this.searchData || null
         this.paramsSearch()
