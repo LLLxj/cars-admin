@@ -131,7 +131,7 @@
           endTime: '',
           contactName: '',
           contactPhone: '',
-          status: '',
+          status: ''
         },
         form: {
           sysUserId: ''
@@ -282,9 +282,12 @@
       },
       resetFrom () {
         this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+          rangeTime: [],
+          startTime: '',
+          endTime: '',
+          contactName: '',
+          contactPhone: '',
+          status: ''
         }
         this.getDataList()
       },

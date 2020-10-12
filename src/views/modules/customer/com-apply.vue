@@ -6,19 +6,31 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
+          <!-- <el-form-item label="请输入用户名">
             <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          </el-form-item> -->
+          <el-form-item label="请输入客户手机">
+            <el-input v-model="dataForm.dealUserPhone" placeholder="请输入客户手机" clearable></el-input>
           </el-form-item>
           <el-form-item label="客户">
             <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
           </el-form-item>
+          <el-form-item label="审核状态">
+            <el-select v-model="dataForm.examine" placeholder="请选择">
+              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="提交日期" prop="rangeTime">
+            <el-date-picker v-model="dataForm.rangeTime" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              value-format="yyyy-MM-dd 00:00:00"
+              :clearable="true"
+            ></el-date-picker>
+          </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
             <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
-            <el-button @click="resetFrom()">重置</el-button>
+            <el-button @click="resetFrom()" type="primary">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
             <el-button type="danger" :loading="downloadLoading" @click="downFile()">下载模板</el-button>
@@ -39,6 +51,14 @@
               <span>{{scope.row.sysUserName || '--'}}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="examine" header-align="center" align="center" label="审核状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.examine === 0">失败</span>
+              <span v-if="scope.row.examine === 1">审核中</span>
+              <span v-if="scope.row.examine === 2">通过</span>
+              <span v-if="scope.row.examine === 3">作废</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="examineTime" header-align="center" align="center" label="审核时间">
             <template slot-scope="scope">
               <span>{{scope.row.examineTime || '--'}}</span>
@@ -46,10 +66,10 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="200"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="failHandle(scope.row.dealStoreId)">失败</el-button> 
-              <el-button type="text" size="small" @click="successHandle(scope.row.dealStoreId)">成功</el-button>
-              <el-button type="text" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId, scope.row.dealStoreId, 2)">编辑</el-button>
+              <el-button type="text" v-if="scope.row.examine === 1" size="small" @click="failHandle(scope.row.dealStoreId)">驳回</el-button> 
+              <el-button type="text" v-if="scope.row.examine === 1" size="small" @click="successHandle(scope.row.dealStoreId)">通过</el-button>
+              <el-button type="text" v-if="scope.row.examine === 1 || scope.row.examine === 2" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
+              <el-button type="text" v-if="scope.row.examine === 1 || scope.row.examine === 0" size="small" @click="addOrUpdateHandle(scope.row.dealUserId, scope.row.dealStoreId, 2)">编辑</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -102,13 +122,26 @@
     data () {
       return {
         dataForm: {
-          userName: '',
-          phone: '',
-          dealUserId: ''
+          dealUserPhone: '',
+          dealUserId: '',
+          examine: '',
+          startTime: '',
+          endTime: '',
+          rangeTime: []
         },
         form: {
           sysUserId: ''
         },
+        statusList: [
+          // <span v-if="scope.row.examine === 0">失败</span>
+          //     <span v-if="scope.row.examine === 1">审核中</span>
+          //     <span v-if="scope.row.examine === 2">通过</span>
+          //     <span v-if="scope.row.examine === 3">作废</span>
+          { label: '失败', value: '0' },
+          { label: '审核中', value: 1 },
+          { label: '通过', value: 2 },
+          { label: '作废', value: 3 }
+        ],
         id: '',
         dataList: [],
         isShow: true,
@@ -141,7 +174,13 @@
       // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
+        params = {
+          startTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[0] : '',
+          endTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[1] : '',
+          dealUserId: this.dataForm.dealUserId ? this.dataForm.dealUserId : '',
+          dealUserPhone: this.dataForm.dealUserPhone ? this.dataForm.dealUserPhone : '',
+          examine: this.dataForm.examine ? this.dataForm.examine : '',
+        }
         ComApply.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
@@ -230,9 +269,12 @@
       },
       resetFrom () {
         this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+          dealUserPhone: '',
+          dealUserId: '',
+          examine: '',
+          startTime: '',
+          endTime: '',
+          rangeTime: []
         }
         this.getDataList()
       },

@@ -6,7 +6,7 @@ class ComApply{
 
   static list(params) {
     return request({
-      url: `${baseUrl}/deal/user/store/list`,
+      url: `${baseUrl}/deal/user/store/listPage`,
       method: 'get',
       params: params
     })
