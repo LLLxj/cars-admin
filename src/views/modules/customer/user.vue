@@ -18,9 +18,9 @@
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="baozhengjin()">保证金</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="refundHandle()">退费</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="financeHandle()">金融单</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="baozhengjin()">保证金</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="refundHandle()">退费</el-button>
+            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="financeHandle()">金融单</el-button>
             <el-button @click="resetFrom()">重置</el-button>
           </el-form-item>
         </el-form>
@@ -60,7 +60,7 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
+              <el-button v-if="scope.row.status === 1" type="text" size="small" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealUserId)">启用</el-button>
               <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
