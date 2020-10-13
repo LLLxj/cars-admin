@@ -156,18 +156,28 @@
     },
     methods: {
       // 获取数据列表
+      getDataList1() {
+        this.pageIndex = 1
+        this.dataForm.page = 1
+        this.getDataList()
+      },
+      // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
         params = {
           startTime: '',
           endTime: '',
           dealPhone: '',
-          status: ''
+          status: '',
+          page: 1,
+          limie: 10
         }
         params.startTime = this.dataForm.rangeTime[0]
         params.endTime = this.dataForm.rangeTime[1]
         params.dealPhone = this.dataForm.dealPhone
         params.status = this.dataForm.status
+        params.page = this.dataForm.page
+        params.limit = this.dataForm.limit
         Refund.list(params).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
@@ -231,20 +241,25 @@
       },
       resetFrom () {
         this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+          dealPhone: '',
+          status: '',
+          startTime: '',
+          endTime: '',
+          rangeTime: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.dataForm.page = val
-        this.dataForm.limit = 1
+        this.pageSize = val
+        this.dataForm.limit = val
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.dataForm.page = val
         this.getDataList()
       },

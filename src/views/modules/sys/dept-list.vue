@@ -91,6 +91,8 @@
           page: 1,
           limit: 10
         }
+        this.pageIndex = 1
+        this.pageSize = 10
         this.getDataList(this.searchData)
       },
       getDataList1 () {
@@ -165,14 +167,14 @@
       // 每页数
       sizeChangeHandle (val) {
         this.pageSize = val
-        this.searchData.page = val
+        this.searchData.limit = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
         this.pageIndex = val
-        this.searchData.limit = val
+        this.searchData.page = val
         this.getDataList()
       },
       // 多选

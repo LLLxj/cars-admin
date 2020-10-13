@@ -22,7 +22,7 @@
             <StatusSelect v-model="searchData.status"></StatusSelect>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button> 
+            <el-button @click="getDataList1()">查询</el-button> 
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetForm()" type="primary">重置</el-button> 
           </el-form-item>
@@ -172,6 +172,12 @@
     },
     methods: {
       // 获取数据列表
+      getDataList1() {
+        this.pageIndex = 1
+        this.searchData.page = 1
+        this.getDataList()
+      },
+      // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
         params = this.searchData || null
@@ -209,12 +215,13 @@
       },
       // 每页数
       sizeChangeHandle (val) {
-        // this.searchData.page = val
+        this.pageSize = val
         this.searchData.limit = val
         this.getDataList(this.searchData)
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.searchData.page = val
         this.getDataList(this.searchData)
       },

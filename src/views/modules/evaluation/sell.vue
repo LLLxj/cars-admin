@@ -25,7 +25,7 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button>
+            <el-button @click="getDataList1()">查询</el-button>
             <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -173,14 +173,22 @@
     },
     methods: {
       // 获取数据列表
+      getDataList1() {
+        this.pageIndex = 1
+        this.dataForm.page = 1
+        this.getDataList()
+      },
+      // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
         params = {
           startTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[0] : '',
           endTime: this.dataForm.rangeTime ? this.dataForm.rangeTime[1] : '',
-          contactName: this.dataForm.contactName ? this.dataForm.contactName : '',
-          contactPhone: this.dataForm.contactPhone ? this.dataForm.contactPhone : '',
-          status: this.dataForm.status ? this.dataForm.status : '',
+          contactName: this.dataForm.contactName,
+          contactPhone: this.dataForm.contactPhone,
+          status: this.dataForm.status,
+          page: this.dataForm.page,
+          limit: this.dataForm.limit
         }
         Sell.list(params).then(res => {
           if (res.data && res.data.code === 0) {
@@ -287,18 +295,21 @@
           endTime: '',
           contactName: '',
           contactPhone: '',
-          status: ''
+          status: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.dataForm.page = val
-        this.dataForm.limit = 1
+        this.pageSize = val
+        this.dataForm.limit = val
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.dataForm.page = val
         this.getDataList()
       },

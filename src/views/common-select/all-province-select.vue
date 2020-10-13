@@ -1,5 +1,5 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" :disabled="disabled" placeholder="请选择市区" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择市区" @change="getCity">
     <el-option
       v-for="item in dataList"
       :key="item.areaId"
@@ -56,12 +56,11 @@
     methods: {
       init () {
         this.getDataList()
-        
       },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Areas.cityList(19).then(res => {
+        Areas.proList().then(res => {
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
           }else{

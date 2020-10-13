@@ -9,8 +9,11 @@
           <!-- <el-form-item label="区域名称">
             <el-input v-model="searchData.areaName" placeholder="区域名称" clearable></el-input>
           </el-form-item> -->
+          <el-form-item label="选择省份">
+            <ProSelect v-model="searchData.provinceId" ref="provinceSelect" @get-city-val="getProData"></ProSelect>
+          </el-form-item>
           <el-form-item label="选择市区">
-            <citySelect v-model="searchData.cityId" @get-city-val="getCityData"></citySelect>
+            <citySelect v-model="searchData.cityId" :disabled="chooseProvince" @get-city-val="getCityData"></citySelect>
           </el-form-item>
           <el-form-item label="选择县/区">
             <countrySelect v-model="searchData.countryId" ref="countrySelect" :disabled="chooseCity" @get-country-val="getCountryData"></countrySelect>
@@ -51,6 +54,7 @@
 
   import Areas from '@/api/area'
   import ElContainer from 'element-ui/packages/container/index'
+  import ProSelect from '@/views/common-select/all-province-select'
   import citySelect from '@/views/common-select/all-city-select'
   import countrySelect from '@/views/common-select/all-country-select'
   import Bus from '@/utils/bus'
@@ -65,6 +69,7 @@
         dataListLoading: false,
         searchData: {
           // areaName: '',
+          provinceId: '',
           countryId: '',
           cityId: '',
           areaId: '',
@@ -78,10 +83,11 @@
           limit: 10
         },
         chooseCity: true,
+        chooseProvince: true
       }
     },
     components: {
-      citySelect, countrySelect
+      citySelect, countrySelect, ProSelect
     },
     activated () {
       this.getDataList()
@@ -108,16 +114,21 @@
         this.paramsSearch()
       },
       paramsSearch() {
-        var data = this.searchData
-        if (data.cityId !== '' && data.countryId == '') {
-          this.params.areaId = data.cityId
-        } else if (data.cityId !== '' && data.countryId !== '') {
-          this.params.areaId = data.countryId
+        var data = {}
+        data.page = this.searchData.page
+        data.limit = this.searchData.limit
+        if (!this.searchData.provinceId) {
+          data.areaId = ''
+        } else {
+          data.areaId = this.searchData.provinceId
+          if (this.searchData.cityId !== '') {
+            data.areaId = this.searchData.cityId
+            if (this.searchData.countryId !== '') {
+              data.areaId = this.searchData.countryId
+            }
+          }
         }
-        // this.params.areaName = data.areaName
-        this.params.page = this.searchData.page
-        this.params.limit = this.searchData.limit
-        Areas.list(this.params).then(res => {
+        Areas.list(data).then(res => {
           if (res.data && res.data.code === 0) {
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
@@ -137,6 +148,12 @@
         // 更新子组件状态
         this.$refs.countrySelect.update(val)
       },
+      getProData(val) {
+        this.searchData.provinceId = val
+        this.chooseProvince = false
+        // 更新子组件状态
+        // this.$refs.provinceSelect.update(val)
+      },
       getCountryData(val) {
         this.searchData.countryId = val
       },
@@ -151,12 +168,14 @@
       },
       // 每页数
       sizeChangeHandle (val) {
+        this.pageSize = val
         // this.searchData.page = val
         this.searchData.limit = val
         this.getDataList(this.searchData)
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.searchData.page = val
         this.getDataList(this.searchData)
       },

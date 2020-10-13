@@ -7,13 +7,13 @@
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
           <el-form-item label="标题">
-            <el-input v-model="searchData.name" placeholder="标题" clearable></el-input>
+            <el-input v-model="searchData.bannerName" placeholder="标题" clearable></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button>
+            <el-button @click="getDataListBtn()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button> 
           </el-form-item>
@@ -81,7 +81,7 @@
     data () {
       return {
         searchData: {
-          name: '',
+          bannerName: '',
           status: '',
           page: 1,
           limit: 10
@@ -114,6 +114,13 @@
     },
     methods: {
       // 获取数据列表
+      getDataListBtn() {
+        this.searchData.page = 1
+        this.searchData.limit = 10
+        this.pageIndex = 1
+        this.pageSize = 10
+        this.getDataList()
+      },
       getDataList (params) {
         this.dataListLoading = true
         params = this.searchData || null
@@ -177,7 +184,7 @@
       },
       resetFrom () {
         this.searchData = {
-          name: '',
+          bannerName: '',
           status: '',
           page: 1,
           limit: 10
@@ -186,13 +193,12 @@
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.dataForm.page = val
-        this.dataForm.limit = 1
+        this.searchData.limit = val
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
-        this.dataForm.page = val
+        this.searchData.page = val
         this.getDataList()
       },
       // 多选

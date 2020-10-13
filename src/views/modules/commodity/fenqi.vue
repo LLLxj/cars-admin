@@ -28,7 +28,7 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button>
+            <el-button @click="getDataList1()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -162,6 +162,11 @@
       this.getDataList()
     },
     methods: {
+      getDataList1() {
+        this.pageIndex = 1
+        this.dataForm.page = 1
+        this.getDataList()
+      },
       // 获取数据列表
       getDataList (params) {
         this.dataForm.startTime = this.dataForm.dateTime[0]
@@ -174,7 +179,9 @@
           contactName: this.dataForm.contactName,
           contactName: this.dataForm.contactName,
           startTime: this.dataForm.dateTime[0],
-          endTime: this.dataForm.dateTime[1]
+          endTime: this.dataForm.dateTime[1],
+          page: this.dataForm.page,
+          limit: this.dataForm.limit
         }
         this.dataListLoading = true
         params = dataForm || null
@@ -241,7 +248,6 @@
       },
       resetFrom () {
         this.dataForm = {
-          dataForm: {
           dealUserName: '',
           contactPhone: '',
           contactName: '',
@@ -250,19 +256,21 @@
           contactName: '',
           dateTime: '',
           startTime: '',
-          endTime: ''
-        },
+          endTime: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.dataForm.page = val
-        this.dataForm.limit = 1
+        this.pageSize = val
+        this.dataForm.limit = val
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.dataForm.page = val
         this.getDataList()
       },

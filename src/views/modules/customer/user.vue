@@ -16,7 +16,7 @@
             <TypeSelect v-model="dataForm.type"></TypeSelect>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getDataList()">查询</el-button>
+            <el-button @click="getDataList1()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="baozhengjin()">保证金</el-button>
             <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0" @click="refundHandle()">退费</el-button>
@@ -153,6 +153,12 @@
     },
     methods: {
       // 获取数据列表
+      getDataList1() {
+        this.pageIndex = 1
+        this.dataForm.page = 1
+        this.getDataList()
+      },
+      // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
         params = this.dataForm || null
@@ -258,12 +264,13 @@
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.dataForm.page = val
+        this.pageSize = val
         this.dataForm.limit = 1
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
+        this.pageIndex = val
         this.dataForm.page = val
         this.getDataList()
       },
