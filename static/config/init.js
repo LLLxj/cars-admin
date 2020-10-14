@@ -3,7 +3,7 @@
  */
 ;(function() {
   var resList = {
-    icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon.ico',
+    icon: window.SITE_CONFIG.cdnUrl + '/static/img/index.ico',
     css: [
       window.SITE_CONFIG.cdnUrl + '/static/css/app.css'
     ],
