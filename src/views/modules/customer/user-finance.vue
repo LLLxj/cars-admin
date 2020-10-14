@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="edit !== true ? '新增' : '编辑'"
+    :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
@@ -57,12 +57,17 @@
     },
     methods: {
       init (item, id) {
+        console.log(id)
         this.visible = true
+        this.id = id || ''
         if (item) {
           this.dataForm.dealStoreId = item.dealStoreId
         } else {
           this.edit = true
-          this.setInfo(id)
+          if (id) {
+            this.setInfo(id)
+          }
+          
         }
       },
       setInfo(data) {
@@ -91,7 +96,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if (this.edit) {
+            if (this.id) {
               Finance.update(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({

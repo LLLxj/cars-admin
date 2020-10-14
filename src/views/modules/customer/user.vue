@@ -208,7 +208,7 @@
       financeHandle() {
         this.userFinanceVisible = true
         this.$nextTick(() => {
-          this.$refs.UserFinance.init(this.selectItem)
+          this.$refs.UserFinance.init(this.selectItem, '')
         })
       },
       // 禁用

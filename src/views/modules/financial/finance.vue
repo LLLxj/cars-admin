@@ -29,24 +29,24 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <!-- <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button> -->
             <el-button @click="resetFrom()">重置</el-button>
             
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="financeNo" header-align="center" align="center" label="金融单编号">
+          <el-table-column prop="financeNo" header-align="center" align="center" label="金融单编号" min-width="140px">
           </el-table-column>
-            <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
-            <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
-            <el-table-column prop="contactPhone" header-align="center" align="center" label="联系人手机号" />
-            <el-table-column prop="financePrice" header-align="center" align="center" label="金融单金额" />
-            <el-table-column prop="remark" header-align="center" align="center" label="备注">
-                <template slot-scope="scope">
-        <span>{{scope.row.remark || '--'}}</span>
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" />
+          <el-table-column prop="contactName" header-align="center" align="center" label="联系人" />
+          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系人手机号" />
+          <el-table-column prop="financePrice" header-align="center" align="center" label="金融单金额" />
+          <!-- <el-table-column prop="remark" header-align="center" align="center" label="备注">
+            <template slot-scope="scope">
+              <span>{{scope.row.remark || '--'}}</span>
             </template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">作废</span>
@@ -54,7 +54,7 @@
               <span v-if="scope.row.status === 4">已完成</span>
             </template>
           </el-table-column>
-					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间">
+					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" min-width="120px">
 						<template slot-scope="scope">
               <span>{{scope.row.submitTime || '--'}}</span>
             </template>
@@ -69,11 +69,8 @@
               <span>{{scope.row.examineTime || '--'}}</span>
             </template>
 					</el-table-column>
-          <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
+          <el-table-column fixed="right" header-align="center" align="center" width="230" label="操作">
             <template slot-scope="scope">
-              <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.depositId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.depositId)">启用</el-button> -->
-              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.financeId)">查看</el-button> -->
               <el-button type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
               <el-button type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
               <el-button type="text" size="small" @click="success(scope.row)">已完成</el-button>
@@ -101,7 +98,6 @@
   </div>
 </template>
 <script>
-
   import Finance from '@/api/customer/finance'
   import TypeSelect from '@/views/common-select/customer-type-select'
 	import AddOrUpdate from '@/views/modules/customer/user-finance'
