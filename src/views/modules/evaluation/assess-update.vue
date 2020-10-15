@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="客户" prop="dealUser">
-        <CustomerSelect v-model="dataForm.dealUser" @get-val="getCustomerVal"></CustomerSelect>
+      <el-form-item label="客户" prop="dealUserId">
+        <CustomerSelect v-model="dataForm.dealUserId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
       <el-form-item label="品牌名称" prop="couBrandId">
         <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
@@ -203,7 +203,7 @@
         } 
       },
       getCustomerVal(val) { // 选择客户回调
-        this.dataForm.dealUserId = val.dealUserId
+        // this.dataForm.dealUserId = val.dealUserId
         this.dataForm.phone = val.dealUserPhone
       },
       setData(data) {

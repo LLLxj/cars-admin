@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="客户" prop="dealStore">
-        <CustomerSelect v-model="dataForm.dealStore" @get-val="getCustomerVal"></CustomerSelect>
+      <el-form-item label="客户" prop="dealStoreId">
+        <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
       <el-form-item label="标题" prop="dealWaresTitle">
         <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
@@ -165,7 +165,6 @@
           token: getToken()
         },
         dataForm: {
-          dealStore: {},
           sex: 0,
           phone: '',
           marketYear: '',
@@ -237,7 +236,9 @@
       setData(data) {
         Product.info(data).then(({data}) => {
           if (data.code === 0) {
-            this.dataForm = data.data
+            let tempObj = data.data
+            tempObj.marketYear = tempObj.marketYear.toString()
+            this.dataForm = tempObj
           }else {
             this.$message.error(data.msg)
           }
@@ -247,7 +248,7 @@
         })
       },
       getCustomerVal(val) { // 选择客户回调
-        this.dataForm.dealStoreId = val.dealStoreId
+        // this.dataForm.dealStoreId = val.dealStoreId
         this.dataForm.phone = val.dealUserPhone
       },
       getProInfo(val) {
@@ -255,6 +256,15 @@
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.cityAreaId = ''
+        this.dataForm.countyAreaId = ''
+        this.dataForm.waresImages = []
+        this.dataForm.coverImage = {
+          image: ''
+        }
+        this.dataForm.driveImage = {
+          image: ''
+        }
       },
       cancle () {
         this.visible = false
