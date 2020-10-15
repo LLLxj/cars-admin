@@ -70,7 +70,7 @@
       getCity(val) {
         let obj = {}
         this.dataList.forEach(item => {
-          if (item.dealUserId === val) {
+          if (item.dealStoreId === val) {
             obj = item
           }
         });

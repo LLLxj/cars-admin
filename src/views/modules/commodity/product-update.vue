@@ -248,6 +248,7 @@
         })
       },
       getCustomerVal(val) { // 选择客户回调
+        console.log(val)
         // this.dataForm.dealStoreId = val.dealStoreId
         this.dataForm.phone = val.dealUserPhone
       },
