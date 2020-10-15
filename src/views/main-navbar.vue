@@ -2,9 +2,10 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <div class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.png" style="width: 156px;height: 40px;"/></a>
-        <!-- <div class="img-box"><a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.png" style="width: 100%"/></a></div> -->
-        <a class="site-navbar__brand-mini" href="javascript:;"><img src="~@/assets/img/menu_short1.png" style="width: 40px;height: 38px;"/></a>
+        <!-- <div class="img-box"><a class="site-navbar__brand-lg" href="javascript:;"><img src="~@/assets/img/menu.png" style="width: 156px;height: 40px;"/></a></div> -->
+        <div class="img-box"><a class="site-navbar__brand-lg" href="javascript:;"><img src="http://ysch99.com/logoFile/square.png" style="width: 156px;height: 40px;"/></a></div>
+        <!-- <a class="site-navbar__brand-mini" href="javascript:;"><img src="~@/assets/img/menu_short1.png" style="width: 40px;height: 38px;"/></a> -->
+        <a class="site-navbar__brand-mini" href="javascript:;"><img src="http://ysch99.com/logoFile/rectangular.png" style="width: 40px;height: 38px;"/></a>
       </div>
     </div>
     <div class="site-navbar__body clearfix">
@@ -607,7 +608,8 @@
     // width: 100%;
     .navbar__brand{
       .img-box{
-        width: 100%;
+        // width: 100%;
+        border: 1px solid red;
         &>img{
           width: 100%;
         }

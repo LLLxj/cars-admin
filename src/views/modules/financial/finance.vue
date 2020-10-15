@@ -50,8 +50,9 @@
 					<el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">作废</span>
-              <span v-if="scope.row.status === 1">处理中</span>
-              <span v-if="scope.row.status === 4">已完成</span>
+              <span v-if="scope.row.status === 1">待处理</span>
+              <span v-if="scope.row.status === 2">处理中</span>
+              <span v-if="scope.row.status === 3">完成</span>
             </template>
           </el-table-column>
 					<el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" min-width="120px">
@@ -71,9 +72,9 @@
 					</el-table-column>
           <el-table-column fixed="right" header-align="center" align="center" width="230" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
-              <el-button type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
-              <el-button type="text" size="small" @click="success(scope.row)">已完成</el-button>
+              <el-button v-if="scope.row.status === 1" type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
+              <el-button v-if="scope.row.status === 1 || scope.row.status === 2" type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
+              <el-button v-if="scope.row.status === 2" type="text" size="small" @click="success(scope.row)">已完成</el-button>
 							<el-button type="text" size="small" @click="getRecord(scope.row.financeId)">审核记录</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>

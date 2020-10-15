@@ -39,7 +39,7 @@
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
   import Sell from '@/api/customer/sell'
-  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
+  import CustomerSelect from '@/views/common-select/customer/store-com-customer'
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
   import CitySelect from '@/views/common-select/assess/city-select'

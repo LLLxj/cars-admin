@@ -1,10 +1,10 @@
 <template>
-  <el-select v-loading="dataListLoading" v-model="temp_value" filterable :clearable="temp_clearable" placeholder="请选择客户" @change="getCity">
+  <el-select v-loading="dataListLoading" v-model="temp_value" value-key="dealUserId" filterable :clearable="temp_clearable" placeholder="请选择客户" @change="getCity">
     <el-option
       v-for="item in dataList"
-      :key="item.dealStoreId"
+      :key="item.dealUserId"
       :label="item.dealUserName"
-      :value="item.dealStoreId">
+      :value="item">
     </el-option>
   </el-select>
 </template>
@@ -16,7 +16,7 @@
     props: {
       value: {
         // 接受外部v-model传入的值
-        type: [Number, String]
+        type: [Number, String, Object]
       },
       clearable: {
         type: [Boolean],
@@ -57,7 +57,7 @@
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
-        Customer.dealList().then(res => {
+        Customer.comList().then(res => {
           if(res.data && res.data.code === 0){
             this.dataList = res.data.data
           }else{
@@ -68,6 +68,7 @@
         })
       },
       getCity(val) {
+        this.$emit('get-val', val)
         // this.$emit('get-city-val', val) // 通过$emit触发父组件
       }
     }

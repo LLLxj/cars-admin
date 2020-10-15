@@ -12,6 +12,12 @@
           <el-form-item label="状态">
             <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
+          <el-form-item label="展示类型">
+            <el-select v-model="searchData.displayType" placeholder="请选择">
+              <el-option v-for="item in displayTypeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button @click="getDataListBtn()">查询</el-button>
             <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -22,14 +28,20 @@
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="bannerName" header-align="center" align="center" label="标题">
           </el-table-column>
-          <el-table-column header-align="center" align="center" label="缩略图">
+          <el-table-column header-align="center" align="center" label="缩略图" min-width="200px">
             <template slot-scope="scope">
-              <div v-if="scope.row.bannerWaresList.length !== 0">
-                <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId">
+              <div class="img-box" v-if="scope.row.bannerWaresList.length !== 0">
+                <div v-for="item in scope.row.bannerWaresList" :key="item.bannerId + item.dealWaresId">
                   <img :src="item.image" alt="" style="max-height: 50px;max-width: 50px">
                 </div>
               </div>
               <span v-else>-</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="displayType" header-align="center" align="center" label="展示类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.displayType === 0">零售</span>
+              <span v-if="scope.row.displayType === 1">企业</span>
             </template>
           </el-table-column>
           <el-table-column prop="sort" header-align="center" align="center" label="排序">
@@ -83,9 +95,14 @@
         searchData: {
           bannerName: '',
           status: '',
+          displayType: '',
           page: 1,
           limit: 10
         },
+        displayTypeList: [
+          { label: '零售', value: 0 },
+          { label: '企业', value: 1 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -187,7 +204,8 @@
           bannerName: '',
           status: '',
           page: 1,
-          limit: 10
+          limit: 10,
+          displayType: ''
         }
         this.getDataList()
       },
@@ -282,3 +300,9 @@
     }
   }
 </script>
+
+<style>
+  .imgBox{
+    display: flex;
+  }
+</style>

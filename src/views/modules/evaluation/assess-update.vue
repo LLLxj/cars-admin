@@ -4,6 +4,9 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
+      <el-form-item label="客户" prop="dealUser">
+        <CustomerSelect v-model="dataForm.dealUser" @get-val="getCustomerVal"></CustomerSelect>
+      </el-form-item>
       <el-form-item label="品牌名称" prop="couBrandId">
         <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
       </el-form-item>
@@ -14,9 +17,6 @@
       <el-form-item label="商品名称" prop="assessWaresTitle">
         <!-- <ProductSelect v-model="dataForm.couWaresId" :disabled="!dataForm.couSeriesId" :couSeriesId="dataForm.couSeriesId" @sent-pro-info="getProInfo"></ProductSelect> -->
         <el-input v-model="dataForm.assessWaresTitle" placeholder="请输入商品名称"></el-input>
-      </el-form-item>
-      <el-form-item label="客户" prop="dealUserId">
-        <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
       </el-form-item>
       <el-form-item label="选择市区">
         <CitySelect v-model="dataForm.cityAreaId"></CitySelect>
@@ -201,6 +201,10 @@
           this.dataForm.couWaresId = id
           this.setData(id)
         } 
+      },
+      getCustomerVal(val) { // 选择客户回调
+        this.dataForm.dealUserId = val.dealUserId
+        this.dataForm.phone = val.dealUserPhone
       },
       setData(data) {
         Assess.info(data).then(({data}) => {

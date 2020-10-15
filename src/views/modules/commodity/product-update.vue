@@ -4,6 +4,9 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
+      <el-form-item label="客户" prop="dealStore">
+        <CustomerSelect v-model="dataForm.dealStore" @get-val="getCustomerVal"></CustomerSelect>
+      </el-form-item>
       <el-form-item label="标题" prop="dealWaresTitle">
         <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
       </el-form-item>
@@ -49,7 +52,8 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="行驶里程" prop="distance">
-        <el-input v-model="dataForm.distance"></el-input>
+        <el-input-number v-model="dataForm.distance"></el-input-number>
+        <!-- <el-input v-model="dataForm.distance"></el-input> -->
       </el-form-item>
       <el-form-item label="牌照ID" prop="licenseCode">
         <el-input v-model="dataForm.licenseCode"></el-input>
@@ -126,10 +130,6 @@
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="客户" prop="dealStoreId">
-        <CustomerSelect v-model="dataForm.dealStoreId"></CustomerSelect>
-      </el-form-item>
-      
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
@@ -141,7 +141,7 @@
 <script>
   import { isMobile, removeBlank } from '@/utils/validate'
   import Product from '@/api/customer/product'
-  import CustomerSelect from '@/views/common-select/customer/all-com-customer1'
+  import CustomerSelect from '@/views/common-select/customer/store-com-customer'
   import ProductSelect from '@/views/common-select/customer/product-select'
   import BrandSelect from '@/views/common-select/brand-select'
   import SeriesSelect from '@/views/common-select/brand-series-select'
@@ -165,7 +165,9 @@
           token: getToken()
         },
         dataForm: {
-          phone: 13079244223,
+          dealStore: {},
+          sex: 0,
+          phone: '',
           marketYear: '',
           couWaresId: '',
           couBrandId: '',
@@ -187,9 +189,9 @@
           addr: '',
           waresRemark: '',
           transferNum: '',
-          isTransfer: '',
-          isMortgage: '',
-          isMaintain: '',
+          isTransfer: 0,
+          isMortgage: 0,
+          isMaintain: 0,
           dealWaresName: '',
           coverImage: {
             image: ''
@@ -243,6 +245,10 @@
           console.log(err)
           this.$message.error(data.msg)
         })
+      },
+      getCustomerVal(val) { // 选择客户回调
+        this.dataForm.dealStoreId = val.dealStoreId
+        this.dataForm.phone = val.dealUserPhone
       },
       getProInfo(val) {
         this.dataForm.couWaresPrice = val.couWaresPrice

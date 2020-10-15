@@ -134,7 +134,7 @@
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
   import ElMain from 'element-ui/packages/main/index'
-  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
+  import CustomerSelect from '@/views/common-select/customer/all-customer'
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
   import Vue from 'vue'

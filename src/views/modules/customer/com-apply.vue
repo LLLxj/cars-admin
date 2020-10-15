@@ -13,6 +13,7 @@
             <el-input v-model="dataForm.dealUserPhone" placeholder="请输入客户手机" clearable></el-input>
           </el-form-item>
           <el-form-item label="客户">
+            <!-- <CustomerSelect v-model="dataForm.dealUser" @get-val="getCustomerVal"></CustomerSelect> -->
             <CustomerSelect v-model="dataForm.dealUserId"></CustomerSelect>
           </el-form-item>
           <el-form-item label="审核状态">
@@ -108,7 +109,7 @@
 <script>
 
   import ComApply from '@/api/customer/com-apply'
-  import CustomerSelect from '@/views/common-select/customer/all-com-customer'
+  import CustomerSelect from '@/views/common-select/customer/all-customer'
   import AddOrUpdate from './user-com-auth'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
@@ -168,7 +169,7 @@
       BusinessSelect
     },
     activated () {
-      // this.getDataList()
+      this.getDataList()
     },
     methods: {
       // 获取数据列表
@@ -202,6 +203,9 @@
           }
           this.dataListLoading = false
         })
+      },
+       getCustomerVal(val) { // 选择客户回调
+        this.dataForm.dealUserId = val.dealUserId
       },
       schoolTreeChangeEvent (deptId) {
         this.dataForm.deptId = deptId

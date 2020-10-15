@@ -51,6 +51,12 @@
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="dataForm.sort" controls-position="right" :min="0" label="排序号"></el-input-number>
       </el-form-item>
+      <el-form-item label="展示类型" prop="displayType">
+        <el-radio-group v-model="dataForm.displayType">
+          <el-radio :label="0">零售</el-radio>
+          <el-radio :label="1">企业</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
@@ -92,7 +98,8 @@
           bannerId: '',
           bannerName: '',
           bannerWaresList: [],
-          sort: ''
+          sort: '',
+          displayType: 0
         },
         body: {
           text: '',
@@ -102,13 +109,12 @@
         bannerId: '',
         dataRule: {
           bannerName: [
-            { required: true, message: 'banner名称不能为空', trigger: 'blur' },
+            { required: true, message: 'banner标题不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ],
-          // phone: [
-          //   { required: true, message: '手机号不能为空', trigger: 'blur' },
-          //   { validator: validateMobile, trigger: 'blur' }
-          // ],
+          sort: [
+            { required: true, message: '排序不能为空', trigger: 'blur' },
+          ]
         }
       }
     },
@@ -146,13 +152,11 @@
       // 多图上传 成功回调
       imageUploadSuccess2(res, file, fileList) {
         if (res.code === 0) {
-          console.log(res)
           this.dataForm.bannerWaresList.forEach(item => {
-            if (item.dealWaresId === item.dealWaresId) {
+            if (item.dealWaresId === this.selectItem.dealWaresId) {
               item.image = res.data.url
             }
           })
-          console.log(this.dataForm.bannerWaresList)
         } else {
           this.$message(res.data.msg)
         }
@@ -198,6 +202,7 @@
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
+        this.dataForm.bannerWaresList = []
       },
       cancle () {
         this.visible = false

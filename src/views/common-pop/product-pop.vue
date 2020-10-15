@@ -43,6 +43,9 @@
       return {
         dataForm: {
           dealWaresTitle: '',
+          status: 3,
+          onlineStatus: 0,
+          sellStatus: 0
         },
         visible:false,
         dataList: [],
