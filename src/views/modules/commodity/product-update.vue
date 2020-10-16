@@ -3,7 +3,7 @@
     :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="140px">
       <el-form-item label="客户" prop="dealStoreId">
         <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
@@ -94,7 +94,7 @@
           <el-radio :label="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="上传封面图">
+      <el-form-item label="上传封面图" prop="coverImage">
         <el-upload
           :action="'/apiPro/deal/wares/upload/waresImage'"
           :data="{ phone: dataForm.dealUserPhone }"
@@ -103,12 +103,12 @@
           :accept="'.jpg, .png'"
           list-type="picture-card"
           :file-list="fileList1"
-          :disabled="!dataForm.phone"
+          :disabled="!dataForm.dealUserPhone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="上传驾驶证">
+      <el-form-item label="上传驾驶证" prop="driveImage">
         <el-upload
           :action="'/apiPro/deal/wares/upload/drivingImage'"
           :data="{ phone: dataForm.dealUserPhone }"
@@ -116,13 +116,13 @@
           :on-success="imageUploadSuccess1"
           :accept="'.jpg, .png'"
           list-type="picture-card"
-          :disabled="!dataForm.phone"
+          :disabled="!dataForm.dealUserPhone"
           :file-list="fileList2"
           :on-remove="handleRemove1">
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="上传评估图片">
+      <el-form-item label="上传评估图片" prop="waresImages">
         <el-upload
           :action="'/apiPro/deal/assess/upload/waresImage'"
           :data="{ phone: dataForm.dealUserPhone }"
@@ -131,7 +131,7 @@
           :accept="'.jpg, .png'"
           list-type="picture-card"
           :file-list="fileList3"
-          :disabled="!dataForm.phone"
+          :disabled="!dataForm.dealUserPhone"
           :on-remove="handleRemove2">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -215,6 +215,24 @@
           couWaresId: [
             { required: true, message: '商品名不能为空', trigger: 'blur' },
           ],
+          dealStoreId: [
+            { required: true, message: '客户不能为空', trigger: 'blur' },
+          ],
+          dealWaresTitle: [
+            { required: true, message: '标题不能为空', trigger: 'blur' },
+          ],
+          contactPhone: [
+            { required: true, message: '联系电话不能为空', trigger: 'blur' },
+          ],
+          contactName: [
+            { required: true, message: '联系人名称不能为空', trigger: 'blur' },
+          ],
+          sex: [
+            { required: true, message: '请选择性别', trigger: 'blur' },
+          ],
+          waresFrameCode: [
+            { required: true, message: '产品框架号不能为空', trigger: 'blur' },
+          ],
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
           ],
@@ -223,6 +241,54 @@
           ],
           couModelId: [
             { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
+          ],
+          waresFrameCode: [
+            { required: true, message: '产品框架号不能为空', trigger: 'blur' },
+          ],
+          tradePrice: [
+            { required: true, message: '厂商批发价不能为空', trigger: 'blur' },
+          ],
+          retailPrice: [
+            { required: true, message: '厂商零售价不能为空', trigger: 'blur' },
+          ],
+          registerTime: [
+            { required: true, message: '上牌时间不能为空', trigger: 'blur' },
+          ],
+          distance: [
+            { required: true, message: '行驶里程不能为空', trigger: 'blur' },
+          ],
+          licenseCode: [
+            { required: true, message: '牌照id不能为空', trigger: 'blur' },
+          ],
+          marketYear: [
+            { required: true, message: '年款不能为空', trigger: 'blur' },
+          ],
+          addr: [
+            { required: true, message: '详细地址不能为空', trigger: 'blur' },
+          ],
+          waresRemark: [
+            { required: true, message: '商品描述不能为空', trigger: 'blur' },
+          ],
+          transferNum: [
+            { required: true, message: '', trigger: 'blur' },
+          ],
+          isTransfer: [
+            { required: true, message: '', trigger: 'blur' },
+          ],
+          isMortgage: [
+            { required: true, message: '', trigger: 'blur' },
+          ],
+          isMaintain: [
+            { required: true, message: '', trigger: 'blur' },
+          ],
+          coverImage: [
+            { required: true, message: '请上传封面图', trigger: 'blur' },
+          ],
+          driveImage: [
+            { required: true, message: '请上传驾驶证', trigger: 'blur'},
+          ],
+          waresImages: [
+            { required: true, message: '请上传评估图片', trigger: 'blur'}
           ]
         }
       }
@@ -271,7 +337,6 @@
         })
       },
       getCustomerVal(val) { // 选择客户回调
-        console.log(val)
         // this.dataForm.dealStoreId = val.dealStoreId
         this.dataForm.dealUserPhone = val.dealUserPhone
       },

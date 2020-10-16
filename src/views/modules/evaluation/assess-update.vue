@@ -31,47 +31,35 @@
         <el-date-picker v-model="dataForm.registerTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-			<el-form-item label="上传驾驶证">
+			<el-form-item label="上传驾驶证" prop="driveImage">
         <el-upload
           :action="'/apiPro/deal/assess/upload/drivingImage'"
-          :data="{ phone: dataForm.phone }"
+          :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess"
           :accept="'.jpg, .png'"
           list-type="picture-card"
           :file-list="fileList1"
-          :disabled="!dataForm.phone"
+          :disabled="!dataForm.dealUserPhone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="上传评估图片">
+      <el-form-item label="上传评估图片" prop="waresImages">
         <el-upload
           :action="'/apiPro/deal/assess/upload/waresImage'"
-          :data="{ phone: dataForm.phone }"
+          :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess1"
           :accept="'.jpg, .png'"
           list-type="picture-card"
           :file-list="fileList2"
-          :disabled="!dataForm.phone"
+          :disabled="!dataForm.dealUserPhone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
     </el-form>
-    <!-- {
-  "couWaresName": "string",
-  "couSeriesId": 0,
-  "couModelId": 0,
-  "couWaresPrice": "string",
-  "marketYear": 0,
-  "marketTime": "2020-06-10",
-  "disMent": "string",
-  "varBox": "string",
-  "drive": "string",
-  "consume": "string"
-} -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -119,20 +107,28 @@
           cityAreaId: '',
           countyAreaId: '',
           distance: '',
-          phone: '',
+          dealUserPhone: '',
           registerTime: '', //上牌时间
           driveImage: { // 驾驶证
-
+            image: ''
           },
           waresImages: [ // 商品照片
-
           ]
         },
         id: '',
         dataRule: {
+          dealUserId: [
+            { required: true, message: '请选择客户', trigger: 'blur', type: 'number' },
+          ],
           couWaresName: [
             { required: true, message: '商品名不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
+          ],
+          distance: [
+            { required: true, message: '请输入行驶里程', trigger: 'blur' },
+          ],
+          registerTime: [
+            { required: true, message: '请选择上牌时间', trigger: 'blur' },
           ],
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
@@ -146,8 +142,11 @@
           couModelId: [
             { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
           ],
-          phone: [
-            { required: true, message: '请输入用户电话号码', trigger: 'blur'},
+          driveImage: [
+            { required: true, message: '请上传驾驶证', trigger: 'blur'},
+          ],
+          waresImages: [
+            { required: true, message: '请上传评估图片', trigger: 'blur'},
           ]
         }
       }
@@ -168,7 +167,7 @@
       },
       getCustomerVal(val) { // 选择客户回调
         // this.dataForm.dealUserId = val.dealUserId
-        this.dataForm.phone = val.dealUserPhone
+        this.dataForm.dealUserPhone = val.dealUserPhone
       },
       setData(data) {
         Assess.info(data).then(({data}) => {
