@@ -97,7 +97,7 @@
       <el-form-item label="上传封面图">
         <el-upload
           :action="'/apiPro/deal/wares/upload/waresImage'"
-          :data="{ phone: dataForm.phone }"
+          :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess"
           :accept="'.jpg, .png'"
@@ -111,7 +111,7 @@
       <el-form-item label="上传驾驶证">
         <el-upload
           :action="'/apiPro/deal/wares/upload/drivingImage'"
-          :data="{ phone: dataForm.phone }"
+          :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess1"
           :accept="'.jpg, .png'"
@@ -125,7 +125,7 @@
       <el-form-item label="上传评估图片">
         <el-upload
           :action="'/apiPro/deal/assess/upload/waresImage'"
-          :data="{ phone: dataForm.phone }"
+          :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess2"
           :accept="'.jpg, .png'"
@@ -175,7 +175,7 @@
         fileList3: [],
         dataForm: {
           sex: 0,
-          phone: '',
+          dealUserPhone: '',
           marketYear: '',
           couWaresId: '',
           couBrandId: '',
@@ -273,7 +273,7 @@
       getCustomerVal(val) { // 选择客户回调
         console.log(val)
         // this.dataForm.dealStoreId = val.dealStoreId
-        this.dataForm.phone = val.dealUserPhone
+        this.dataForm.dealUserPhone = val.dealUserPhone
       },
       getProInfo(val) {
         this.dataForm.couWaresPrice = val.couWaresPrice
