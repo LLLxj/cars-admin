@@ -3,7 +3,7 @@
     :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="140px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="160px">
       <el-form-item label="客户" prop="dealStoreId">
         <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
@@ -94,7 +94,7 @@
           <el-radio :label="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="上传封面图" prop="coverImage">
+      <el-form-item label="上传封面图（1张）" prop="coverImage">
         <el-upload
           :action="'/apiPro/deal/wares/upload/waresImage'"
           :data="{ phone: dataForm.dealUserPhone }"
@@ -108,7 +108,7 @@
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="上传驾驶证" prop="driveImage">
+      <el-form-item label="上传驾驶证（1张）" prop="driveImage">
         <el-upload
           :action="'/apiPro/deal/wares/upload/drivingImage'"
           :data="{ phone: dataForm.dealUserPhone }"

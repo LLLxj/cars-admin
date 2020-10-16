@@ -3,7 +3,7 @@
     :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="160px">
       <el-form-item label="客户" prop="dealUserId">
         <CustomerSelect v-model="dataForm.dealUserId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
@@ -31,7 +31,7 @@
         <el-date-picker v-model="dataForm.registerTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-			<el-form-item label="上传驾驶证" prop="driveImage">
+			<el-form-item label="上传驾驶证（1张）" prop="driveImage">
         <el-upload
           :action="'/apiPro/deal/assess/upload/drivingImage'"
           :data="{ phone: dataForm.dealUserPhone }"

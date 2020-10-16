@@ -67,10 +67,10 @@
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.refundId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.refundId)">启用</el-button> -->
-              <el-button type="text" size="small" @click="addOrUpdateHandle(null, scope.row.refundId)">编辑</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.refundId, 1)">驳回</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.refundId, 2)">经理审核</el-button>
-              <el-button type="text" size="small" @click="checkOrder(scope.row.refundId, 3)">通过</el-button>
+              <el-button v-if="scope.row.status === 1 || scope.row.status === 2" type="text" size="small" @click="addOrUpdateHandle(null, scope.row.refundId)">编辑</el-button>
+              <el-button v-if="scope.row.status === 3 || scope.row.status === 2" type="text" size="small" @click="checkOrder(scope.row.refundId, 1)">驳回</el-button>
+              <el-button v-if="scope.row.status === 2" type="text" size="small" @click="checkOrder(scope.row.refundId, 2)">经理审核</el-button>
+              <el-button v-if="scope.row.status === 3" type="text" size="small" @click="checkOrder(scope.row.refundId, 3)">通过</el-button>
               <el-button type="text" size="small" @click="getRecord(scope.row.refundId)">审核记录</el-button>
             </template>
           </el-table-column>
