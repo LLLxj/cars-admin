@@ -10,9 +10,9 @@
       <el-form-item label="客户职位" prop="dealUserJob">
         <el-input v-model="dataForm.dealUserJob" :disabled="edit" placeholder="请输入客户职位"></el-input>
       </el-form-item>
-      <el-form-item label="所属用户" prop="sysUserId">
+      <!-- <el-form-item label="所属用户" prop="sysUserId">
         <UserSelect v-model="dataForm.sysUserId" :disabled="edit"></UserSelect>
-      </el-form-item>
+      </el-form-item> -->
 			<el-form-item label="上传门面图">
         <el-upload
           :action="'/apiPro/deal/user/store/upload/image'"
@@ -22,6 +22,7 @@
           :accept="'.jpg, .png'"
           list-type="picture-card"
           :on-remove="handleRemove"
+          :file-list="fileList"
           :disabled="edit">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -57,6 +58,7 @@
 				myHeaders: {
           token: getToken()
         },
+        fileList: [],
         edit: false,
         visible: false,
         roleList: [],
@@ -71,7 +73,7 @@
 					dealStoreName: '',
 					image: '',
 					dealUserJob: '',
-					sysUserId: '',
+					// sysUserId: '',
 					phone: ''
         },
         id: '',
@@ -94,9 +96,6 @@
     },
     methods: {
       init (id, authId, index) {
-        console.log(id)
-        console.log(authId)
-        console.log(index)
         this.visible = true
         if (index === 2) {
           this.edit = true
@@ -109,6 +108,7 @@
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
+        this.fileList = []
 			},
 			handleRemove(file, fileList) {
         this.dataForm.image = ''
@@ -123,7 +123,7 @@
       getAuthInfo(data) {
         ComApply.info(data).then(({data}) => {
           if (data.code === 0) {
-            this.dataForm.dealUserId = data.data.dealUserId
+            // this.dataForm.dealUserId = data.data.dealUserId
             this.dataForm.dealStoreName = data.data.dealStoreName
             this.dataForm.image = data.data.image
             this.dataForm.dealUserJob = data.data.dealUserJob

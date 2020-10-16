@@ -39,6 +39,8 @@
           :on-success="imageUploadSuccess"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          :file-list="fileList1"
+          :disabled="!dataForm.phone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -51,6 +53,8 @@
           :on-success="imageUploadSuccess1"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          :file-list="fileList2"
+          :disabled="!dataForm.phone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -101,50 +105,10 @@
         myHeaders: {
           token: getToken()
         },
-        phone: '13422356022',
+        phone: '',
+        fileList1: [],
+        fileList2: [],
 				driverImage: '', // 上传驾驶证路径
-//         dealAssessId (integer, optional): 评估ID ,
-// couBrandId (integer, optional): 所属品牌ID ,
-// couBrandName (string, optional): 所属品牌名称 ,
-// couSeriesId (integer, optional): 所属品牌系列ID ,
-// couSeriesName (string, optional): 所属品牌系列名称 ,
-// couWaresId (integer, optional): 所属商品ID ,
-// couWaresName (string, optional): 所属商品名称 ,
-// registerTime (string, optional): 上牌时间 ,
-// proAreaId (integer, optional): 省级区域ID ,
-// proAreaName (string, optional): 省级区域名称 ,
-// cityAreaId (integer, optional): 市级区域ID ,
-// cityAreaName (string, optional): 市级区域名称 ,
-// countyAreaId (integer, optional): 县/区级区域ID ,
-// countyAreaName (string, optional): 县/区级区域名称 ,
-// distance (integer, optional): 行驶里程 ,
-// dealUserId (integer, optional): 客户ID ,
-// images (Array[string], optional): 图片路径集合 ,
-// status (integer, optional): 状态 0.待审核 1.已审核 ,
-// dealAssessPrice (string, optional): 评估价格 ,
-// sellStatus (integer, optional): 交易状态 0.未交易 1.交易中 2.已交易 ,
-// driveImage (inline_model_22, optional),
-// waresImages (Array[Inline Model 1], optional),
-// examineUserId (integer, optional): 审核人ID ,
-// examineTime (string, optional): 审核时间
-
-// {
-//   "couBrandId": 0,
-//   "couSeriesId": 0,
-//   "couWaresId": 0,
-//   "registerTime": "2020-06-13T06:07:39.131Z",
-//   "proAreaId": 0,
-//   "cityAreaId": 0,
-//   "countyAreaId": 0,
-//   "distance": 0,
-//   "dealUserId": 0,
-//   "driveImage": {
-//     "image": "string"
-//   },
-//   "waresImages": [
-//     {}
-//   ]
-// }
         dataForm: {
           couWaresId: '',
           couWaresName: '',
@@ -220,6 +184,10 @@
       },
       resetForm() {
         this.$refs['dataForm'].resetFields()
+        this.fileList1 = []
+        this.fileList2 = []
+        this.dataForm.cityAreaId = ''
+        this.dataForm.countyAreaId = ''
       },
       cancle () {
         this.visible = false

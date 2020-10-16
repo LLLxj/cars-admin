@@ -102,6 +102,8 @@
           :on-success="imageUploadSuccess"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          :file-list="fileList1"
+          :disabled="!dataForm.phone"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -114,6 +116,8 @@
           :on-success="imageUploadSuccess1"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          :disabled="!dataForm.phone"
+          :file-list="fileList2"
           :on-remove="handleRemove1">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -126,6 +130,8 @@
           :on-success="imageUploadSuccess2"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          :file-list="fileList3"
+          :disabled="!dataForm.phone"
           :on-remove="handleRemove2">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -164,6 +170,9 @@
         myHeaders: {
           token: getToken()
         },
+        fileList1: [],
+        fileList2: [],
+        fileList3: [],
         dataForm: {
           sex: 0,
           phone: '',
@@ -238,6 +247,20 @@
           if (data.code === 0) {
             let tempObj = data.data
             tempObj.marketYear = tempObj.marketYear.toString()
+            if (tempObj.coverImage && tempObj.coverImage.image) {
+              tempObj.coverImage.url = tempObj.coverImage.image
+              this.fileList1.push(tempObj.coverImage)
+            }
+            if (tempObj.driveImage && tempObj.driveImage.image) {
+              tempObj.driveImage.url = tempObj.driveImage.image
+              this.fileList2.push(tempObj.driveImage)
+            }
+            if (tempObj.waresImages && tempObj.waresImages.length) {
+              tempObj.waresImages.forEach(item => {
+                item.url = item.image
+              })
+              this.fileList3 = tempObj.waresImages
+            }
             this.dataForm = tempObj
           }else {
             this.$message.error(data.msg)
@@ -266,6 +289,9 @@
         this.dataForm.driveImage = {
           image: ''
         }
+        this.fileList1 = []
+        this.fileList2 = []
+        this.fileList3 = []
       },
       cancle () {
         this.visible = false
