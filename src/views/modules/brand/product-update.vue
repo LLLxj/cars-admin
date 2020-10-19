@@ -13,7 +13,7 @@
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
-      <el-form-item label="选择型号" prop="couModelId">
+      <el-form-item label="选择车辆类型" prop="couModelId">
         <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
       </el-form-item>
       <el-form-item label="厂商指导价" prop="couWaresPrice">
@@ -112,7 +112,7 @@
             { required: true, message: '请选择所属系列', trigger: 'blur', type: 'number' },
           ],
           couModelId: [
-            { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
+            { required: true, message: '请选择所属车辆类型', trigger: 'blur', type: 'number' },
           ]
         }
       }

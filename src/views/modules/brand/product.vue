@@ -15,7 +15,7 @@
           <el-form-item label="选择系列" prop="couSeriesId">
             <SeriesSelect v-model="searchData.couSeriesId" :disabled="!searchData.couBrandId" :couSeriesId="searchData.couBrandId"></SeriesSelect>
           </el-form-item>
-          <el-form-item label="选择型号" prop="couModelId">
+          <el-form-item label="选择车辆类型" prop="couModelId">
             <ModelSelect v-model="searchData.couModelId"></ModelSelect>
           </el-form-item>
           <el-form-item label="状态">
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="所属品牌系列">
           </el-table-column>
-          <el-table-column prop="couModelName" header-align="center" align="center" label="所属型号名称">
+          <el-table-column prop="couModelName" header-align="center" align="center" label="所属车辆类型名称">
           </el-table-column>
           <el-table-column prop="couWaresPrice" header-align="center" align="center" label="厂商指导价">
           </el-table-column>

@@ -7,9 +7,6 @@
       <el-form-item label="客户" prop="dealStoreId">
         <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
-      <el-form-item label="标题" prop="dealWaresTitle">
-        <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
-      </el-form-item>
       <el-form-item label="联系电话" prop="contactPhone">
         <el-input v-model="dataForm.contactPhone" placeholder="请输入联系电话" maxlength="11"></el-input>
       </el-form-item>
@@ -22,14 +19,17 @@
           <el-radio :label="1">小姐</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="产品框架号" prop="waresFrameCode">
+      <!-- <el-form-item label="产品框架号" prop="waresFrameCode">
         <el-input v-model="dataForm.waresFrameCode"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="品牌名称" prop="couBrandId">
         <BrandSelect v-model="dataForm.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
       </el-form-item>
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
+      </el-form-item>
+      <el-form-item label="标题" prop="dealWaresTitle">
+        <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
       </el-form-item>
       <!-- <el-form-item label="商品名称" prop="couWaresName">
         <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
@@ -38,7 +38,7 @@
       <!-- <el-form-item label="厂商指导价" prop="couWaresPrice">
         <el-input-number v-model="dataForm.couWaresPrice" disabled="" :min="1" label=""></el-input-number>
       </el-form-item> -->
-      <el-form-item label="选择型号" prop="couModelId">
+      <el-form-item label="选择车辆类型" prop="couModelId">
         <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
       </el-form-item>
       <el-form-item label="厂商批发价" prop="tradePrice">
@@ -183,7 +183,7 @@
           couSeriesId: '',
           couModelId: '',
           couWaresPrice: '',
-          waresFrameCode: '',
+          // waresFrameCode: '',
           contactPhone: '',
           contactName: '',
           tradePrice: '',
@@ -230,9 +230,6 @@
           sex: [
             { required: true, message: '请选择性别', trigger: 'blur' },
           ],
-          waresFrameCode: [
-            { required: true, message: '产品框架号不能为空', trigger: 'blur' },
-          ],
           couBrandId: [
             { required: true, message: '请选择所属品牌', trigger: 'blur', type: 'number' },
           ],
@@ -240,11 +237,11 @@
             { required: true, message: '请选择所属系列', trigger: 'blur', type: 'number' },
           ],
           couModelId: [
-            { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
+            { required: true, message: '请选择所属车辆类型', trigger: 'blur', type: 'number' },
           ],
-          waresFrameCode: [
-            { required: true, message: '产品框架号不能为空', trigger: 'blur' },
-          ],
+          // waresFrameCode: [
+          //   { required: true, message: '产品框架号不能为空', trigger: 'blur' },
+          // ],
           tradePrice: [
             { required: true, message: '厂商批发价不能为空', trigger: 'blur' },
           ],

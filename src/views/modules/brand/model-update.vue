@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="型号名称" prop="couModelName">
-        <el-input v-model="dataForm.couModelName" placeholder="请输入型号名称"></el-input>
+      <el-form-item label="车辆类型名称" prop="couModelName">
+        <el-input v-model="dataForm.couModelName" placeholder="请输入车辆类型名称"></el-input>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="20">
@@ -67,7 +67,7 @@
         id: '',
         dataRule: {
           couModelName: [
-            { required: true, message: '型号名称不能为空', trigger: 'blur' },
+            { required: true, message: '车辆类型名称不能为空', trigger: 'blur' },
             { validator: removeSpace, trigger: 'blur'}
           ]
         }

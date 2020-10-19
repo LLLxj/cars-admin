@@ -6,7 +6,7 @@
       <el-main>
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
-          <el-form-item label="型号名称">
+          <el-form-item label="车辆类型名称">
             <el-input v-model="searchData.couModelName" placeholder="商品类型名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="状态">
@@ -20,9 +20,9 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="couModelName" header-align="center" align="center" label="型号名称">
+          <el-table-column prop="couModelName" header-align="center" align="center" label="车辆类型名称">
           </el-table-column>
-          <el-table-column prop="image" header-align="center" align="center" label="型号照片">
+          <el-table-column prop="image" header-align="center" align="center" label="车辆类型照片">
             <template slot-scope="scope">
               <img v-if="scope.row.image" :src="scope.row.image" style="max-width:80px;" alt="">
               <span v-else>-</span>
