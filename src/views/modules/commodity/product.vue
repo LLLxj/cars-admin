@@ -41,7 +41,7 @@
               <span v-else>女士</span>
             </template>
           </el-table-column>
-          <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" min-width="120"/>
+          <!-- <el-table-column prop="waresFrameCode" header-align="center" align="center" label="商品框架号" min-width="120"/> -->
           <el-table-column prop="couBrandName" header-align="center" align="center" label="品牌名称" min-width="120"/>
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" min-width="160"/>
           <!-- <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" min-width="120"/> -->
@@ -49,7 +49,7 @@
           <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价" />
           <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价" />
           <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" min-width="160"/>
-          <el-table-column prop="distance" header-align="center" align="center" label="行驶里程" />
+          <el-table-column prop="distance" header-align="center" align="center" label="行驶里程（公里）" />
           <!-- <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" min-width="120"/> -->
           <el-table-column prop="licenseCode" header-align="center" align="center" label="牌照" min-width="120"/>
           <el-table-column prop="addr" header-align="center" align="center" label="详细地址" min-width="120"/>

@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="160px">
-      <el-form-item label="客户" prop="dealStoreId">
+      <el-form-item label="所属客户" prop="dealStoreId">
         <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
       <el-form-item label="联系电话" prop="contactPhone">
@@ -28,8 +28,8 @@
       <el-form-item label="选择系列" prop="couSeriesId">
         <SeriesSelect v-model="dataForm.couSeriesId" :disabled="!dataForm.couBrandId" :couSeriesId="dataForm.couBrandId"></SeriesSelect>
       </el-form-item>
-      <el-form-item label="标题" prop="dealWaresTitle">
-        <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入标题"></el-input>
+      <el-form-item label="出售商品标题" prop="dealWaresTitle">
+        <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入出售商品标题"></el-input>
       </el-form-item>
       <!-- <el-form-item label="商品名称" prop="couWaresName">
         <el-input v-model="dataForm.couWaresName" placeholder="请输入商品名称"></el-input> -->
@@ -51,11 +51,11 @@
         <el-date-picker v-model="dataForm.registerTime" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="行驶里程" prop="distance">
+      <el-form-item label="行驶里程（公里）" prop="distance">
         <el-input-number v-model="dataForm.distance"></el-input-number>
         <!-- <el-input v-model="dataForm.distance"></el-input> -->
       </el-form-item>
-      <el-form-item label="牌照ID" prop="licenseCode">
+      <el-form-item label="牌照所在地" prop="licenseCode">
         <el-input v-model="dataForm.licenseCode"></el-input>
       </el-form-item>
       <el-form-item label="年款" prop="marketYear">
@@ -219,7 +219,7 @@
             { required: true, message: '客户不能为空', trigger: 'blur' },
           ],
           dealWaresTitle: [
-            { required: true, message: '标题不能为空', trigger: 'blur' },
+            { required: true, message: '出售商品标题不能为空', trigger: 'blur' },
           ],
           contactPhone: [
             { required: true, message: '联系电话不能为空', trigger: 'blur' },

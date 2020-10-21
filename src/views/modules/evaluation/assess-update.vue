@@ -140,7 +140,7 @@
             { required: true, message: '请输入评估商品名称', trigger: 'blur' },
           ],
           couModelId: [
-            { required: true, message: '请选择所属型号', trigger: 'blur', type: 'number' },
+            { required: true, message: '请选择所属车辆类型', trigger: 'blur', type: 'number' },
           ],
           driveImage: [
             { required: true, message: '请上传驾驶证', trigger: 'blur'},
