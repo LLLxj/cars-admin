@@ -24,7 +24,7 @@
               <el-table-column label="图片" prop="image" header-align="center" align="center">
                 <template slot-scope="scope">
                   <img v-if="scope.row.image" :src="scope.row.image" :alt="scope.row.image" style="width: 80px;" />
-                  <el-upload v-else :action="GLOBAL.UPLOAD_BRAND_URL" :show-file-list="false" :on-success="imageUploadSuccess2" :before-upload="beforeAvatarUpload"
+                  <el-upload v-else :action="GLOBAL.UPLOAD_BANNER_URL" :show-file-list="false" :on-success="imageUploadSuccess2" :before-upload="beforeAvatarUpload"
                     :headers="myHeaders"
                     :accept="'.jpg, .png'"
                     >
