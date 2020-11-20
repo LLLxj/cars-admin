@@ -390,7 +390,8 @@
         }
       },
       handleRemove2(file, fileList) {
-        console.log(fileList)
+        const delUrl = file.response.data.url
+        this.dataForm.waresImages = this.dataForm.waresImages.filter(item =>  item.image !== delUrl)
       },
        // 上传图片 格式和大小校验
       beforeAvatarUpload(file) {

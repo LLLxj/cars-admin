@@ -105,7 +105,7 @@
               <span v-if="scope.row.sellStatus === 1">已出售</span>
               <span v-if="scope.row.onlineStatus === 0">上架</span>
               <span v-if="scope.row.onlineStatus === 1">下架</span> -->
-              <el-button v-if="scope.row.status === 1 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
+              <el-button v-if="(scope.row.status === 0 || scope.row.status === 1) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
               <el-button v-if="(scope.row.status === 1 || scope.row.status === 2) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
               <el-button v-if="scope.row.status === 1" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
               <el-button v-if="scope.row.status === 2 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 4)">通过</el-button>
