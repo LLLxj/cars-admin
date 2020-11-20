@@ -122,9 +122,9 @@
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="上传评估图片" prop="waresImages">
+      <el-form-item label="上传商品图片" prop="waresImages">
         <el-upload
-          :action="'/apiPro/deal/assess/upload/waresImage'"
+          :action="'/apiPro/deal/wares/upload/waresImage'"
           :data="{ phone: dataForm.dealUserPhone }"
           :headers="myHeaders"
           :on-success="imageUploadSuccess2"
