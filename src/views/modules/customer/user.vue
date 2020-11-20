@@ -25,7 +25,7 @@
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @row-click="handleRowlclick" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
-          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
+          <el-table-column type="index" align="center" header-align="center" width="80" label="NO"/>
           <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
           </el-table-column>
           <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column prop="dealStoreName" header-align="center" align="center" label="企业名称">
             <template slot-scope="scope">
-              <span>{{scope.row.storeName || '--'}}</span>
+              <span>{{scope.row.dealStoreName || '--'}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称">
