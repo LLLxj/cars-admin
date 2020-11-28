@@ -31,7 +31,8 @@ Vue.prototype.GLOBAL = {
   /** 单文件上传地址 */
   'UPLOAD_URL': '/apiPro/conf/banner/upload/image',
   'UPLOAD_BRAND_URL': '/apiPro/cou/wares/brand/upload/image',
-  'UPLOAD_BANNER_URL': '/apiPro/conf/banner/upload/image'
+  'UPLOAD_BANNER_URL': '/apiPro/conf/banner/upload/image',
+  'UPLOAD_ADVERTISE_URL': '/apiPro/conf/advertising/upload/image'
 }
 
 // 保存整站vuex本地储存初始状态

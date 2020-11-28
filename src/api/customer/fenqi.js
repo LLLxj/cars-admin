@@ -2,10 +2,8 @@
 import request from '@/utils/httpRequest'
 const baseUrl = '/apiPro'
 
-
-class Fenqi{
-
-  static list(params) {
+class Fenqi {
+  static list (params) {
     return request({
       url: `${baseUrl}/deal/wares/installment/list`,
       method: 'get',
@@ -13,16 +11,15 @@ class Fenqi{
     })
   }
 
-
-  static success(data) {
+  static success (data) {
     return request({
-      url: `${baseUrl}/deal/wares/installment/success` ,
+      url: `${baseUrl}/deal/wares/installment/success`,
       method: 'post',
       data
     })
   }
 
-  static waste(data) {
+  static waste (data) {
     return request({
       url: `${baseUrl}/deal/wares/installment/waste`,
       method: 'post',
@@ -30,15 +27,22 @@ class Fenqi{
     })
   }
 
-
-  static info(data) {
+  static processing (data) { // 处理中
     return request({
-      url: `${baseUrl}/deal/wares/installment/info/` + data,
-      method: 'get',
+      url: `${baseUrl}/deal/wares/installment/processing`,
+      method: 'post',
+      data
     })
   }
 
-  static save(data) {
+  static info (data) {
+    return request({
+      url: `${baseUrl}/deal/wares/installment/info/` + data,
+      method: 'get'
+    })
+  }
+
+  static save (data) {
     return request({
       url: `${baseUrl}/deal/wares/installment/save`,
       method: 'post',
@@ -46,7 +50,7 @@ class Fenqi{
     })
   }
 
-  static update(data) {
+  static update (data) {
     return request({
       url: `${baseUrl}/deal/wares/installment/update`,
       method: 'post',
@@ -54,13 +58,12 @@ class Fenqi{
     })
   }
 
-  static delete(data) {
+  static delete (data) {
     return request({
       url: `${baseUrl}/deal/wares/installment/delete/` + data,
-      method: 'get',
+      method: 'get'
     })
   }
-
 }
 
 export default Fenqi

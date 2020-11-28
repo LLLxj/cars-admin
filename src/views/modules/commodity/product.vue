@@ -7,7 +7,7 @@
         <!-- <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
           <el-form-item label="商品名称">
-            <el-input v-model="searchData.couWaresName" placeholder="商品名称" clearable></el-input>
+            <el-input v-model="searchData.dealWaresTitle" placeholder="商品名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="品牌名称" prop="couBrandId">
             <BrandSelect v-model="searchData.couBrandId" placeholder="请输入品牌名称"></BrandSelect>
@@ -23,7 +23,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button> 
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button v-if="isAuth('deal:wares:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetForm()" type="primary">重置</el-button> 
           </el-form-item>
         </el-form>
@@ -95,7 +95,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="submitTime" header-align="center" align="center" label="提交时间" min-width="160"/>
-          <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
+          <el-table-column fixed="right" header-align="center"  align="center" width="200" label="操作">
             <template slot-scope="scope">
               <!-- <span v-if="scope.row.status === 0">驳回</span>
               <span v-if="scope.row.status === 1">销售审核中</span>
@@ -105,13 +105,16 @@
               <span v-if="scope.row.sellStatus === 1">已出售</span>
               <span v-if="scope.row.onlineStatus === 0">上架</span>
               <span v-if="scope.row.onlineStatus === 1">下架</span> -->
-              <el-button v-if="(scope.row.status === 0 || scope.row.status === 1) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId)">编辑</el-button>
-              <el-button v-if="(scope.row.status === 1 || scope.row.status === 2) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
-              <el-button v-if="scope.row.status === 1" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
-              <el-button v-if="scope.row.status === 2 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 4)">通过</el-button>
-              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="onLineHandle(scope.row)">上架</el-button>
-              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="unLineHandle(scope.row)">下架</el-button>
-              <el-button v-if="scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="saleHandle(scope.row.dealWaresId)">已出售</el-button>
+              <el-button v-if="isAuth('deal:wares:update') && (scope.row.status === 0 || scope.row.status === 1) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId, false)">编辑</el-button>
+              <el-button v-if="scope.row.status !== 1 && scope.row.status !== 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId, true)">详情</el-button>
+              <el-button v-if="isAuth('deal:wares:reject') && (scope.row.status === 1 || scope.row.status === 2) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
+              <el-button v-if="isAuth('deal:wares:manager') && scope.row.status === 1" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
+              <el-button v-if="isAuth('deal:wares:waste') && scope.row.sellStatus === 0 && scope.row.onlineStatus === 1 && ((scope.row.status === 0 || scope.row.status === 1 || scope.row.status === 2 || scope.row.status === 3))" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 5)">作废</el-button>
+              <el-button v-if="isAuth('deal:wares:delete') && scope.row.status === 4 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 6)">删除</el-button>
+              <el-button v-if="isAuth('deal:wares:sussess') && scope.row.status === 2 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 4)">通过</el-button>
+              <el-button v-if="isAuth('deal:wares:onLine') && scope.row.status === 3 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="onLineHandle(scope.row)">上架</el-button>
+              <el-button v-if="isAuth('deal:wares:unLine') && scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="unLineHandle(scope.row)">下架</el-button>
+              <el-button v-if="isAuth('deal:wares:sale') && scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="saleHandle(scope.row.dealWaresId)">已出售</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -207,10 +210,10 @@
         this.getDataList()
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle (id, status) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, status)
         })
       },
       // 每页数

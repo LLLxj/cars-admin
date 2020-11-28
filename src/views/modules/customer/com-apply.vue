@@ -67,10 +67,10 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="200"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" v-if="scope.row.examine === 1" size="small" @click="failHandle(scope.row.dealStoreId)">驳回</el-button> 
-              <el-button type="text" v-if="scope.row.examine === 1" size="small" @click="successHandle(scope.row.dealStoreId)">通过</el-button>
-              <el-button type="text" v-if="scope.row.examine === 1 || scope.row.examine === 2" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
-              <el-button type="text" v-if="scope.row.examine === 1 || scope.row.examine === 0" size="small" @click="addOrUpdateHandle(scope.row.dealUserId, scope.row.dealStoreId, 2)">编辑</el-button>
+              <el-button type="text" v-if="scope.row.examine === 1 && isAuth('deal:user:store:fail')" size="small" @click="failHandle(scope.row.dealStoreId)">驳回</el-button> 
+              <el-button type="text" v-if="scope.row.examine === 1 && isAuth('deal:user:store:success')" size="small" @click="successHandle(scope.row.dealStoreId)">通过</el-button>
+              <el-button type="text" v-if="(scope.row.examine === 1 || scope.row.examine === 2) && isAuth('deal:user:store:waste')" size="small" @click="disHandle(scope.row.dealStoreId)">作废</el-button>
+              <el-button type="text" v-if="scope.row.examine === 1 || scope.row.examine === 0 && isAuth('deal:user:store:update')" size="small" @click="addOrUpdateHandle(scope.row.dealUserId, scope.row.dealStoreId, 2)">编辑</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>

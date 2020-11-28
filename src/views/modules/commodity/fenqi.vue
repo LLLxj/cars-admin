@@ -6,17 +6,20 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="dataForm">
-          <el-form-item label="客户名称">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入客户名称" clearable></el-input>
+          <el-form-item label="咨询人名称">
+            <el-input v-model="dataForm.contactName" placeholder="咨询人名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="商品标题">
             <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入商品标题" clearable></el-input>
           </el-form-item>
-          <el-form-item label="联系人名称">
-            <el-input v-model="dataForm.contactName" placeholder="请输入联系人名称" clearable></el-input>
+          <el-form-item label="所属客户名称">
+            <el-input v-model="dataForm.dealUserName" placeholder="请输入客户名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="联系人电话">
-            <el-input v-model="dataForm.contactPhone" placeholder="请输入联系电话" clearable></el-input>
+          <el-form-item label="所属客户手机">
+            <el-input v-model="dataForm.dealUserPhone" placeholder="请输入客户手机" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="所属企业名称">
+            <el-input v-model="dataForm.dealStoreName" placeholder="请输入企业名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="跟进状态">
             <followStatusSelect v-model="dataForm.followStatus"></followStatusSelect>
@@ -29,7 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button v-if="isAuth('deal:wares:installment:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
@@ -40,37 +43,35 @@
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
+          <el-table-column prop="contactName" header-align="center" align="center" label="咨询人名称" />
+          <el-table-column prop="sumbitTime" header-align="center" align="center" label="咨询时间" />
+          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="资讯商品标题" />
+          <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属企业名称" />
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="所属客户名称" />
+          <el-table-column prop="dealUserPhone" header-align="center" align="center" label="所属客户手机" />
+          <el-table-column prop="followStatus" header-align="center" align="center" label="跟进状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.followStatus === 0">作废</span>
+              <span v-if="scope.row.followStatus === 1">待处理</span>
+              <span v-if="scope.row.followStatus === 2">已处理</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="咨询商品标题">
-          </el-table-column>
-          <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话">
-          </el-table-column>
-          <el-table-column prop="contactName" header-align="center" align="center" label="联系人名称">
-          </el-table-column>
-           <el-table-column prop="sex" header-align="center" align="center" label="性别" width="80">
+          <!-- <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话">
+          </el-table-column> -->
+          <!-- <el-table-column prop="sex" header-align="center" align="center" label="性别" width="80">
             <template slot-scope="scope">
               <span v-if="scope.row.sex === 0">先生</span>
               <span v-if="scope.row.sex === 1">小姐</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="submitTime" header-align="center" align="center" label="提交咨询时间" width="150">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="sysUserName" header-align="center" align="center" label="跟进人">
             <template slot-scope="scope">
               <span>{{scope.row.sysUserName || '--'}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="followRemark" header-align="center" align="center" label="备注">
+          <el-table-column prop="followRemark" header-align="center" align="center" label="处理意见">
             <template slot-scope="scope">
               <span>{{scope.row.followRemark || '--'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="followStatus" header-align="center" align="center" label="单据状态">
-            <template slot-scope="scope">
-              <span v-if="scope.row.followStatus === 0">待处理</span>
-              <span v-if="scope.row.followStatus === 1">待处理</span>
-              <span v-if="scope.row.followStatus === 2">已处理</span>
             </template>
           </el-table-column>
           <el-table-column prop="followTime" header-align="center" align="center" label="跟进时间" width="150">
@@ -80,9 +81,10 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.followStatus === 1" @click="checkOrder(scope.row, 1)">作废</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.followStatus === 1" @click="checkOrder(scope.row, 2)">已跟进</el-button>
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.installmentId)">查看</el-button>
+              <el-button v-if="isAuth('deal:wares:installment:waste') && scope.row.followStatus === 1" type="text" size="small" @click="checkOrder(scope.row, 1)">作废</el-button> 
+              <el-button v-if="isAuth('deal:wares:installment:processing') && scope.row.followStatus === 1" type="text" size="small" @click="checkOrder(scope.row, 3)">处理中</el-button>
+              <el-button v-if="isAuth('deal:wares:installment:success') && scope.row.followStatus === 2" type="text" size="small" @click="checkOrder(scope.row, 2)">已处理</el-button>
+              <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.installmentId)">查看</el-button> -->
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>
@@ -99,6 +101,7 @@
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <CheckOrder v-if="checkOrderVisible" ref="checkOrder" @refreshDataList="getDataList"></CheckOrder>
+        <FollowList v-if="followListVisible" ref="followList" @refreshDataList="getDataList"/>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -112,6 +115,7 @@
   import followStatusSelect from '@/views/common-select/follow-status-select'
   import AddOrUpdate from './fenqi-add'
   import CheckOrder from './fenqi-check'
+  import FollowList from './fenqi-follow'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -123,12 +127,12 @@
     data () {
       return {
         dataForm: {
-          dealUserName: '',
-          contactPhone: '',
           contactName: '',
           dealWaresTitle: '',
-          contactName: '',
-          contactName: '',
+          dealUserName: '',
+          dealUserPhone: '',
+          dealStoreName: '',
+          followStatus: '',
           dateTime: '',
           startTime: '',
           endTime: ''
@@ -144,6 +148,7 @@
         addOrUpdateVisible: false,
         uploadPopVisible: false,
         checkOrderVisible: false,
+        followListVisible: false,
         searchData: {
         },
       }
@@ -156,7 +161,8 @@
       ElMain,
       uploadPop,
       followStatusSelect,
-      CheckOrder
+      CheckOrder,
+      FollowList
     },
     activated () {
       this.getDataList()
@@ -172,12 +178,17 @@
         this.dataForm.startTime = this.dataForm.dateTime[0]
         this.dataForm.endTime = this.dataForm.dateTime[1]
         let dataForm = {
-          dealUserName: this.dataForm.dealUserName,
-          contactPhone: this.dataForm.contactPhone,
           contactName: this.dataForm.contactName,
           dealWaresTitle: this.dataForm.dealWaresTitle,
-          contactName: this.dataForm.contactName,
-          contactName: this.dataForm.contactName,
+          dealUserName: this.dataForm.dealUserName,
+          dealUserPhone: this.dataForm.dealUserPhone,
+          dealStoreName: this.dataForm.dealStoreName,
+          followStatus: this.dataForm.followStatus,
+          // dealUserName: this.dataForm.dealUserName,
+          // contactPhone: this.dataForm.contactPhone,
+          // contactName: this.dataForm.contactName,
+          // dealWaresTitle: this.dataForm.dealWaresTitle,
+          // contactName: this.dataForm.contactName,
           startTime: this.dataForm.dateTime[0],
           endTime: this.dataForm.dateTime[1],
           page: this.dataForm.page,
@@ -248,12 +259,12 @@
       },
       resetFrom () {
         this.dataForm = {
-          dealUserName: '',
-          contactPhone: '',
           contactName: '',
           dealWaresTitle: '',
-          contactName: '',
-          contactName: '',
+          dealUserName: '',
+          dealUserPhone: '',
+          dealStoreName: '',
+          followStatus: '',
           dateTime: '',
           startTime: '',
           endTime: '',
@@ -290,10 +301,18 @@
         })
       },
       checkOrder (item, index) {
-        this.checkOrderVisible = true
-        this.$nextTick(() => {
-          this.$refs.checkOrder.init(item, index)
-        })
+        if (index === 3) {
+          this.followListVisible = true
+          this.$nextTick(() => {
+            this.$refs.followList.init(item, index)
+          })
+        } else {
+          this.checkOrderVisible = true
+          this.$nextTick(() => {
+            this.$refs.checkOrder.init(item, index)
+          })
+        }
+        
       },
       // 导出操作
       exportHandle () {

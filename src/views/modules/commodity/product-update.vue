@@ -3,7 +3,7 @@
     :title="!id ? '新增' : '编辑'"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="800px">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="160px">
+    <el-form :model="dataForm" :disabled="editStatus" :rules="dataRule" ref="dataForm" label-width="160px">
       <el-form-item label="所属客户" prop="dealStoreId">
         <CustomerSelect v-model="dataForm.dealStoreId" @get-val="getCustomerVal"></CustomerSelect>
       </el-form-item>
@@ -137,7 +137,7 @@
         </el-upload>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <span slot="footer" class="dialog-footer" v-if="!editStatus">
       <el-button @click="cancle()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
@@ -166,6 +166,7 @@
         callback()
       }
       return {
+        editStatus: false,
         visible: false,
         myHeaders: {
           token: getToken()
@@ -297,8 +298,9 @@
     watch: {
     },
     methods: {
-      init (id) {
+      init (id, status) {
         this.id = id
+        this.editStatus = status
         this.visible = true
         if(id) {
           this.dataForm.couWaresId = id

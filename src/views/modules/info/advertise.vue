@@ -5,65 +5,50 @@
       <!--右侧-->
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
-        <el-form :inline="true" :model="dataForm">
-          <el-form-item label="请输入用户名">
-            <el-input v-model="dataForm.dealUserName" placeholder="请输入用户名" clearable></el-input>
+        <el-form :inline="true" :model="searchData">
+          <el-form-item label="标题">
+            <el-input v-model="searchData.adName" placeholder="标题" clearable></el-input>
           </el-form-item>
-          <el-form-item label="请输入手机号">
-            <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+          <el-form-item label="状态">
+            <SelectStatus v-model="searchData.status" placeholder="用户名" clearable></SelectStatus>
           </el-form-item>
-          <el-form-item label="类型">
-            <TypeSelect v-model="dataForm.type"></TypeSelect>
-          </el-form-item>
+          <!-- <el-form-item label="展示类型">
+            <el-select v-model="searchData.displayType" placeholder="请选择">
+              <el-option v-for="item in displayTypeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item> -->
           <el-form-item>
-            <el-button @click="getDataList1()">查询</el-button>
-            <el-button v-if="isAuth('deal:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="baozhengjin()">保证金</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="refundHandle()">退费</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="financeHandle()">金融单</el-button>
-            <el-button @click="resetFrom()">重置</el-button>
+            <el-button @click="getDataListBtn()">查询</el-button>
+            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button @click="resetFrom()">重置</el-button> 
           </el-form-item>
         </el-form>
-        <el-table :data="dataList" border stripe v-loading="dataListLoading" @row-click="handleRowlclick" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
-          <el-table-column type="index" align="center" header-align="center" width="80" label="NO"/>
-          <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称">
+        <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
+          <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
+          <el-table-column prop="adName" header-align="center" align="center" label="广告图标题">
           </el-table-column>
-          <el-table-column prop="depositPrice" header-align="center" align="center" label="保证金总金额">
-          </el-table-column>
-          <el-table-column prop="creditGrade" header-align="center" align="center" label="信用等级">
-          </el-table-column>
-          <el-table-column prop="integral" header-align="center" align="center" label="积分">
-          </el-table-column>
-          <el-table-column prop="dealStoreName" header-align="center" align="center" label="企业名称">
+          <el-table-column header-align="center" align="center" label="广告图" min-width="200px">
             <template slot-scope="scope">
-              <span>{{scope.row.dealStoreName || '--'}}</span>
+              <div class="img-box" v-if="scope.row.image">
+                <img :src="scope.row.image" alt="" style="max-height: 50px;max-width: 50px">
+              </div>
+              <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column prop="sysUserName" header-align="center" align="center" label="所属用户名称">
-            <template slot-scope="scope">
-              <span>{{scope.row.sysUserName || '--'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="phone" header-align="center" align="center" label="手机号">
-          </el-table-column>
-          <el-table-column prop="type" header-align="center" align="center" label="客户类型">
-            <template slot-scope="scope">
-              <span v-if="scope.row.type === 0">个人用户</span>
-              <span v-else>企业用户</span>
-            </template>
-          </el-table-column>
+          <!-- <el-table-column prop="sort" header-align="center" align="center" label="排序">
+          </el-table-column> -->
           <el-table-column prop="status" header-align="center" align="center" label="状态">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 0" size="small" type="info">禁用</el-tag>
-              <el-tag v-else size="small">正常</el-tag>
+              <el-tag type="info" v-if="scope.row.status === 0">禁用</el-tag>
+              <el-tag v-else>正常</el-tag>
             </template>
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.status === 1 && isAuth('deal:user:store:save')" type="text" size="small" @click="comAuth(scope.row.dealUserId, null, 1)">企业认证</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 1 && isAuth('deal:user:disable')" @click="disHandle(scope.row.dealUserId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0 && isAuth('deal:user:normal')" @click="norHandle(scope.row.dealUserId)">启用</el-button>
-              <el-button type="text" size="small" v-if="isAuth('deal:user:update')" @click="addOrUpdateHandle(scope.row.dealUserId)">编辑</el-button>
+              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row)">启用</el-button>
+              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.adId)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -76,14 +61,8 @@
           :total="totalPage"
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
-        <!-- 操作记录右边展示 -->
-        <regRecordRight v-show="selectItem.sysUserName" ref="regRecordRight"></regRecordRight>
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-        <comAuth v-if="comAuthVisible" ref="comAuth" @refreshDataList="getDataList"></comAuth>
-        <ensureMoney v-if="ensureMoneyVisible" ref="ensureMoney" @refreshDataList="getDataList"></ensureMoney>
-        <Refund v-if="refundVisible" ref="refund" @refreshDataList="getDataList"></Refund>
-        <UserFinance v-if="userFinanceVisible" ref="UserFinance" @refreshDataList="getDataList"></UserFinance>
         <!-- 弹窗, 上传文件 -->
         <!-- <uploadPop v-if="uploadPopVisible" ref="uploadPop" @refreshDataList="getDataList"></uploadPop> -->
       </el-main>
@@ -91,15 +70,10 @@
   </div>
 </template>
 <script>
-
-  import Customer from '@/api/customer/customer'
+  import SelectStatus from '@/views/common-select/select-status'
+  import Advertise from '@/api/advertise'
   import TypeSelect from '@/views/common-select/customer-type-select'
-  import AddOrUpdate from './user-add'
-  import comAuth from './user-com-auth'
-  import UserFinance from './user-finance'
-  import regRecordRight from './user-record'
-  import ensureMoney from './user-ensure-money'
-  import Refund from './user-refund'
+  import AddOrUpdate from './advertise-update'
   import uploadPop from '@/views/common-pop/upload-user-pop'
   import ElContainer from 'element-ui/packages/container/index'
   import ElAside from 'element-ui/packages/aside/index'
@@ -110,14 +84,16 @@
   export default {
     data () {
       return {
-        dataForm: {
-          userName: '',
-          phone: '',
-          type: ''
+        searchData: {
+          adName: '',
+          status: '',
+          page: 1,
+          limit: 10
         },
-        ensureMoneyVisible: false,
-        selectItem: {},
-        comAuthVisible: false,
+        displayTypeList: [
+          { label: '零售', value: 0 },
+          { label: '企业', value: 1 }
+        ],
         dataList: [],
         isShow: true,
         pageIndex: 1,
@@ -128,8 +104,6 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         uploadPopVisible: false,
-        refundVisible: false,
-        userFinanceVisible: false,
         searchData: {
         },
       }
@@ -141,79 +115,43 @@
       ElAside,
       ElMain,
       uploadPop,
-      comAuth,
-      ensureMoney,
-      regRecordRight,
-      Refund,
-      UserFinance
+      SelectStatus
     },
     activated () {
       this.getDataList()
-      this.selectItem = {}
     },
     methods: {
       // 获取数据列表
-      getDataList1() {
+      getDataListBtn() {
+        this.searchData.page = 1
+        this.searchData.limit = 10
         this.pageIndex = 1
-        this.dataForm.page = 1
+        this.pageSize = 10
         this.getDataList()
       },
-      // 获取数据列表
       getDataList (params) {
         this.dataListLoading = true
-        params = this.dataForm || null
-        Customer.list(params).then(res => {
+        params = this.searchData || null
+        Advertise.list(params).then(res => {
+          console.log(res)
           if (res.data && res.data.code === 0) {
+            console.log(res.data.data.list)
             this.dataList = res.data.data.list
             this.totalPage = res.data.data.totalCount
             if(this.dataList !== null){
               this.isShow = false
             }
           } else {
+            this.$message.error(res.data.msg)
             this.dataList = []
             this.totalPage = 0
           }
           this.dataListLoading = false
         })
       },
-      // 单击事件
-      handleRowlclick (val) {
-        this.selectItem = val
-        this.$nextTick(() => {
-          this.$refs.regRecordRight.init(val.dealUserId)
-        })
-      },
-      schoolTreeChangeEvent (deptId) {
-        this.dataForm.deptId = deptId
-        this.getDataList()
-      },
-      comAuth(id) {
-        this.comAuthVisible = true
-        this.$nextTick(() => {
-          this.$refs.comAuth.init(id)
-        })
-      },
-      baozhengjin() {
-        this.ensureMoneyVisible = true
-        this.$nextTick(() => {
-          this.$refs.ensureMoney.init(this.selectItem)
-        })
-      },
-      refundHandle() {
-        this.refundVisible = true
-        this.$nextTick(() => {
-          this.$refs.refund.init(this.selectItem)
-        })
-      },
-      financeHandle() {
-        this.userFinanceVisible = true
-        this.$nextTick(() => {
-          this.$refs.UserFinance.init(this.selectItem, '')
-        })
-      },
       // 禁用
       disHandle (data) {
-        Customer.disable(data).then(res => {
+        Advertise.disable(data.adId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -239,7 +177,7 @@
       },
       // 启用
       norHandle (data) {
-        Customer.awake(data).then(res => {
+        Advertise.normal(data.adId).then(res => {
           if(res.data && res.data.code === 0){
             this.$message({
               message: '操作成功',
@@ -255,23 +193,22 @@
         })
       },
       resetFrom () {
-        this.dataForm = {
-          userName: '',
-          phone: '',
-          type: ''
+        this.searchData = {
+          adName: '',
+          status: '',
+          page: 1,
+          limit: 10
         }
         this.getDataList()
       },
       // 每页数
       sizeChangeHandle (val) {
-        this.pageSize = val
-        this.dataForm.limit = 1
+        this.searchData.limit = val
         this.getDataList()
       },
       // 当前页
       currentChangeHandle (val) {
-        this.pageIndex = val
-        this.dataForm.page = val
+        this.searchData.page = val
         this.getDataList()
       },
       // 多选
@@ -355,3 +292,9 @@
     }
   }
 </script>
+
+<style>
+  .imgBox{
+    display: flex;
+  }
+</style>

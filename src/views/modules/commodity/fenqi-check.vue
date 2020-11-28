@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="审核"
+    title="跟进意见"
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
@@ -61,7 +61,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if (this.index === 1) {
+            if (this.index === 1) { // 待处理
               Fenqi.waste(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
@@ -81,7 +81,7 @@
                 console.log(err)
                 this.$message.error(err)
               })
-            } else if (this.index === 2) {
+            } else if (this.index === 2) { // 已处理
               Fenqi.success(this.dataForm).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$message({
@@ -102,7 +102,27 @@
                 this.$message.error(err)
               })
             }
-					} 
+					} else if (this.index === 3) { // 处理中
+            Fenqi.processing(this.dataForm).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.resetForm()
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                }
+              }).catch(err => {
+                console.log(err)
+                this.$message.error(err)
+              })
+          }
         })
       }
     }
