@@ -109,8 +109,8 @@
               <el-button v-if="scope.row.status !== 1 && scope.row.status !== 0" type="text" size="small" @click="addOrUpdateHandle(scope.row.dealWaresId, true)">详情</el-button>
               <el-button v-if="isAuth('deal:wares:reject') && (scope.row.status === 1 || scope.row.status === 2) && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 1)">驳回</el-button> 
               <el-button v-if="isAuth('deal:wares:manager') && scope.row.status === 1" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 2)">经理审核</el-button>
-              <el-button v-if="isAuth('deal:wares:waste') && scope.row.sellStatus === 0 && scope.row.onlineStatus === 1 && ((scope.row.status === 0 || scope.row.status === 1 || scope.row.status === 2 || scope.row.status === 3))" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 5)">作废</el-button>
-              <el-button v-if="isAuth('deal:wares:delete') && scope.row.status === 4 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 6)">删除</el-button>
+              <el-button v-if="isAuth('deal:wares:waste') && scope.row.sellStatus === 0 && scope.row.onlineStatus === 1 && ((scope.row.status === 0 || scope.row.status === 1 || scope.row.status === 2 || scope.row.status === 3))" type="text" size="small" @click="wasteHandle(scope.row.dealWaresId)">作废</el-button>
+              <el-button v-if="isAuth('deal:wares:delete') && scope.row.status === 4 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="deleteHandle(scope.row)">删除</el-button>
               <el-button v-if="isAuth('deal:wares:sussess') && scope.row.status === 2 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="manageHandle(scope.row.dealWaresId, 4)">通过</el-button>
               <el-button v-if="isAuth('deal:wares:onLine') && scope.row.status === 3 && scope.row.onlineStatus === 1 && scope.row.sellStatus === 0" type="text" size="small" @click="onLineHandle(scope.row)">上架</el-button>
               <el-button v-if="isAuth('deal:wares:unLine') && scope.row.status === 3 && scope.row.onlineStatus === 0 && scope.row.sellStatus === 0" type="text" size="small" @click="unLineHandle(scope.row)">下架</el-button>
@@ -234,6 +234,30 @@
           this.$refs.checkOrder.init(id, index)
         })
       },
+      wasteHandle (item) {
+        Products.waste(item).then(res => {
+          if(res.data && res.data.code === 0){
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          }else{
+            this.$message.error(res.data.msg)
+          }
+        }).catch(err => {
+          this.listLoading = false
+          console.log(err)
+          this.$message({
+            message: err || '读取接口失败！',
+            type: 'error',
+            duration: 1500
+          })
+        })
+      },
       onLineHandle(item) {
         Products.onLine({
           dealWaresId: item.dealWaresId,
@@ -258,6 +282,37 @@
             message: err || '读取接口失败！',
             type: 'error',
             duration: 1500
+          })
+        })
+      },
+      deleteHandle (item) {
+        console.log(item)
+        this.$confirm('确定删除？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          Products.delete(item).then(res => {
+            if(res.data && res.data.code === 0){
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            }else{
+              this.$message.error(res.data.msg)
+            }
+          }).catch(err => {
+            this.listLoading = false
+            console.log(err)
+            this.$message({
+              message: err || '读取接口失败！',
+              type: 'error',
+              duration: 1500
+            })
           })
         })
       },

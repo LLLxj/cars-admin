@@ -95,17 +95,15 @@ class Products {
 
   static waste (data) {
     return request({
-      url: `${baseUrl}/deal/wares/waste`,
-      method: 'post',
-      data
+      url: `${baseUrl}/deal/wares/waste/` + data,
+      method: 'get'
     })
   }
 
   static delete (data) {
     return request({
-      url: `${baseUrl}/deal/wares/delete`,
-      method: 'post',
-      data
+      url: `${baseUrl}/deal/wares/delete/` + data,
+      method: 'get'
     })
   }
 
