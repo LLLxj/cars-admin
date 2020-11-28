@@ -13,9 +13,8 @@ class Fenqi {
 
   static success (data) {
     return request({
-      url: `${baseUrl}/deal/wares/installment/success`,
-      method: 'post',
-      data
+      url: `${baseUrl}/deal/wares/installment/success/` + data,
+      method: 'get'
     })
   }
 

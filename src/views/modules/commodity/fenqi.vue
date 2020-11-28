@@ -83,7 +83,7 @@
             <template slot-scope="scope">
               <el-button v-if="isAuth('deal:wares:installment:waste') && scope.row.followStatus === 1" type="text" size="small" @click="checkOrder(scope.row, 1)">作废</el-button> 
               <el-button v-if="isAuth('deal:wares:installment:processing') && scope.row.followStatus === 1" type="text" size="small" @click="checkOrder(scope.row, 3)">处理中</el-button>
-              <el-button v-if="isAuth('deal:wares:installment:success') && scope.row.followStatus === 2" type="text" size="small" @click="checkOrder(scope.row, 2)">已处理</el-button>
+              <el-button v-if="isAuth('deal:wares:installment:success') && scope.row.followStatus === 2" type="text" size="small" @click="successHandle(scope.row, 2)">已处理</el-button>
               <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.installmentId)">查看</el-button> -->
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
@@ -256,6 +256,30 @@
             this.$message.error(res.data.msg)
           }
         })
+      },
+      successHandle (item) {
+        Fenqi.success(item.installmentId).then(res => {
+            if(res.data && res.data.code === 0){
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            }else{
+              this.$message.error(res.data.msg)
+            }
+          }).catch(err => {
+            this.listLoading = false
+            console.log(err)
+            this.$message({
+              message: err || '读取接口失败！',
+              type: 'error',
+              duration: 1500
+            })
+          })
       },
       resetFrom () {
         this.dataForm = {

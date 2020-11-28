@@ -292,7 +292,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          Products.delete(item).then(res => {
+          Products.delete(item.dealWaresId).then(res => {
             if(res.data && res.data.code === 0){
               this.$message({
                 message: '操作成功',
