@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible" @close="cancle" width="500px">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="120px">
-      <el-form-item label="评估价格" prop="dealAssessPrice">
+      <el-form-item label="评估价格(万元)" prop="dealAssessPrice">
         <el-input-number v-model="dataForm.dealAssessPrice" :min="0" label="" placeholder="请输入评估价格"></el-input-number>
       </el-form-item>
     </el-form>

@@ -46,8 +46,8 @@
           <el-table-column prop="couSeriesName" header-align="center" align="center" label="系列名称" min-width="160"/>
           <!-- <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" min-width="120"/> -->
           <el-table-column prop="couModelName" header-align="center" align="center" label="车辆类型名称" min-width="120"/>
-          <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价" />
-          <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价" />
+          <el-table-column prop="tradePrice" header-align="center" align="center" label="批发价(万元)" min-width="120"/>
+          <el-table-column prop="retailPrice" header-align="center" align="center" label="零售价(万元)" min-width="120"/>
           <el-table-column prop="registerTime" header-align="center" align="center" label="上牌时间" min-width="160"/>
           <el-table-column prop="distance" header-align="center" align="center" label="行驶里程（公里）" />
           <!-- <el-table-column prop="licenseId" header-align="center" align="center" label="牌照ID" min-width="120"/> -->
@@ -55,7 +55,7 @@
           <el-table-column prop="addr" header-align="center" align="center" label="详细地址" min-width="120"/>
           <el-table-column prop="waresRemark" header-align="center" align="center" label="商品描述" min-width="120"/>
           <el-table-column prop="transferNum" header-align="center" align="center" label="过户次数" />
-          <el-table-column prop="isTransfer" header-align="center" align="center" label="是否含过户费" min-width="140">
+          <!-- <el-table-column prop="isTransfer" header-align="center" align="center" label="是否含过户费" min-width="140">
             <template slot-scope="scope">
               <span v-if="scope.row.isTransfer === 0">无</span>
               <span v-else>有</span>
@@ -72,7 +72,7 @@
               <span v-if="scope.row.isTransfer === 0">无</span>
               <span v-else>有</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="status" header-align="center" align="center" label="审核状态" min-width="120">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">驳回</span>

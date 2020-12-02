@@ -41,10 +41,10 @@
       <el-form-item label="选择车辆类型" prop="couModelId">
         <ModelSelect v-model="dataForm.couModelId"></ModelSelect>
       </el-form-item>
-      <el-form-item label="厂商批发价" prop="tradePrice">
+      <el-form-item label="厂商批发价(万元)" prop="tradePrice">
         <el-input-number v-model="dataForm.tradePrice"></el-input-number>
       </el-form-item>
-      <el-form-item label="厂商零售价" prop="retailPrice">
+      <el-form-item label="厂商零售价(万元)" prop="retailPrice">
         <el-input-number v-model="dataForm.retailPrice"></el-input-number>
       </el-form-item>
        <el-form-item label="上牌时间" prop="registerTime">
@@ -76,7 +76,7 @@
       <el-form-item label="过户次数" prop="transferNum">
         <el-input-number v-model="dataForm.transferNum"></el-input-number>
       </el-form-item>
-      <el-form-item label="是否有过户费" prop="isTransfer">
+      <!-- <el-form-item label="是否有过户费" prop="isTransfer">
         <el-radio-group v-model="dataForm.isTransfer">
           <el-radio :label="0">无</el-radio>
           <el-radio :label="1">是</el-radio>
@@ -93,7 +93,7 @@
           <el-radio :label="0">无</el-radio>
           <el-radio :label="1">是</el-radio>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="上传封面图（1张）" prop="coverImage">
         <el-upload
           :action="'/apiPro/deal/wares/upload/waresImage'"
@@ -198,9 +198,9 @@
           addr: '',
           waresRemark: '',
           transferNum: '',
-          isTransfer: 0,
-          isMortgage: 0,
-          isMaintain: 0,
+          // isTransfer: 0,
+          // isMortgage: 0,
+          // isMaintain: 0,
           dealWaresName: '',
           coverImage: {
             image: ''
@@ -270,15 +270,15 @@
           transferNum: [
             { required: true, message: '', trigger: 'blur' },
           ],
-          isTransfer: [
-            { required: true, message: '', trigger: 'blur' },
-          ],
-          isMortgage: [
-            { required: true, message: '', trigger: 'blur' },
-          ],
-          isMaintain: [
-            { required: true, message: '', trigger: 'blur' },
-          ],
+          // isTransfer: [
+          //   { required: true, message: '', trigger: 'blur' },
+          // ],
+          // isMortgage: [
+          //   { required: true, message: '', trigger: 'blur' },
+          // ],
+          // isMaintain: [
+          //   { required: true, message: '', trigger: 'blur' },
+          // ],
           coverImage: [
             { required: true, message: '请上传封面图', trigger: 'blur' },
           ],

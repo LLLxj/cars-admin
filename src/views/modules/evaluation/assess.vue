@@ -52,10 +52,10 @@
           <!-- <el-table-column prop="couWaresName" header-align="center" align="center" label="商品名称" fixed="left" width="120"/> -->
           <el-table-column prop="assessWaresTitle" header-align="center" align="center" label="评估商品名称" fixed="left" width="120"/>
           <!-- <el-table-column prop="dealUserName" header-align="center" align="center" label="客户名称" /> -->
-          <el-table-column prop="dealAssessPrice" header-align="center" align="center" label="评估价格" width="100"/>
+          <el-table-column prop="dealAssessPrice" header-align="center" align="center" label="评估价格(万元)" width="140"/>
           <el-table-column header-align="center" align="center" label="商品照片" min-width="160">
             <template slot-scope="scope">
-							<div v-if="scope.row.waresImages && scope.row.waresImages.length !==0 ">
+							<div style="display: flex;" v-if="scope.row.waresImages && scope.row.waresImages.length !==0 ">
 								<div v-for="(item, index) in scope.row.waresImages" :key="index">
 									<img :src="item.image" style="width:40px" alt="">
 								</div>
