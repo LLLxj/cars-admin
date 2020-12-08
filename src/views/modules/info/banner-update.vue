@@ -126,6 +126,7 @@
     methods: {
       init (id) {
         this.bannerId = id
+        this.id = id
         this.visible = true
         if(id) {
           this.setData(id)
