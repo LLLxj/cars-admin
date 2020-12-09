@@ -130,6 +130,7 @@
           :on-success="imageUploadSuccess2"
           :accept="'.jpg, .png'"
           list-type="picture-card"
+          multiple
           :file-list="fileList3"
           :disabled="!dataForm.dealUserPhone"
           :on-remove="handleRemove2">
