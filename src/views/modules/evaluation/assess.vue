@@ -38,7 +38,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button>
-            <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+            <el-button v-if="isAuth('deal:assess:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
             <!-- <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
             <el-button type="info" :disabled="isShow" :loading="downloadLoading" @click="exportHandle()">导出</el-button>
@@ -99,9 +99,9 @@
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealAssessId)">评估</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1 && scope.row.sellStatus === 0" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
+              <el-button type="text" size="small" v-if="isAuth('deal:assess:sell:save') && scope.row.status === 1 && scope.row.sellStatus === 0" @click="sellHandle(scope.row.dealAssessId, 1)">出售</el-button>
               <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.dealAssessId)">编辑</el-button> -->
-              <el-button type="text" size="small" v-if="scope.row.status === 0 && scope.row.sellStatus === 0" @click="wasteHandle(scope.row.dealAssessId)">作废</el-button>
+              <el-button type="text" size="small" v-if="isAuth('deal:assess:waste') && scope.row.status === 0 && scope.row.sellStatus === 0" @click="wasteHandle(scope.row.dealAssessId)">作废</el-button>
             </template>
           </el-table-column>
         </el-table>

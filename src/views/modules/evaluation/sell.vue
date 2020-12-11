@@ -68,10 +68,10 @@
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.dealAssessId)">禁用</el-button> 
               <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.dealAssessId)">启用</el-button> -->
               <!-- <el-button type="text" size="small" v-if="scope.row.status === 0" @click="assesHandle(scope.row.dealSellId)">评估</el-button> -->
-              <el-button type="text" v-if="scope.row.status === 1" size="small" @click="addOrUpdateHandle(scope.row.dealSellId, 2)">编辑</el-button>
-              <el-button type="text" v-if="scope.row.status === 1" size="small" @click="ingHanlde(scope.row.dealSellId, 2)">开始跟进</el-button>
-              <el-button type="text" v-if="scope.row.status === 1 || scope.row.status === 2" size="small" @click="cancleHandle(scope.row.dealSellId)">撤回</el-button>
-              <el-button type="text" v-if="scope.row.status === 2" size="small" @click="successHandle(scope.row)">已跟进</el-button>
+              <el-button type="text" v-if="isAuth('deal:assess:sell:update') && scope.row.status === 1" size="small" @click="addOrUpdateHandle(scope.row.dealSellId, 2)">编辑</el-button>
+              <el-button type="text" v-if="isAuth('deal:assess:sell:processing') && scope.row.status === 1" size="small" @click="ingHanlde(scope.row.dealSellId, 2)">开始跟进</el-button>
+              <el-button type="text" v-if="isAuth('deal:assess:sell:cancel') && scope.row.status === 1 || scope.row.status === 2" size="small" @click="cancleHandle(scope.row.dealSellId)">撤回</el-button>
+              <el-button type="text" v-if="isAuth('deal:assess:sell:success') && scope.row.status === 2" size="small" @click="successHandle(scope.row)">已跟进</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>
           </el-table-column>

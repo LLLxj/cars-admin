@@ -72,9 +72,9 @@
 					</el-table-column>
           <el-table-column fixed="right" header-align="center" align="center" width="230" label="操作">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.status === 1" type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
-              <el-button v-if="scope.row.status === 1 || scope.row.status === 2" type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
-              <el-button v-if="scope.row.status === 2" type="text" size="small" @click="success(scope.row)">已完成</el-button>
+              <el-button v-if="isAuth('deal:user:store:finance:checkpending') && scope.row.status === 1" type="text" size="small" @click="ingHandle(scope.row)">处理中</el-button>
+              <el-button v-if="isAuth('deal:user:store:finance:waste') &&  scope.row.status === 1 || scope.row.status === 2" type="text" size="small" @click="waste(scope.row.financeId)">作废</el-button>
+              <el-button v-if="isAuth('deal:user:store:finance:success') &&  scope.row.status === 2" type="text" size="small" @click="success(scope.row)">已完成</el-button>
 							<el-button type="text" size="small" @click="getRecord(scope.row.financeId)">审核记录</el-button>
               <!-- <el-button type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button> -->
             </template>

@@ -72,9 +72,9 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center" width="150" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couWaresId)">编辑</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couWaresId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.couWaresId)">启用</el-button>
+              <el-button v-if="isAuth('cou:wares:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.couWaresId)">编辑</el-button>
+              <el-button type="text" size="small" v-if="isAuth('cou:wares:disable') && scope.row.status === 1" @click="disHandle(scope.row.couWaresId)">禁用</el-button> 
+              <el-button type="text" size="small" v-if="isAuth('cou:wares:normal') && scope.row.status === 0" @click="norHandle(scope.row.couWaresId)">启用</el-button>
             </template>
           </el-table-column>
         </el-table>

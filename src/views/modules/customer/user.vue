@@ -18,9 +18,9 @@
           <el-form-item>
             <el-button @click="getDataList1()">查询</el-button>
             <el-button v-if="isAuth('deal:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="baozhengjin()">保证金</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="refundHandle()">退费</el-button>
-            <el-button type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="financeHandle()">金融单</el-button>
+            <el-button v-if="isAuth('deal:user:store:deposit:save')" type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="baozhengjin()">保证金</el-button>
+            <el-button v-if="isAuth('deal:user:store:refund:save')" type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="refundHandle()">退费</el-button>
+            <el-button v-if="isAuth('deal:user:store:finance:save')" type="primary" :disabled="!this.selectItem.dealUserId || this.selectItem.type === 0 || this.selectItem.status === 0" @click="financeHandle()">金融单</el-button>
             <el-button @click="resetFrom()">重置</el-button>
           </el-form-item>
         </el-form>

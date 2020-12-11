@@ -38,9 +38,9 @@
           </el-table-column>
           <el-table-column fixed="right" header-align="center"  align="center"  width="150"  label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.couBrandId)">编辑</el-button>
-              <el-button type="text" size="small" v-if="scope.row.status === 1" @click="disHandle(scope.row.couBrandId)">禁用</el-button> 
-              <el-button type="text" size="small" v-if="scope.row.status === 0" @click="norHandle(scope.row.couBrandId)">启用</el-button>
+              <el-button v-if="isAuth('cou:wares:brand:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.couBrandId)">编辑</el-button>
+              <el-button type="text" size="small" v-if="isAuth('cou:wares:brand:disable') && scope.row.status === 1" @click="disHandle(scope.row.couBrandId)">禁用</el-button> 
+              <el-button  type="text" size="small" v-if="isAuth('cou:wares:brand:normal') && scope.row.status === 0" @click="norHandle(scope.row.couBrandId)">启用</el-button>
             </template>
           </el-table-column>
         </el-table>

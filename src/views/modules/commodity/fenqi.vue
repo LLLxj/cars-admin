@@ -44,7 +44,7 @@
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
           <el-table-column type="index" align="center" header-align="center" width="80" label="NO" fixed/>
           <el-table-column prop="contactName" header-align="center" align="center" label="咨询人名称" />
-          <el-table-column prop="sumbitTime" header-align="center" align="center" label="咨询时间" />
+          <el-table-column prop="submitTime" header-align="center" align="center" label="咨询时间" />
           <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="资讯商品标题" />
           <el-table-column prop="dealStoreName" header-align="center" align="center" label="所属企业名称" />
           <el-table-column prop="dealUserName" header-align="center" align="center" label="所属客户名称" />
