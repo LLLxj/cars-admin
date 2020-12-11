@@ -4,8 +4,11 @@
    <el-dialog title="商品列表" :close-on-click-modal="false" :visible.sync="visible" append-to-body>
       <el-main>
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-          <el-form-item>
+          <el-form-item label="标题">
             <el-input v-model="dataForm.dealWaresTitle" placeholder="请输入商品标题" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="客户手机号">
+            <el-input v-model="dataForm.dealUserPhone" placeholder="请输入手机号码" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="getDataList()">查询</el-button>
@@ -17,11 +20,7 @@
         <el-table :data="dataList" border v-loading="dataListLoading" @row-dblclick="handleRowDblclick" @row-click="handleRowlclick" style="width: 100%;">
           <el-table-column type="index" label="NO" align="center" header-align="center" width="80"/>
           <el-table-column prop="dealWaresTitle" header-align="center" align="center" label="商品标题"/>
-          <!-- <el-table-column prop="image" header-align="center" align="center" label="商品图片">
-            <template slot-scope="scope">
-              <img :src="scope.row.image" alt="" style="width:50px">
-            </template>
-          </el-table-column> -->
+          <el-table-column prop="dealUserName" header-align="center" align="center" label="所属客户名称"/>
         </el-table>
         <el-pagination @size-change="sizeChangeHandle" background @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize"
           :total="totalPage"
@@ -37,6 +36,7 @@
 <script>
 
   import Product from '@/api/customer/product'
+  import CustomerSelect from '@/views/common-select/customer/store-com-customer'
 
   export default {
     data () {
@@ -45,7 +45,8 @@
           dealWaresTitle: '',
           status: 3,
           onlineStatus: 0,
-          sellStatus: 0
+          sellStatus: 0,
+          dealUserPhone: ""
         },
         visible:false,
         dataList: [],
@@ -67,6 +68,9 @@
         addOrUpdateVisible: false,
         dialogFormVisible:false
       }
+    },
+    components: {
+      CustomerSelect
     },
     methods: {
     init () {
@@ -103,8 +107,10 @@
       resetForm () {
         this.dataForm = {
           brandName: '',
-          brandId: ''
+          brandId: '',
+          dealUserPhone: ''
         }
+        this.getDataList()
       },
        // 双击事件
       handleRowDblclick (val, row) {
