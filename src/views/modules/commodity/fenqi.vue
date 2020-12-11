@@ -53,7 +53,8 @@
             <template slot-scope="scope">
               <span v-if="scope.row.followStatus === 0">作废</span>
               <span v-if="scope.row.followStatus === 1">待处理</span>
-              <span v-if="scope.row.followStatus === 2">已处理</span>
+              <span v-if="scope.row.followStatus === 2">处理中</span>
+              <span v-if="scope.row.followStatus === 3">已处理</span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="contactPhone" header-align="center" align="center" label="联系电话">
