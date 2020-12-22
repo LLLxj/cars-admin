@@ -385,15 +385,21 @@
       },
       imageUploadSuccess2(res, file) {
         if (res.code === 0) {
-          let obj = { image: '' }
+          let obj = { image: '', url: '' }
           obj.image = res.data.url
+          obj.url = res.data.url
           this.dataForm.waresImages.push(obj)
         } else {
           this.$message(res.msg)
         }
       },
       handleRemove2(file, fileList) {
-        const delUrl = file.response.data.url
+        let delUrl
+        if (this.id) {
+          delUrl = file.url
+        } else {
+          delUrl = file.response.data.url
+        }
         this.dataForm.waresImages = this.dataForm.waresImages.filter(item =>  item.image !== delUrl)
       },
        // 上传图片 格式和大小校验
