@@ -73,8 +73,8 @@
       <el-form-item label="非银行机构借款申请次数" prop="loanUnBankNum">
         <el-input v-model="dataForm.loanUnBankNum" placeholder="请输入非银行机构借款申请次数" clearable></el-input>
       </el-form-item>
-      <el-form-item label="产品" prop="recordIdList">
-        <el-select
+      <el-form-item label="可承担风险记录" prop="recordIdList">
+        <!-- <el-select
           v-model="dataForm.recordIdList"
           filterable
           :multiple="true"
@@ -87,7 +87,10 @@
             :label="item.recordName"
             :value="item.recordId"
           />
-        </el-select>
+        </el-select> -->
+        <el-checkbox-group v-model="dataForm.recordIdList">
+          <el-checkbox v-for="item in recordList" :key="item.recordId" :label="item.recordId">{{ item.recordName }}</el-checkbox>
+        </el-checkbox-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
