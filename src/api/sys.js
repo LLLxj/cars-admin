@@ -196,6 +196,13 @@ class System{
     })
   }
 
+  static allBusinessLIst () {
+    return request({
+      url: `${baseUrl}/sys/user/getSaleUser`,
+      method: 'get'
+    })
+  }
+
 }
 
 export default System
