@@ -17,7 +17,7 @@
         <el-input v-model="dataForm.creditRating" placeholder="请输入信用等级" clearable></el-input>
       </el-form-item>
       <el-form-item label="年龄要求" prop="age">
-        <el-input v-model="dataForm.age" placeholder="请输入年龄要求" clearable></el-input>
+        <el-input-number v-model="dataForm.age" class="box-input" :precision="0" :step="1" controls-position="right" />
       </el-form-item>
       <el-form-item label="执行中能否操作" prop="isExecute">
         <el-radio-group v-model="dataForm.isExecute">
@@ -42,7 +42,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="车龄要求" prop="carAge">
-        <el-input v-model="dataForm.carAge" placeholder="请输入车龄要求" clearable></el-input>
+        <el-input-number v-model="dataForm.carAge" class="box-input" :precision="0" :step="1" controls-position="right" />
+        <!-- <el-input v-model="dataForm.carAge" placeholder="请输入车龄要求" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="已过科目几" prop="subject">
         <el-select v-model="dataForm.subject" class="box-input" placeholder="请选择已过科目">
@@ -50,7 +51,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="免担保年龄要求" prop="ageNoGuarantee">
-        <el-input v-model="dataForm.ageNoGuarantee" placeholder="请输入免担保年龄要求" clearable></el-input>
+        <el-input-number v-model="dataForm.ageNoGuarantee" class="box-input" :precision="0" :step="1" controls-position="right" />
+        <!-- <el-input v-model="dataForm.ageNoGuarantee" placeholder="请输入免担保年龄要求" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="是否有驾驶证" prop="isDriverCard">
         <el-radio-group v-model="dataForm.isDriverCard">
@@ -59,7 +61,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="名下有按揭车辆台数" prop="mortgageCarNum">
-        <el-input v-model="dataForm.mortgageCarNum" placeholder="请输入名下有按揭车辆台数" clearable></el-input>
+        <el-input-number v-model="dataForm.mortgageCarNum" class="box-input" :precision="0" :step="1" controls-position="right" />
+        <!-- <el-input v-model="dataForm.mortgageCarNum" placeholder="请输入名下有按揭车辆台数" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="是否蓝牌货车可做" prop="isBlueCard">
         <el-radio-group v-model="dataForm.isBlueCard">
@@ -68,10 +71,14 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="银行机构借款申请次数" prop="loanBankNum">
-        <el-input v-model="dataForm.loanBankNum" placeholder="请输入银行机构借款申请次数" clearable></el-input>
+        <el-input-number v-model="dataForm.loanBankNum" class="box-input" :precision="0" :step="1" controls-position="right" />
+
+        <!-- <el-input v-model="dataForm.loanBankNum" placeholder="请输入银行机构借款申请次数" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="非银行机构借款申请次数" prop="loanUnBankNum">
-        <el-input v-model="dataForm.loanUnBankNum" placeholder="请输入非银行机构借款申请次数" clearable></el-input>
+        <el-input-number v-model="dataForm.loanUnBankNum" class="box-input" :precision="0" :step="1" controls-position="right" />
+
+        <!-- <el-input v-model="dataForm.loanUnBankNum" placeholder="请输入非银行机构借款申请次数" clearable></el-input> -->
       </el-form-item>
       <el-form-item label="可承担风险记录" prop="recordIdList">
         <!-- <el-select

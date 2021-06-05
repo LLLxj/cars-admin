@@ -6,76 +6,77 @@
       <el-main>
         <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()" @submit.native.prevent> -->
         <el-form :inline="true" :model="searchData">
-          <!-- <el-form-item label="客户手机号">
-            <el-input v-model="dataForm.dealPhone" placeholder="请输入手机号" clearable></el-input>
-          </el-form-item> -->
-          <el-form-item label="风险名称" prop="productName">
-            <el-input v-model="searchData.productName" placeholder="请输入风险名称" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="信用等级" prop="creditRating">
-            <el-input v-model="searchData.creditRating" placeholder="请输入信用等级" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="执行能否操作" prop="isExecute">
-            <el-select v-model="searchData.isExecute" placeholder="请选择">
-              <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="司法风险" prop="judicialRisk">
-            <el-select v-model="searchData.judicialRisk" placeholder="请选择">
-              <el-option v-for="item in judicialRiskList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="多头风险借贷" prop="mickleRisk">
-            <el-select v-model="searchData.mickleRisk" placeholder="请选择">
-              <el-option v-for="item in mickleRiskList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="可否可做事故车" prop="isAccidentCar">
-            <el-select v-model="searchData.isAccidentCar" placeholder="请选择">
-              <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="已过科目几" prop="subject">
-            <el-select v-model="searchData.subject" placeholder="请选择">
-              <el-option v-for="item in subjectList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="免担保年龄要求" prop="ageNoGuarantee">
-            <el-input v-model="searchData.ageNoGuarantee" placeholder="请输入风险名称" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="是否有行驶证" prop="isDriverCard">
-            <el-select v-model="searchData.isDriverCard" placeholder="请选择">
-              <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="是否有行驶证" prop="isDriverCard">
-            <el-select v-model="searchData.isDriverCard" placeholder="请选择">
-              <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="是否蓝牌货车" prop="isBlueCard">
-            <el-select v-model="searchData.isBlueCard" placeholder="请选择">
-              <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="searchData.status" placeholder="请选择">
-              <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <div v-if="expand">
+            <el-form-item label="风险名称" prop="productName">
+              <el-input v-model="searchData.productName" placeholder="请输入风险名称" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="信用等级" prop="creditRating">
+              <el-input v-model="searchData.creditRating" placeholder="请输入信用等级" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="执行能否操作" prop="isExecute">
+              <el-select v-model="searchData.isExecute" placeholder="请选择">
+                <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="司法风险" prop="judicialRisk">
+              <el-select v-model="searchData.judicialRisk" placeholder="请选择">
+                <el-option v-for="item in judicialRiskList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="多头风险借贷" prop="mickleRisk">
+              <el-select v-model="searchData.mickleRisk" placeholder="请选择">
+                <el-option v-for="item in mickleRiskList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="可否可做事故车" prop="isAccidentCar">
+              <el-select v-model="searchData.isAccidentCar" placeholder="请选择">
+                <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="已过科目几" prop="subject">
+              <el-select v-model="searchData.subject" placeholder="请选择">
+                <el-option v-for="item in subjectList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="免担保年龄要求" prop="ageNoGuarantee">
+              <el-input v-model="searchData.ageNoGuarantee" placeholder="请输入风险名称" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="是否有行驶证" prop="isDriverCard">
+              <el-select v-model="searchData.isDriverCard" placeholder="请选择">
+                <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="是否有行驶证" prop="isDriverCard">
+              <el-select v-model="searchData.isDriverCard" placeholder="请选择">
+                <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="是否蓝牌货车" prop="isBlueCard">
+              <el-select v-model="searchData.isBlueCard" placeholder="请选择">
+                <el-option v-for="item in isExecuteList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="状态">
+              <el-select v-model="searchData.status" placeholder="请选择">
+                <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+          
           <el-form-item>
             <el-button type="primary" @click="getDataList1()">查询</el-button>
             <el-button v-if="isAuth('loan:product:save')" type="primary" @click="addHandle()">新增</el-button>
             <el-button @click="resetFrom()">重置</el-button>
+            <el-button @click="expand = !expand">{{ expand ? '收起查询' : '展开查询' }}</el-button>
           </el-form-item>
         </el-form>
         <el-table :data="dataList" border stripe v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;" id="dataListUser">
@@ -183,6 +184,7 @@
   export default {
     data () {
       return {
+        expand: false,
         searchData: {
           productName: '',
           page: 1,
